@@ -15,7 +15,6 @@ import { useMeta } from '@/hooks/useMeta';
 const MainPage = () => {
   const {
     step,
-    setStep,
     baseDate,
     setBaseDate,
     booking,
@@ -25,6 +24,9 @@ const MainPage = () => {
     setBarber,
     setDate,
     setTime,
+    // @ts-expect-error
+    setStep,
+    // @ts-expect-error
     nextStep,
     prevStep,
     confirmBooking

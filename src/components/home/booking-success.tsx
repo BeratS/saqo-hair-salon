@@ -1,4 +1,4 @@
-import { Calendar, Check, MapPin, Share2, User } from 'lucide-react';
+import { Calendar, Check, MapPin, User } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { Button } from "@/components/ui/button";
