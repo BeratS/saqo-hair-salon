@@ -45,7 +45,7 @@ function PickTime({
                         <CalendarIcon size={28} className="text-black" />
                     </SheetTrigger>
 
-                    <SheetContent side="bottom" className="rounded-t-[3.5rem] px-6 pb-16 border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                    <SheetContent side="bottom" className="max-w-xl mx-auto rounded-t-[3.5rem] px-6 pb-16 border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                         {/* Grabber Handle for Visual Cue */}
                         <div className="mx-auto w-16 h-1.5 rounded-full bg-zinc-200 mt-2 mb-8" />
 
