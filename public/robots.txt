@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /projects
+Allow: /project/
+
+Sitemap: https://saqo-hair-salon.web.app/sitemap.xml
