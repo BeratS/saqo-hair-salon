@@ -89,7 +89,7 @@ function PickTime({
             </div>
 
             {/* DATE STRIP (Sticky-style at top) */}
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 no-scrollbar snap-x">
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
                 {weekStrip.map((date: Date, i: number) => {
                     const isSelected = booking.date?.toDateString() === date.toDateString();
                     return (

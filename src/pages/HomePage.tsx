@@ -39,7 +39,7 @@ const MainPage = () => {
 
   return (
     <main className="flex justify-center items-center min-h-screen">
-      <div className="w-full h-screen max-w-md bg-white overflow-hidden relative flex flex-col">
+      <div className="w-full h-screen max-w-lg bg-white overflow-hidden relative flex flex-col">
 
         {/* HEADER SECTION */}
         <div className="p-6 pt-12 bg-white">
