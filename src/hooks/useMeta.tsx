@@ -24,17 +24,17 @@ export const useMeta = (
             script.type = "application/ld+json";
             script.innerHTML = JSON.stringify(schemaData ||{
                 "@context": "https://schema.org",
-                "@type": "AutoTransportService",
-                "name": "Auto Transport Irfan",
-                "image": "https://auto-transport-irfan.web.app/og-image.jpg",
-                "url": "https://auto-transport-irfan.web.app/",
-                "description": "Premium auto transport service specializing in safe and reliable vehicle shipping.",
+                "@type": "HairSalon",
+                "name": "Saqo Hair Salon",
+                "image": "https://saqo-hair-salon.web.app//og-image.jpg",
+                "url": "https://saqo-hair-salon.web.app//",
+                "description": "Premium hair salon service specializing in professional hair care and styling.",
                 "address": {
                     "@type": "PostalAddress",
-                    "addressLocality": "Zurich",
-                    "addressCountry": "Switzerland",
+                    "addressLocality": "Skopje, Cair Pavle Ilic 5",
+                    "addressCountry": "Skopje",
                     "phone": "+41 XX XXX XX XX",
-                    "email": "autotransportirfan@gmail.com"
+                    "email": "saqohairsalon@gmail.com"
                 }
             });
             document.head.appendChild(script);

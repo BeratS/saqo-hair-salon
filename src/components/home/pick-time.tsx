@@ -72,7 +72,7 @@ function PickTime({
                                     head_cell: "text-zinc-400 w-14 font-bold text-sm uppercase",
                                     month_caption: "pb-6 text-center",
                                     cell: "h-16 w-16 text-center text-xl p-0 relative",
-                                    day: "h-14 w-14 p-0 font-black rounded-2xl transition-all hover:bg-zinc-100",
+                                    day: "h-14 w-14 p-0 font-black rounded-2xl transition-all bg-transparent",
                                     day_selected: "bg-black text-white hover:bg-black focus:bg-black shadow-2xl scale-110",
                                     day_today: "bg-zinc-100 text-black border-2 border-black",
                                 }}

@@ -2,6 +2,7 @@ import './index.css';
 // Multi Language Module
 import '@/lib/i18n';
 
+import { MotionConfig } from 'motion/react';
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -45,7 +46,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider> {/* Wrap the RouterProvider */}
-      <RouterProvider router={router} />
+      <MotionConfig reducedMotion="user">
+        <RouterProvider router={router} />
+      </MotionConfig>
     </AuthProvider>
     <Toaster expand={true} richColors position="top-right" duration={8000} />
   </StrictMode>

@@ -71,7 +71,7 @@ export default function AuthPage() {
     <div className="flex items-center justify-center min-h-[70vh] bg-slate-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl text-center font-bold font-mono">AUTO TRANSPORT - IRFAN</CardTitle>
+          <CardTitle className="text-2xl text-center font-bold font-mono">Saqo Hair Salon</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="login">
