@@ -84,6 +84,11 @@ function TopHeader({ step, prevStep }: IProps) {
                                 onClick={() => handleLanguageChange(lng.code)}
                                 className="rounded-xl font-bold uppercase text-xs p-3 cursor-pointer"
                             >
+                                <img
+                                    src={`/flags/${lng.code?.toUpperCase()}.svg`}
+                                    alt={lng.code}
+                                    className="w-4 h-4 rounded-sm object-cover"
+                                />
                                 {lng.name}
                             </DropdownMenuItem>
                         ))}
