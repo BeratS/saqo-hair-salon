@@ -1,19 +1,10 @@
 import { Sparkles } from "lucide-react"; // Added for extra "cool" factor
-import { AnimatePresence,motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
-
-const SERVICES: IBookingService[] = [
-    { id: '1', name: 'Haircut', price: 200 },
-    { id: '2', name: 'Children’s haircut', price: 150 },
-    { id: '3', name: 'Beard shave', price: 100 },
-    { id: '4', name: 'Hair wash', price: 50 },
-    { id: '5', name: 'Face wax', price: 50 },
-    { id: '6', name: 'Mask + Steam treatment', price: 100 },
-    { id: 'all-inclusive', name: 'All Inclusive', price: 500, description: 'Includes: Hair wash before & after, beard trimming, 3 types of face masks + steam, hair styling.' },
-];
+import { SERVICES } from "./booking-constants";
 
 interface IProps {
     booking: IBookingState;
@@ -28,7 +19,7 @@ function SelectService({
 }: IProps) {
     return (
         <div className="flex flex-col h-full space-y-6">
-            <h2 className="text-3xl text-center font-black leading-tight tracking-tighter uppercase">
+            <h2 className="text-3xl text-center font-black leading-tight tracking-tighter">
                 Select Services
             </h2>
 
@@ -46,15 +37,15 @@ function SelectService({
                             initial={false}
                             animate={{
                                 // Premium golden glow for the All Inclusive card
-                                boxShadow: isSpecial && isSelected 
-                                    ? "0px 0px 20px rgba(234, 179, 8, 0.5)" 
+                                boxShadow: isSpecial && isSelected
+                                    ? "0px 0px 20px rgba(234, 179, 8, 0.5)"
                                     : "0px 0px 0px rgba(0,0,0,0)",
                                 borderColor: isSpecial ? (isSelected ? "#eab308" : "#fbbf24") : (isSelected ? "#000" : "#f4f4f5")
                             }}
                             className={cn(
                                 "relative overflow-hidden py-4 px-6 rounded-[2.5rem] border-2 transition-all cursor-pointer",
                                 isSelected
-                                    ? 'bg-black text-white shadow-xl'
+                                    ? 'bg-primary text-white shadow-xl'
                                     : 'bg-white text-black hover:border-zinc-300',
                                 isSpecial && !isSelected && 'bg-amber-50/50 border-amber-200'
                             )}
@@ -62,7 +53,7 @@ function SelectService({
                             {/* Floating "VIP" Badge for All Inclusive */}
                             {isSpecial && (
                                 <div className={cn(
-                                    "absolute top-0 right-40 px-3 py-1 rounded-b-xl text-[10px] font-black uppercase tracking-tighter transition-all",
+                                    "absolute top-0 right-30 sm:right-40 px-3 py-1 rounded-b-xl text-[10px] font-black uppercase tracking-tighter transition-all",
                                     isSelected ? "bg-amber-400 text-black" : "bg-zinc-100 text-zinc-500"
                                 )}>
                                     Value Pack
@@ -71,7 +62,7 @@ function SelectService({
 
                             <div className="relative z-10 flex justify-between items-baseline gap-2">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xl font-black uppercase whitespace-nowrap">
+                                    <span className="text-lg font-black uppercase whitespace-nowrap">
                                         {service.name}
                                     </span>
                                     {isSpecial && isSelected && (
@@ -91,12 +82,12 @@ function SelectService({
 
                             <AnimatePresence>
                                 {service.description && (
-                                    <motion.p 
+                                    <motion.p
                                         initial={{ height: 0, opacity: 0 }}
                                         animate={{ height: "auto", opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
-                                        className={cn("text-sm mt-2 leading-relaxed font-medium",
-                                            isSelected ? 'text-zinc-400' : 'text-zinc-500'
+                                        className={cn("text-sm mt-2 leading-relaxed text-balance font-medium",
+                                            isSelected ? 'text-zinc-100' : 'text-zinc-500'
                                         )}
                                     >
                                         {service.description}
@@ -106,7 +97,7 @@ function SelectService({
 
                             {/* Background decoration for the Premium card */}
                             {isSpecial && isSelected && (
-                                <motion.div 
+                                <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.1 }}
                                     className="absolute -right-4 -bottom-4 text-white rotate-12"
@@ -120,24 +111,28 @@ function SelectService({
             </div>
 
             {/* FIXED BOTTOM ACTION BAR */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-white via-white/90 to-transparent pt-10">
-                <Button
-                    type="button"
-                    disabled={booking.selectedServices.length === 0}
-                    onClick={nextStep}
-                    className="w-full py-9 rounded-[2.5rem] bg-black text-white hover:bg-zinc-900 text-xl font-black uppercase shadow-2xl tracking-widest flex justify-between px-10 transition-transform active:scale-95"
-                >
-                    <span className="flex items-center gap-2">Next</span>
-                    <motion.span 
-                        key={booking.totalPrice}
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="tabular-nums"
-                    >
-                        {booking.totalPrice} den
-                    </motion.span>
-                </Button>
-            </div>
+            <AnimatePresence>
+                {booking.selectedServices.length > 0 && (
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-white via-white/90 to-transparent pt-10">
+                        <Button
+                            type="button"
+                            disabled={booking.selectedServices.length === 0}
+                            onClick={nextStep}
+                            className="w-full py-9 rounded-[2.5rem] bg-black text-white hover:bg-zinc-900 text-xl font-black uppercase shadow-2xl tracking-widest flex justify-between px-10 transition-transform active:scale-95"
+                        >
+                            <span className="flex items-center gap-2">Next</span>
+                            <motion.span
+                                key={booking.totalPrice}
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="tabular-nums"
+                            >
+                                {booking.totalPrice} den
+                            </motion.span>
+                        </Button>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

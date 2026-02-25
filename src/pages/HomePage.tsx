@@ -45,7 +45,7 @@ const MainPage = () => {
         <TopHeader step={step} prevStep={prevStep} />
 
         {/* STEP CONTENT */}
-        <div className="flex-1 relative px-6 overflow-y-auto pb-24">
+        <div className="flex-1 relative px-6 overflow-y-auto overflow-x-hidden pb-24">
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
@@ -53,7 +53,7 @@ const MainPage = () => {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -20, opacity: 0 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className='absolute inset-0'
+              className='absolute inset-2'
             >
               {/* STEP 0: BARBER SELECTION */}
               {step === BookingStepsEnum.Barber && (

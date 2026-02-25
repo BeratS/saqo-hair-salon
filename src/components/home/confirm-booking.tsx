@@ -16,10 +16,10 @@ function ConfirmBooking({
     confirmBooking
 }: IProps) {
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 px-2">
             <h2 className="text-3xl font-black">Confirm your<br />Booking?</h2>
             <div className="space-y-3">
-                <div className="bg-zinc-100/50 p-5 rounded-[2rem] mb-6">
+                <div className="bg-primary/10 border-2 border-primary/20 p-5 rounded-[2rem] mb-6">
                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2">Summary</p>
                     <p className="font-bold text-sm">
                         {booking.barber?.name} • {booking.date && format(booking.date, 'MMMM do')} @ {booking.time}

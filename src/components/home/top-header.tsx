@@ -39,19 +39,21 @@ function TopHeader({ step, prevStep }: IProps) {
 
             <div className="flex justify-between items-center mb-8 px-1">
                 {/* LEFT SIDE: Back or Logo */}
-                {step > 0 ? (
-                    <Button
-                        variant="secondary"
-                        onClick={prevStep}
-                        className="p-2 size-10 bg-zinc-100 rounded-full hover:bg-zinc-200 transition-colors"
-                    >
-                        <ChevronLeft size={24} />
-                    </Button>
-                ) : (
-                    <div className="p-2.5 bg-black rounded-full shadow-lg">
-                        <Scissors size={20} className="text-white" />
-                    </div>
-                )}
+                <div className="left-icon w-14 inline-flex">
+                    {step > 0 ? (
+                        <Button
+                            variant="secondary"
+                            onClick={prevStep}
+                            className="p-2 size-10 bg-zinc-100 rounded-full hover:bg-zinc-200 transition-colors"
+                        >
+                            <ChevronLeft size={24} />
+                        </Button>
+                    ) : (
+                        <div className="p-2.5 bg-black rounded-full shadow-lg">
+                            <Scissors size={20} className="text-white" />
+                        </div>
+                    )}
+                </div>
 
                 {/* CENTER: Title */}
                 <h1 className="font-black text-xl tracking-tighter uppercase">
@@ -63,10 +65,15 @@ function TopHeader({ step, prevStep }: IProps) {
                     <DropdownMenuTrigger render={
                         <Button
                             variant="ghost"
-                            className="size-10 p-0 rounded-full bg-zinc-50 border-2 border-zinc-100 hover:bg-zinc-100 focus:ring-0"
+                            className="w-14 h-10 p-0 rounded-full bg-zinc-50 border-2 border-zinc-100 hover:bg-zinc-100 focus:ring-0"
                         />
                     }>
-                        <span className="text-[10px] font-black uppercase tracking-tighter">
+                        <img
+                            src={`/flags/${i18n?.language?.toUpperCase()}.svg`}
+                            alt={i18n?.language}
+                            className="w-4 h-4 rounded-sm object-cover"
+                        />
+                        <span className="text-xs font-black uppercase tracking-tighter">
                             {i18n?.language}
                         </span>
                     </DropdownMenuTrigger>

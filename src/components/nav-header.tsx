@@ -34,7 +34,7 @@ export function NavHeader() {
   };
 
   return (
-    <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 px-4">
+    <header className="border-b bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/60 px-4">
       <div className="max-w-7xl flex h-16 items-center justify-between mx-auto">
         {/* Logo Section */}
         <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight">

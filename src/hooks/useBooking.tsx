@@ -69,13 +69,21 @@ const useBooking = () => {
             const isAllInclusive = service.id === 'all-inclusive';
 
             // If selecting All Inclusive, clear others
-            if (isAllInclusive) return { ...prev, selectedServices: [service] };
+            if (isAllInclusive) return {
+                ...prev,
+                selectedServices: [service],
+                totalPrice: service.price
+            };
 
             // If other service is selected and All Inclusive was active, clear All Inclusive
             const filtered = prev.selectedServices.filter(s => s.id !== 'all-inclusive');
 
             const exists = filtered.find(s => s.id === service.id);
-            if (exists) return { ...prev, selectedServices: filtered.filter(s => s.id !== service.id) };
+            if (exists) return {
+                ...prev,
+                selectedServices: filtered.filter(s => s.id !== service.id),
+                totalPrice: filtered.reduce((sum, s) => sum + s.price, 0)
+            };
             return {
                 ...prev,
                 selectedServices: [...filtered, service],
