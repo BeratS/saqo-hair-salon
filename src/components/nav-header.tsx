@@ -18,7 +18,6 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
 
-import LanguageSwitcher from "./language-switcher";
 
 export function NavHeader() {
   const { user } = useAuth();
@@ -45,7 +44,6 @@ export function NavHeader() {
 
         {/* User Section */}
         <div className="flex items-center gap-4">
-          <LanguageSwitcher />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="relative h-10 w-10 rounded-full outline-none cursor-pointer">
