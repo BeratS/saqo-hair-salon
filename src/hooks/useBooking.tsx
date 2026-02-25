@@ -84,6 +84,18 @@ const useBooking = () => {
         });
     };
 
+    const handleResetStep = () => {
+        setBooking({
+            barber: null,
+            date: null,
+            time: null,
+            name: '',
+            phone: '',
+            selectedServices: [],
+            totalPrice: 0,
+        });
+        setStep(BookingStepsEnum.Barber);
+    }
 
     return {
         step,
@@ -100,7 +112,8 @@ const useBooking = () => {
         nextStep,
         prevStep,
         confirmBooking,
-        toggleService
+        toggleService,
+        handleResetStep
     };
 };
 

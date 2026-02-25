@@ -26,13 +26,14 @@ const MainPage = () => {
     setBarber,
     setDate,
     setTime,
-    // @ts-expect-error
+    // eslint-disable-next-line
     setStep,
-    // @ts-expect-error
+    // eslint-disable-next-line
     nextStep,
     prevStep,
     confirmBooking,
-    toggleService
+    toggleService,
+    handleResetStep,
   } = useBooking();
 
   useMeta(
@@ -122,7 +123,7 @@ const MainPage = () => {
               {step === BookingStepsEnum.Done && (
                 <BookingSuccess
                   booking={booking}
-                  resetStep={() => setStep(0)} />
+                  resetStep={handleResetStep} />
               )}
 
             </motion.div>
