@@ -58,4 +58,19 @@ Follow us on social media to see our latest styles and updates.
 
 ---
 
+## Menu
+
+Haircut ..................................................... 200 den
+Children’s haircut ............................... 150 den
+Beard shave ............................................. 100 den
+Hair wash .................................................. 50 den
+Face wax .................................................... 50 den
+Mask + Steam treatment .................. 100 den
+
+All Inclusive ............................................. 500 den
+
+Includes: Hair wash before and after the haircut, beard trimming, 3 types of face masks + steam treatment, hair styling.
+
+---
+
 © 2026 Saqo Hair Salon – All Rights Reserved.

@@ -11,4 +11,13 @@ interface IBookingState {
   time: string | null;
   name: string;
   phone: string;
+  selectedServices: IBookingService[];
+  totalPrice: number;
+}
+
+interface IBookingService {
+  id: string;
+  name: string;
+  price: number;
+  description?: string;
 }

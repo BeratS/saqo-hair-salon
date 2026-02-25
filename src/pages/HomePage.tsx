@@ -1,14 +1,16 @@
 import { ChevronLeft, Scissors } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
+// Hooks
+import { BookingStepsEnum, listedBookingSteps } from '@/components/home/booking-constants';
 import BookingSuccess from '@/components/home/booking-success';
 // UI Components
 import ConfirmBooking from '@/components/home/confirm-booking';
 import PickBarbers from '@/components/home/pick-barbers';
 import PickTime from '@/components/home/pick-time';
+import SelectService from '@/components/home/select-service';
 import { Button } from '@/components/ui/button';
-// Hooks
-import useBooking, { STEPS } from '@/hooks/useBooking';
+import useBooking from '@/hooks/useBooking';
 import { useMeta } from '@/hooks/useMeta';
 
 
@@ -29,7 +31,8 @@ const MainPage = () => {
     // @ts-expect-error
     nextStep,
     prevStep,
-    confirmBooking
+    confirmBooking,
+    toggleService
   } = useBooking();
 
   useMeta(
@@ -57,7 +60,7 @@ const MainPage = () => {
 
           {/* STEPPER PROGRESS */}
           <div className="flex justify-between px-2">
-            {STEPS.map((s, i) => (
+            {listedBookingSteps.map((s, i) => (
               <div key={s} className="flex flex-col items-center gap-2">
                 <div className={`h-1.5 w-18 rounded-full transition-all duration-500 ${i <= step ? 'bg-black' : 'bg-zinc-100'}`} />
                 <span className={`text-[9px] font-bold uppercase tracking-widest ${i === step ? 'text-black' : 'text-zinc-400'}`}>{s}</span>
@@ -75,16 +78,17 @@ const MainPage = () => {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -20, opacity: 0 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
+              className='absolute inset-0'
             >
               {/* STEP 0: BARBER SELECTION */}
-              {step === 0 && (
+              {step === BookingStepsEnum.Barber && (
                 <PickBarbers
                   booking={booking}
                   setBarber={setBarber} />
               )}
 
               {/* STEP 1: DATE SELECTION (TS ADAPTABLE) */}
-              {step === 1 && (
+              {step === BookingStepsEnum.DateAndTime && (
                 <PickTime
                   baseDate={baseDate}
                   setBaseDate={setBaseDate}
@@ -97,7 +101,16 @@ const MainPage = () => {
               )}
 
               {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
-              {step === 2 && (
+              {step === BookingStepsEnum.Services && (
+                <SelectService
+                  booking={booking}
+                  toggleService={toggleService}
+                  nextStep={nextStep}
+                />
+              )}
+
+              {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
+              {step === BookingStepsEnum.Details && (
                 <ConfirmBooking
                   booking={booking}
                   handleInputChange={handleInputChange}
@@ -106,8 +119,10 @@ const MainPage = () => {
               )}
 
               {/* STEP 3: SUCCESS SCREEN */}
-              {step === 3 && (
-                <BookingSuccess booking={booking} />
+              {step === BookingStepsEnum.Done && (
+                <BookingSuccess
+                  booking={booking}
+                  resetStep={() => setStep(0)} />
               )}
 
             </motion.div>

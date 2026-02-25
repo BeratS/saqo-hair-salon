@@ -2,6 +2,7 @@ import { Calendar, Check, MapPin, User } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { Button } from "@/components/ui/button";
+import { generateCalendarLink } from '@/utils/helper';
 
 // Success Animation Variants
 const iconVariants = {
@@ -22,7 +23,12 @@ const textVariants = {
   })
 } as const;
 
-export default function BookingSuccess({ booking }: { booking: any }) {
+interface IProps {
+  booking: IBookingState;
+  resetStep: () => void;
+}
+
+export default function BookingSuccess({ booking, resetStep }: IProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 text-center">
       {/* Animated Success Circle */}
@@ -30,7 +36,7 @@ export default function BookingSuccess({ booking }: { booking: any }) {
         variants={iconVariants}
         initial="hidden"
         animate="visible"
-        className="w-22 h-22 bg-black rounded-full flex items-center justify-center mb-8 shadow-2xl"
+        className="w-22 min-h-22 bg-black rounded-full flex items-center justify-center mb-8 shadow-2xl"
       >
         <Check size={42} className="text-white" strokeWidth={3} />
       </motion.div>
@@ -39,7 +45,7 @@ export default function BookingSuccess({ booking }: { booking: any }) {
       <motion.div custom={0} variants={textVariants} initial="hidden" animate="visible">
         <h2 className="text-3xl font-black tracking-tighter mb-2">YOU'RE ALL SET!</h2>
         <p className="text-zinc-500 font-medium mb-8">
-          Your seat is reserved. We’re excited to see you at <span className="text-black font-bold">Saqo Hair Salon</span>.
+          Your seat is reserved. <br /> We’re excited to see you at <span className="text-black font-bold">Saqo Hair Salon</span>.
         </p>
       </motion.div>
 
@@ -57,7 +63,7 @@ export default function BookingSuccess({ booking }: { booking: any }) {
           </div>
           <div className="text-left">
             <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Barber</p>
-            <p className="font-bold text-lg">{booking.barber?.name || "Master Barber"}</p>
+            <p className="font-bold text-lg">{booking.barber?.name || "Master Barber"} - (Saqo Hair Salon)</p>
           </div>
         </div>
 
@@ -79,7 +85,7 @@ export default function BookingSuccess({ booking }: { booking: any }) {
           </div>
           <div className="text-left">
             <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Location</p>
-            <p className="font-bold text-lg">Downtown Saqo St. 42</p>
+            <p className="font-bold text-lg">Arhiepiskop Dositej 11 skopje, çair 1000</p>
           </div>
         </div>
       </motion.div>
@@ -92,8 +98,13 @@ export default function BookingSuccess({ booking }: { booking: any }) {
         animate="visible"
         className="w-full space-y-3"
       >
-        <Button className="w-full py-8 rounded-2xl bg-black text-white font-bold text-lg shadow-xl active:scale-95 transition-transform">
+        <Button type="button"
+          onClick={() => window.open(generateCalendarLink(booking), '_blank')}
+          className="w-full py-8 rounded-2xl bg-black text-white border-2 border-transparent hover:border-black font-bold text-lg shadow-xl active:scale-95 transition-transform">
           Add to Calendar
+        </Button>
+        <Button type="button" onClick={resetStep} className="w-full py-8 border-2 border-transparent hover:border-black rounded-2xl font-bold text-lg shadow-xl active:scale-95 transition-transform">
+          Make Another Booking
         </Button>
       </motion.div>
     </div>

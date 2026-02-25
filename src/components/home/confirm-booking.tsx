@@ -5,12 +5,16 @@ import { Phone, User } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface IProps {
-    booking: any;
+    booking: IBookingState;
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     confirmBooking: () => void;
 }
 
-function ConfirmBooking({ booking, handleInputChange, confirmBooking }: IProps) {
+function ConfirmBooking({
+    booking,
+    handleInputChange,
+    confirmBooking
+}: IProps) {
     return (
         <div className="space-y-6">
             <h2 className="text-3xl font-black">Confirm your<br />Booking?</h2>
@@ -20,6 +24,7 @@ function ConfirmBooking({ booking, handleInputChange, confirmBooking }: IProps) 
                     <p className="font-bold text-sm">
                         {booking.barber?.name} • {booking.date && format(booking.date, 'MMMM do')} @ {booking.time}
                     </p>
+                    <p className="font-bold text-base mt-2">Total: {booking.totalPrice ?? 0} den</p>
                 </div>
 
                 <div className="relative">

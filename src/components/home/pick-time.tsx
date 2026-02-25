@@ -13,6 +13,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from '@/lib/utils';
 
 interface IProps {
     baseDate: Date | undefined;
@@ -113,9 +114,9 @@ function PickTime({
             {/* TIME GRID (Scrollable area) */}
             <div className="flex-1 space-y-4 overflow-y-auto pr-1 no-scrollbar pb-20">
                 <div className="flex items-center gap-2">
-                    <div className="h-[1px] flex-1 bg-zinc-100"></div>
+                    <div className="h-px flex-1 bg-zinc-100"></div>
                     <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Available Slots</span>
-                    <div className="h-[1px] flex-1 bg-zinc-100"></div>
+                    <div className="h-px flex-1 bg-zinc-100"></div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
@@ -126,8 +127,8 @@ function PickTime({
                                 key={time}
                                 variant="outline"
                                 disabled={!booking.date} // Disable time if no date is picked
-                                className={`rounded-2xl py-8 font-bold text-sm border-2 transition-all ${isTimeSelected ? 'bg-black text-white border-black' : 'hover:bg-zinc-50'
-                                    }`}
+                                className={cn("rounded-2xl py-8 font-bold text-sm border-2 transition-all",
+                                    isTimeSelected ? 'bg-black text-white border-black' : 'hover:bg-zinc-50')}
                                 onClick={() => setTime(time)} // This handles selection and moves to next step
                             >
                                 {time}

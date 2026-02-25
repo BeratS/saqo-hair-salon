@@ -31,7 +31,7 @@ export const useMeta = (
                 "description": "Premium hair salon service specializing in professional hair care and styling.",
                 "address": {
                     "@type": "PostalAddress",
-                    "addressLocality": "Skopje, Cair Pavle Ilic 5",
+                    "addressLocality": "Arhiepiskop Dositej 11 skopje, çair 1000",
                     "addressCountry": "Skopje",
                     "phone": "+41 XX XXX XX XX",
                     "email": "saqohairsalon@gmail.com"
