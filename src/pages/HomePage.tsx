@@ -1,15 +1,14 @@
-import { ChevronLeft, Scissors } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
 // Hooks
-import { BookingStepsEnum, listedBookingSteps } from '@/components/home/booking-constants';
+import { BookingStepsEnum } from '@/components/home/booking-constants';
 import BookingSuccess from '@/components/home/booking-success';
 // UI Components
 import ConfirmBooking from '@/components/home/confirm-booking';
 import PickBarbers from '@/components/home/pick-barbers';
 import PickTime from '@/components/home/pick-time';
 import SelectService from '@/components/home/select-service';
-import { Button } from '@/components/ui/button';
+import TopHeader from '@/components/home/top-header';
 import useBooking from '@/hooks/useBooking';
 import { useMeta } from '@/hooks/useMeta';
 
@@ -26,9 +25,6 @@ const MainPage = () => {
     setBarber,
     setDate,
     setTime,
-    // eslint-disable-next-line
-    setStep,
-    // eslint-disable-next-line
     nextStep,
     prevStep,
     confirmBooking,
@@ -46,29 +42,7 @@ const MainPage = () => {
       <div className="w-full h-screen max-w-lg bg-white overflow-hidden relative flex flex-col">
 
         {/* HEADER SECTION */}
-        <div className="p-6 pt-12 bg-white">
-          <div className="flex justify-between items-center mb-8">
-            {step > 0 ? (
-              <Button variant="secondary" onClick={prevStep} className="p-2 size-9 bg-zinc-100 rounded-full hover:bg-zinc-200 transition-colors">
-                <ChevronLeft size={20} />
-              </Button>
-            ) : <div className="p-2 bg-black rounded-full"><Scissors size={20} className="text-white" /></div>}
-            <h1 className="font-black text-xl tracking-tighter uppercase">
-              Saqo Hair Salon
-            </h1>
-            <div className="w-9" />
-          </div>
-
-          {/* STEPPER PROGRESS */}
-          <div className="flex justify-between px-2">
-            {listedBookingSteps.map((s, i) => (
-              <div key={s} className="flex flex-col items-center gap-2">
-                <div className={`h-1.5 w-18 rounded-full transition-all duration-500 ${i <= step ? 'bg-black' : 'bg-zinc-100'}`} />
-                <span className={`text-[9px] font-bold uppercase tracking-widest ${i === step ? 'text-black' : 'text-zinc-400'}`}>{s}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <TopHeader step={step} prevStep={prevStep} />
 
         {/* STEP CONTENT */}
         <div className="flex-1 relative px-6 overflow-y-auto pb-24">
