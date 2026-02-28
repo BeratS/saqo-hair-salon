@@ -100,7 +100,7 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
       >
         <Button type="button"
           onClick={() => window.open(generateCalendarLink(booking), '_blank')}
-          className="w-full py-8 bg-black text-white border-2 border-transparent hover:border-black font-bold text-lg shadow-xl active:scale-95 transition-transform">
+          className="w-full py-8 bg-black text-white border-2 border-transparent hover:bg-black/90 hover:border-primary font-bold text-lg shadow-xl active:scale-95 transition-transform">
           Add to Calendar
         </Button>
         <Button type="button" onClick={resetStep} className="w-full py-8 border-2 border-transparent hover:border-black font-bold text-lg shadow-xl active:scale-95 transition-transform">

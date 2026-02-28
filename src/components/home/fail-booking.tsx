@@ -2,6 +2,7 @@ import { AlertCircle, MessageSquare, RefreshCcw, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { Button } from "@/components/ui/button";
+import { Constants } from '@/Constants';
 
 const containerVariants = {
   initial: { opacity: 0, scale: 0.9 },
@@ -17,11 +18,11 @@ const shakeVariants = {
 };
 
 interface IProps {
-  onRetry: () => void;
+  error: string;
   resetStep: () => void;
 }
 
-export default function BookingError({ onRetry, resetStep }: IProps) {
+export default function BookingError({ error, resetStep }: IProps) {
   return (
     <motion.div 
       variants={containerVariants}
@@ -44,21 +45,15 @@ export default function BookingError({ onRetry, resetStep }: IProps) {
       </h2>
       <p className="text-zinc-500 font-medium text-lg mb-10 leading-relaxed">
         We couldn't lock in your appointment. The slot might have just been taken, or there's a connection glitch.
+      {error && <span className="block mt-2 text-sm text-red-500">Error: {error}</span>}
       </p>
 
       {/* Action Area */}
       <div className="w-full space-y-4">
         <Button 
-          onClick={onRetry}
-          className="w-full py-10 rounded-[2rem] bg-black text-white font-black text-xl uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all"
-        >
-          <RefreshCcw size={24} /> Try Again
-        </Button>
-
-        <Button 
           variant="ghost" 
           className="w-full py-8 text-zinc-400 font-bold uppercase tracking-widest text-xs gap-2"
-          onClick={() => window.location.href = 'tel:+38970000000'} // Call the shop directly
+          onClick={() => window.location.href = `tel:${Constants.CONTACT_NUMBER}`} // Call the shop directly
         >
           <MessageSquare size={16} /> Contact Support
         </Button>
@@ -67,7 +62,7 @@ export default function BookingError({ onRetry, resetStep }: IProps) {
       {/* Decorative Close for "Start Over" */}
       <button 
         onClick={() => resetStep()}
-        className="absolute top-8 right-8 p-3 bg-zinc-100 rounded-full text-zinc-400"
+        className="absolute z-1 top-8 right-8 p-3 bg-zinc-100 rounded-full text-zinc-400"
       >
         <X size={20} />
       </button>

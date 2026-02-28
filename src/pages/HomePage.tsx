@@ -5,6 +5,8 @@ import { BookingStepsEnum } from '@/components/home/booking-constants';
 import BookingSuccess from '@/components/home/booking-success';
 // UI Components
 import ConfirmBooking from '@/components/home/confirm-booking';
+import FailBooking from '@/components/home/fail-booking';
+import { BookingLoading } from '@/components/home/loading.ui';
 import PickBarbers from '@/components/home/pick-barbers';
 import PickTime from '@/components/home/pick-time';
 import SelectService from '@/components/home/select-service';
@@ -15,6 +17,8 @@ import { useMeta } from '@/hooks/useMeta';
 
 const MainPage = () => {
   const {
+    isLoading,
+    bookingError,
     step,
     baseDate,
     setBaseDate,
@@ -44,6 +48,10 @@ const MainPage = () => {
         {/* HEADER SECTION */}
         <TopHeader step={step} prevStep={prevStep} />
 
+        {isLoading && (
+          <BookingLoading />
+        )}
+
         {/* STEP CONTENT */}
         <div className="flex-1 relative px-6 overflow-y-auto overflow-x-hidden pb-24">
           <AnimatePresence mode="wait">
@@ -55,15 +63,20 @@ const MainPage = () => {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className='absolute inset-2'
             >
+              {/* Has Error */}
+              {bookingError && (
+                <FailBooking error={bookingError} resetStep={handleResetStep} />
+              )}
+
               {/* STEP 0: BARBER SELECTION */}
-              {step === BookingStepsEnum.Barber && (
+              {!bookingError && step === BookingStepsEnum.Barber && (
                 <PickBarbers
                   booking={booking}
                   setBarber={setBarber} />
               )}
 
               {/* STEP 1: DATE SELECTION (TS ADAPTABLE) */}
-              {step === BookingStepsEnum.DateAndTime && (
+              {!bookingError && step === BookingStepsEnum.DateAndTime && (
                 <PickTime
                   baseDate={baseDate}
                   setBaseDate={setBaseDate}
@@ -76,7 +89,7 @@ const MainPage = () => {
               )}
 
               {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
-              {step === BookingStepsEnum.Services && (
+              {!bookingError && step === BookingStepsEnum.Services && (
                 <SelectService
                   booking={booking}
                   toggleService={toggleService}
@@ -85,7 +98,7 @@ const MainPage = () => {
               )}
 
               {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
-              {step === BookingStepsEnum.Details && (
+              {!bookingError && step === BookingStepsEnum.Details && (
                 <ConfirmBooking
                   booking={booking}
                   handleInputChange={handleInputChange}
@@ -94,7 +107,7 @@ const MainPage = () => {
               )}
 
               {/* STEP 3: SUCCESS SCREEN */}
-              {step === BookingStepsEnum.Done && (
+              {!bookingError && step === BookingStepsEnum.Done && (
                 <BookingSuccess
                   booking={booking}
                   resetStep={handleResetStep} />

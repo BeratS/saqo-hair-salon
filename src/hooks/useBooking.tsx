@@ -2,10 +2,14 @@ import { addDays, startOfDay } from 'date-fns';
 import { type ChangeEvent, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
+import { createAppointment } from '@/services/booking';
+import { wait } from '@/utils/helper';
 
 
 const useBooking = () => {
     const [step, setStep] = useState<number>(BookingStepsEnum.Barber);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [bookingError, setBookingError] = useState<string>('');
     const [baseDate, setBaseDate] = useState<Date>(new Date());
 
     const [booking, setBooking] = useState<IBookingState>({
@@ -59,9 +63,20 @@ const useBooking = () => {
     const prevStep = () => setStep((s) => s - 1);
 
     const confirmBooking = async () => {
-        // Logic for Firebase submission
-        console.log("Submitting to Firebase:", booking);
-        nextStep();
+        try {
+            setIsLoading(true); // Start loading state
+
+            await createAppointment(booking);
+
+            await wait(1000)
+
+            nextStep(); // Success!
+        } catch (error: any) {
+            console.error("Booking failed:",  error?.message);
+            setBookingError(error?.message ?? 'Failed to book appointment'); // Show that red error UI we made
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const toggleService = (service: IBookingService) => {
@@ -103,9 +118,12 @@ const useBooking = () => {
             totalPrice: 0,
         });
         setStep(BookingStepsEnum.Barber);
+        setBookingError('');
     }
 
     return {
+        bookingError,
+        isLoading,
         step,
         setStep,
         baseDate,

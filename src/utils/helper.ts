@@ -1,5 +1,10 @@
 import { format } from "date-fns";
 
+
+export function wait(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /**
  * Converts "2:30 PM" to "143000" (HHMMSS)
  */
@@ -41,6 +46,28 @@ const add30Mins = (time24h: string): string => {
 
     return `${newHH}${newMM}00`;
 };
+
+
+// Helper to merge Date and Time string
+export const mergeDateTime = (date: Date, timeStr: string) => {
+    const [time, modifier] = timeStr.split(' ');
+    // eslint-disable-next-line prefer-const
+    let [hours, minutes] = time.split(':').map(Number);
+
+    if (modifier === 'PM' && hours < 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+
+    const mergedDate = new Date(date);
+    mergedDate.setHours(hours, minutes, 0, 0);
+    return mergedDate;
+};
+
+export const formatDateTimeForDisplay = (date: Date) => {
+    // const date = doc.scheduledAt.toDate();
+    // const formattedDate = format(date, "PPP"); // "Feb 25th, 2026"
+    // const formattedTime = format(date, "p");   // "4:30 PM"
+    return format(date, "MMMM d, yyyy hh:mm a");
+}
 
 export const generateCalendarLink = (booking: IBookingState) => {
     const { date, time, barber, selectedServices } = booking;
