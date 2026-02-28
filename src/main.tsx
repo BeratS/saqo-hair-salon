@@ -17,9 +17,10 @@ import App from "./App";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
+const DashboardPage = lazy(() => import('./pages/admin/dashboard-page'));
 const BarbersPage = lazy(() => import('./pages/admin/barbers-page'));
 const AppointmentPage = lazy(() => import('./pages/admin/appointment-page'));
-const DashboardPage = lazy(() => import('./pages/admin/dashboard-page'));
+const AdminMainPage = lazy(() => import('./pages/admin/main-page'));
 const SchedulerManagerPage = lazy(() => import('./pages/admin/scheduler-manager-page'));
 const AuthPage = lazy(() => import('./pages/auth-page'));
 
@@ -40,10 +41,20 @@ const router = createBrowserRouter([
         path: 'manage',
         element: (
           <ProtectedRoute>
-            <DashboardPage /> {/* Only logged in users see this */}
+            <AdminMainPage /> {/* Only logged in users see this */}
           </ProtectedRoute>
         ),
         children: [
+          {
+            path: 'dashboard',
+            element: (
+              <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              </Suspense>
+            )
+          },
           {
             path: 'appointments',
             element: (

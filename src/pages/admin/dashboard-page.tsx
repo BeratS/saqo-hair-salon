@@ -1,26 +1,24 @@
-import { useRef } from 'react';
-import { Outlet } from 'react-router-dom';
 
-import AdminSidebar from '@/components/admin/admin-sidebar';
-import { Constants } from '@/Constants';
-import { useMeta } from '@/hooks/useMeta';
+import { ChartAreaInteractive } from '@/components/widgets/chart-area-interactive';
+import { DataTable } from '@/components/data-table';
+import { SectionCards } from '@/components/widgets/section-cards';
 
-const MainPage = () => {
-  const mainRef = useRef<HTMLElement>(null);
+import data from "../../app/data.json";
 
-  useMeta(
-    `${Constants.SITE_TITLE} - Dashboard`,
-    `Welcome to the ${Constants.SITE_TITLE} dashboard. Manage your appointments and services.`
-  );
+function DashboardPage() {
+    return (
+        <div className="flex flex-1 flex-col">
+            <div className="@container/main flex flex-1 flex-col gap-2">
+                <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+                    <SectionCards />
+                    <div className="px-4 lg:px-6">
+                        <ChartAreaInteractive />
+                    </div>
+                    <DataTable data={data} />
+                </div>
+            </div>
+        </div>
+    );
+}
 
-  return (
-    <main ref={mainRef} className="relative">
-      <div className="flex h-screen overflow-hidden">
-        <AdminSidebar />
-        <Outlet />
-      </div>
-    </main>
-  );
-};
-
-export default MainPage;
+export default DashboardPage;
