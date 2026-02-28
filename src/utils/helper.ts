@@ -1,5 +1,7 @@
 import { format } from "date-fns";
 
+import { Constants } from "@/Constants";
+
 
 export function wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -74,8 +76,8 @@ export const generateCalendarLink = (booking: IBookingState) => {
 
     // Format details for the calendar description
     const serviceNames = selectedServices.map(s => s.name).join(', ');
-    const title = `Haircut with ${barber?.name} @ Saqo`;
-    const location = "Saqo Hair Salon, Skopje";
+    const title = `Haircut with ${barber?.name} @ ${barber?.name}`;
+    const location = `${Constants.SITE_TITLE}, Skopje`;
 
     // Create a Google Calendar Link (Easiest for Web)
     const startTime = format(date!, "yyyyMMdd") + 'T' + convertTo24h(time!);

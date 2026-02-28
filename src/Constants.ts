@@ -1,5 +1,6 @@
 export const Constants = {
-  TITLE: 'Saqo Hair Salon',
+  SITE_TITLE: 'Saqo Hair Salon',
+  WEBSITE_URL: 'https://saqo-hair-salon.web.app',
   PAGES: {
     DISCOVER: '/',
   },
@@ -15,10 +16,11 @@ export const Constants = {
     LINKEDIN: (url: string) => `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
     TELEGRAM: (url: string, text?: string) => `https://t.me/share/url?url=${url}`, // &text=YOUR_TEXT
   },
-  GOOGLE_MAPS: 'https://maps.app.goo.gl/68UHdWg9BkN1jKh67',
-  ADDRESS: '25th floor, The eighteen tower, Lusail City , Qatar',
-  OPERATING_HOURS: 'Sunday to Thursday : 7:30 AM - 6:00 PM',
-  CONTACT_NUMBER: '+974 4429 2222',
+  GOOGLE_MAPS: 'https://maps.app.goo.gl/sEYuGdvYvDmXgqeh9',
+  ADDRESS: 'Arhiepiskop Dositej 11 Skopje, Çair 1000',
+  LOCATION: 'North Macedonia, Skopje, Çair 1000',
+  EMAIL: 'info@saqohairsalon.com',
+  CONTACT_NUMBER: '+389 70 336 332',
 }
 
 export const DATE_FORMAT = {

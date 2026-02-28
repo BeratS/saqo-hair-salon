@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import { Constants } from '@/Constants';
+
 export const useMeta = (
     title: string,
     description: string,
@@ -25,16 +27,16 @@ export const useMeta = (
             script.innerHTML = JSON.stringify(schemaData ||{
                 "@context": "https://schema.org",
                 "@type": "HairSalon",
-                "name": "Saqo Hair Salon",
-                "image": "https://saqo-hair-salon.web.app//og-image.jpg",
-                "url": "https://saqo-hair-salon.web.app//",
+                "name": Constants.SITE_TITLE,
+                "image": `${Constants.WEBSITE_URL}/og-image.jpg`,
+                "url": Constants.WEBSITE_URL,
                 "description": "Premium hair salon service specializing in professional hair care and styling.",
                 "address": {
                     "@type": "PostalAddress",
-                    "addressLocality": "Arhiepiskop Dositej 11 skopje, çair 1000",
-                    "addressCountry": "Skopje",
-                    "phone": "+41 XX XXX XX XX",
-                    "email": "saqohairsalon@gmail.com"
+                    "addressLocality": Constants.ADDRESS,
+                    "addressCountry": Constants.LOCATION,
+                    "phone": Constants.CONTACT_NUMBER,
+                    "email": Constants.EMAIL
                 }
             });
             document.head.appendChild(script);

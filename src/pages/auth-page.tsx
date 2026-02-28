@@ -3,7 +3,6 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -13,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"; // Adjust path as needed
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Constants } from "@/Constants";
 import { errorMessages } from "@/lib/custom-errors";
 import { auth } from "@/lib/firebase";
 import { loginSchema, type LoginValues, signupSchema, type SignupValues } from "@/lib/validations/auth";
@@ -20,8 +20,6 @@ import { loginSchema, type LoginValues, signupSchema, type SignupValues } from "
 export default function AuthPage() {
   const navigate = useNavigate();
   
-  const { t } = useTranslation();
-
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
 
@@ -45,18 +43,7 @@ export default function AuthPage() {
         await signInWithEmailAndPassword(auth, data.email, data.password);
         toast.success("Welcome back!");
         // Navigation is handled by AuthContext/Router
-        navigate("/"); // Navigate to home after login
-      } else {
-        await createUserWithEmailAndPassword(auth, data.email, data.password);
-
-        // 1. Notify user
-        toast.success("Account created successfully!");
-
-        // 2. Switch tab to login automatically
-        setActiveTab("login");
-
-        // 3. Optional: Reset signup form
-        signupForm.reset();
+        navigate("/manage"); // Navigate to home after login
       }
     } catch (error: any) {
       const msg = errorMessages(error.message)
@@ -68,16 +55,15 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[70vh] bg-slate-50 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-slate-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl text-center font-bold font-mono">Saqo Hair Salon</CardTitle>
+          <CardTitle className="text-2xl text-center font-bold font-mono">{Constants.SITE_TITLE}</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="login">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="login">{t('Login')}</TabsTrigger>
-              <TabsTrigger value="signup">{t('Signup')}</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-1 mb-8">
+              <TabsTrigger value="login">{'Login'}</TabsTrigger>
             </TabsList>
 
             {/* --- LOGIN TAB --- */}

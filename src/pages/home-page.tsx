@@ -11,6 +11,7 @@ import PickBarbers from '@/components/home/pick-barbers';
 import PickTime from '@/components/home/pick-time';
 import SelectService from '@/components/home/select-service';
 import TopHeader from '@/components/home/top-header';
+import { Constants } from '@/Constants';
 import useBooking from '@/hooks/useBooking';
 import { useMeta } from '@/hooks/useMeta';
 
@@ -37,8 +38,8 @@ const MainPage = () => {
   } = useBooking();
 
   useMeta(
-    "Saqo Hair Salon",
-    "Welcome to Saqo Hair Salon, your go-to destination for stylish haircuts and exceptional service in Zurich. Book your appointment today!"
+    Constants.SITE_TITLE,
+    `Welcome to ${Constants.SITE_TITLE}, your go-to destination for stylish haircuts and exceptional service in Zurich. Book your appointment today!`
   );
 
   return (

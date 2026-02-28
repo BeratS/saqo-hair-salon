@@ -7,6 +7,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { Constants } from "@/Constants";
 
 import { Button } from "../ui/button";
 import { listedBookingSteps } from "./booking-constants";
@@ -57,7 +58,7 @@ function TopHeader({ step, prevStep }: IProps) {
 
                 {/* CENTER: Title */}
                 <h1 className="font-black text-xl tracking-tighter uppercase">
-                    Saqo Hair Salon
+                    {Constants.SITE_TITLE}
                 </h1>
 
                 {/* RIGHT SIDE: Language Switcher */}

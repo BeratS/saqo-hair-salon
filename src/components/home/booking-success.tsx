@@ -1,14 +1,16 @@
-import { Calendar, Check, MapPin, User } from 'lucide-react';
+import { Calendar, Check, MapPin, Phone, User } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from "@/components/ui/button";
+import { Constants } from '@/Constants';
 import { generateCalendarLink } from '@/utils/helper';
 
 // Success Animation Variants
 const iconVariants = {
   hidden: { scale: 0, rotate: -45 },
-  visible: { 
-    scale: 1, 
+  visible: {
+    scale: 1,
     rotate: 0,
     transition: { type: "spring", stiffness: 200, damping: 12, delay: 0.2 }
   }
@@ -17,7 +19,7 @@ const iconVariants = {
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
-    opacity: 1, 
+    opacity: 1,
     y: 0,
     transition: { delay: 0.4 + (i * 0.1) }
   })
@@ -29,72 +31,69 @@ interface IProps {
 }
 
 export default function BookingSuccess({ booking, resetStep }: IProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 text-center">
       {/* Animated Success Circle */}
-      <motion.div 
+      <motion.div
         variants={iconVariants}
         initial="hidden"
         animate="visible"
-        className="w-22 min-h-22 bg-black rounded-full flex items-center justify-center mb-8 shadow-2xl"
+        className="w-20 min-h-20 bg-black rounded-full flex items-center justify-center mb-6 shadow-2xl"
       >
-        <Check size={42} className="text-white" strokeWidth={3} />
+        <Check size={40} className="text-white" strokeWidth={3} />
       </motion.div>
 
       {/* Main Message */}
       <motion.div custom={0} variants={textVariants} initial="hidden" animate="visible">
-        <h2 className="text-3xl font-black tracking-tighter mb-2">YOU'RE ALL SET!</h2>
+        <h3 className="text-2xl font-bold text-black mb-2">
+          {t('Your seat is reserved.')}
+        </h3>
         <p className="text-zinc-500 font-medium mb-8">
-          Your seat is reserved. <br /> We’re excited to see you at <span className="text-black font-bold">Saqo Hair Salon</span>.
+          We’re excited to see you at <span className="text-black font-bold">Saqo Hair Salon</span>.
         </p>
       </motion.div>
 
       {/* Appointment Receipt Card */}
-      <motion.div 
-        custom={1} 
-        variants={textVariants} 
-        initial="hidden" 
+      <motion.div
+        custom={1}
+        variants={textVariants}
+        initial="hidden"
         animate="visible"
         className="w-full bg-zinc-50 rounded-[2.5rem] p-6 border-2 border-zinc-100 mb-8 space-y-4"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-            <User size={20} className="text-black" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Barber</p>
-            <p className="font-bold text-lg">{booking.barber?.name || "Master Barber"} - (Saqo Hair Salon)</p>
-          </div>
-        </div>
+        <CardItem
+          icon={<User size={20} className="text-black" />}
+          label="Barber"
+          value={`${booking.barber?.name || "Master Barber"} - (${Constants.SITE_TITLE})`}
+        />
 
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-            <Calendar size={20} className="text-black" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Date & Time</p>
-            <p className="font-bold text-lg">
-              {booking.date ? booking.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : 'Today'} • {booking.time}
-            </p>
-          </div>
-        </div>
+        <CardItem
+          icon={<Calendar size={20} className="text-black" />}
+          label="Date & Time"
+          value={`${booking.date ? booking.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : 'Today'} • ${booking.time}`}
+        />
 
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-            <MapPin size={20} className="text-black" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Location</p>
-            <p className="font-bold text-lg">Arhiepiskop Dositej 11 skopje, çair 1000</p>
-          </div>
-        </div>
+        <CardItem
+          icon={<Phone size={20} className="text-black" />}
+          label="Contact"
+          value={Constants.CONTACT_NUMBER}
+        />
+
+        <CardItem
+          icon={<MapPin size={20} className="text-black" />}
+          label="Location"
+          value={Constants.ADDRESS}
+        />
+
       </motion.div>
 
       {/* Action Buttons */}
-      <motion.div 
-        custom={2} 
-        variants={textVariants} 
-        initial="hidden" 
+      <motion.div
+        custom={2}
+        variants={textVariants}
+        initial="hidden"
         animate="visible"
         className="w-full space-y-3"
       >
@@ -110,3 +109,23 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
     </div>
   );
 }
+
+interface ICardItem {
+  icon: React.ReactNode,
+  label: string,
+  value: string
+}
+
+const CardItem = ({ icon, label, value }: ICardItem) => (
+  <div className="flex items-center gap-4">
+    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+      {icon}
+    </div>
+    <div className="text-left">
+      <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
+        {label}
+      </p>
+      <p className="font-bold text-lg">{value}</p>
+    </div>
+  </div>
+)

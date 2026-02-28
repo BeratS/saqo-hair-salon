@@ -3,21 +3,27 @@ import './index.css';
 import '@/lib/i18n';
 
 import { MotionConfig } from 'motion/react';
-import { StrictMode } from "react";
+import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
 } from "react-router-dom";
 
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 import App from "./App";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-import AuthPage from "./pages/AuthPage";
-import DashboardPage from './pages/DashboardPage';
-import HomePage from "./pages/HomePage";
+
+const BarbersPage = lazy(() => import('./pages/admin/barbers-page'));
+const AppointmentPage = lazy(() => import('./pages/admin/appointment-page'));
+const DashboardPage = lazy(() => import('./pages/admin/dashboard-page'));
+const SchedulerManagerPage = lazy(() => import('./pages/admin/scheduler-manager-page'));
+const AuthPage = lazy(() => import('./pages/auth-page'));
+
+import HomePage from "./pages/home-page";
 
 const router = createBrowserRouter([
   {
@@ -31,12 +37,44 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: 'my-orders',
+        path: 'manage',
         element: (
           <ProtectedRoute>
             <DashboardPage /> {/* Only logged in users see this */}
           </ProtectedRoute>
-        )
+        ),
+        children: [
+          {
+            path: 'appointments',
+            element: (
+              <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+                <ProtectedRoute>
+                  <AppointmentPage />
+                </ProtectedRoute>
+              </Suspense>
+            )
+          },
+          {
+            path: 'schedule',
+            element: (
+              <ProtectedRoute>
+                <SchedulerManagerPage />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'barbers',
+            element: (
+              <ProtectedRoute>
+                <BarbersPage />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: '*',
+            element: <Navigate to="/manage/appointments" replace />
+          }
+        ]
       },
       { path: "auth", element: <AuthPage /> },
     ],
