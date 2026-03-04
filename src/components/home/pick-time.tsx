@@ -1,10 +1,10 @@
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useMemo } from 'react';
 
 // UI Components
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
     Sheet,
     SheetClose,
@@ -15,12 +15,14 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from '@/lib/utils';
 
+import TwoWeekAheadCalendar from '../widgets/two-weeks-ahead-calendar';
+
 interface IProps {
     baseDate: Date | undefined;
     setBaseDate: (date: Date) => void;
     booking: any;
     timeSlots: string[];
-    weekStrip: Date[];
+    dateSlots: Date[];
     setDate: (date: Date) => void;
     setTime: (time: string) => void;
 }
@@ -30,10 +32,23 @@ function PickTime({
     setBaseDate,
     booking,
     timeSlots,
-    weekStrip,
+    dateSlots,
     setDate,
     setTime,
 }: IProps) {
+
+    const weekStrip = useMemo<Date[]>(() => {
+        // 1. Find the index of the currently selected baseDate in our 14-day pool
+        const startIndex = dateSlots.findIndex(date => isSameDay(date, baseDate!));
+
+        // 2. If for some reason it's not found (e.g. it's a Sunday), default to 0
+        const start = startIndex === -1 ? 0 : startIndex;
+
+        // 3. Slice 7 days starting from that selection
+        // We use .slice(start, start + 7) to show the "window" of time
+        return dateSlots.slice(start, start + 5);
+    }, [baseDate, dateSlots]);
+
     return (
         <div className="flex flex-col h-full space-y-6">
             {/* HEADER & JUMP BUTTON */}
@@ -56,29 +71,12 @@ function PickTime({
                             </SheetTitle>
                         </SheetHeader>
 
-                        <div className="relative flex justify-center py-6">
-                            <Calendar
-                                mode="single"
-                                selected={baseDate}
-                                onSelect={(d) => d && setBaseDate(d)}
-                                disabled={{ before: new Date() }}
-                                className="p-0"
-                                classNames={{
-                                    months: "w-full",
-                                    caption_label: "text-2xl font-black uppercase tracking-tighter",
-                                    nav: "flex items-center gap-1 w-full absolute top-2 inset-x-0 justify-between",
-                                    nav_button: "h-12 w-12 bg-zinc-100 rounded-full flex items-center justify-center",
-                                    button_previous: "size-14 text-xl mb-0 bg-zinc-100 rounded-full flex items-center justify-center",
-                                    button_next: "size-14 text-xl mb-0 bg-zinc-100 rounded-full flex items-center justify-center",
-                                    head_cell: "text-zinc-400 w-14 font-bold text-sm uppercase",
-                                    month_caption: "pb-6 text-center",
-                                    cell: "h-16 w-16 text-center text-xl p-0 relative",
-                                    day: "h-14 w-14 p-0 font-black rounded-2xl transition-all bg-transparent",
-                                    day_selected: "bg-black text-white hover:bg-black focus:bg-black shadow-2xl scale-110",
-                                    day_today: "bg-zinc-100 text-black border-2 border-black",
-                                }}
-                            />
-                        </div>
+                        {/* The New Vertical Picker */}
+                        <TwoWeekAheadCalendar
+                            selectedDate={baseDate!}
+                            dateSlots={dateSlots}
+                            onSelect={(d) => setBaseDate(d)}
+                        />
 
                         <SheetClose render={
                             <Button className="w-full py-8 rounded-[2rem] bg-black text-white font-black text-lg uppercase tracking-widest mt-6 active:scale-95 transition-transform" />
@@ -90,7 +88,7 @@ function PickTime({
             </div>
 
             {/* DATE STRIP (Sticky-style at top) */}
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
+            <div className="grid grid-cols-5 gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
                 {weekStrip.map((date: Date, i: number) => {
                     const isSelected = booking.date?.toDateString() === date.toDateString();
                     return (
@@ -98,8 +96,9 @@ function PickTime({
                             key={i}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => setDate(date)} // Note: We don't call nextStep() here anymore
-                            className={`shrink-0 w-20 h-24 rounded-[2rem] border-2 flex flex-col items-center justify-center snap-center cursor-pointer transition-all ${isSelected ? 'bg-black text-white border-black shadow-lg' : 'bg-white border-zinc-100 text-zinc-400'
-                                }`}
+                            className={cn("shrink-0 w-full h-24 rounded-[2rem] border-2 flex flex-col items-center justify-center snap-center cursor-pointer transition-all",
+                                isSelected ? 'bg-primary text-white border-yellow-60 shadow-lg' : 'bg-white border-zinc-100 text-zinc-400'
+                            )}
                         >
                             <span className="text-[10px] font-bold uppercase">{format(date, 'eee')}</span>
                             <span className={`text-2xl font-black tracking-tighter ${isSelected ? 'text-white' : 'text-black'}`}>
@@ -127,8 +126,8 @@ function PickTime({
                                 key={time}
                                 variant="outline"
                                 disabled={!booking.date} // Disable time if no date is picked
-                                className={cn("rounded-2xl py-8 font-bold text-sm border-2 transition-all",
-                                    isTimeSelected ? 'bg-black text-white border-black' : 'hover:bg-zinc-50')}
+                                className={cn("rounded-3xl py-8.5 font-bold text-base border-2 transition-all",
+                                    isTimeSelected ? 'bg-primary text-white border-yellow-60' : 'bg-white hover:bg-zinc-50')}
                                 onClick={() => setTime(time)} // This handles selection and moves to next step
                             >
                                 {time}

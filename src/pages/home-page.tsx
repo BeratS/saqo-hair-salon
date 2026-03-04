@@ -25,7 +25,7 @@ const MainPage = () => {
     setBaseDate,
     booking,
     timeSlots,
-    weekStrip,
+    dateSlots,
     handleInputChange,
     setBarber,
     setDate,
@@ -83,7 +83,7 @@ const MainPage = () => {
                   setBaseDate={setBaseDate}
                   booking={booking}
                   timeSlots={timeSlots}
-                  weekStrip={weekStrip}
+                  dateSlots={dateSlots}
                   setDate={setDate}
                   setTime={setTime}
                 />

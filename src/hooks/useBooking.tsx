@@ -21,6 +21,12 @@ const useBooking = () => {
         selectedServices: [],
         totalPrice: 0,
     });
+    
+    // Generate 14 days (today + 2 weeks) - no Sundays
+    const dateSlots = useMemo(() => {
+        return Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
+            .filter(date => date.getDay() !== 0); // 0 is Sunday
+    }, []); // Empty array means it only runs once on mount
 
     // 10 AM - 8 PM Slots
     const timeSlots = useMemo<string[]>(() => {
@@ -34,11 +40,6 @@ const useBooking = () => {
         }
         return slots;
     }, []);
-
-    // 7 Days strip
-    const weekStrip = useMemo<Date[]>(() => {
-        return Array.from({ length: 7 }).map((_, i) => addDays(startOfDay(baseDate), i));
-    }, [baseDate]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -130,7 +131,7 @@ const useBooking = () => {
         setBaseDate,
         booking,
         timeSlots,
-        weekStrip,
+        dateSlots,
         handleInputChange,
         setBarber,
         setDate,
