@@ -1,3 +1,4 @@
+import { endOfDay, startOfDay } from "date-fns";
 import { addDoc, collection, serverTimestamp, Timestamp } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
@@ -42,3 +43,16 @@ export const createAppointment = async (booking: IBookingState) => {
     return docRef.id;
 };
 
+export const getAppointments = async () => {
+    // Implement fetching appointments from Firestore
+    // Query Logic for "Today"
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
+
+    // const q = query(
+    //     collection(db, "appointments"),
+    //     where("scheduledAt", ">=", Timestamp.fromDate(todayStart)),
+    //     where("scheduledAt", "<=", Timestamp.fromDate(todayEnd)),
+    //     orderBy("scheduledAt", "asc")
+    // );
+}

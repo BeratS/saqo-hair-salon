@@ -1,13 +1,11 @@
-import AppointmentDataTable from "@/components/admin/appointment-data-table";
+import SettingConfig from "@/components/admin/settings-config";
 
-
-export default function AppointmentListPage() {
-
+export default function SettingsPage() {
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <AppointmentDataTable />
+          <SettingConfig />
         </div>
       </div>
     </div>

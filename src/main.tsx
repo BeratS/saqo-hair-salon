@@ -17,11 +17,10 @@ import App from "./App";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
-const DashboardPage = lazy(() => import('./pages/admin/dashboard-page'));
 const BarbersPage = lazy(() => import('./pages/admin/barbers-page'));
 const AppointmentPage = lazy(() => import('./pages/admin/appointment-page'));
 const AdminMainPage = lazy(() => import('./pages/admin/main-page'));
-const SchedulerManagerPage = lazy(() => import('./pages/admin/scheduler-manager-page'));
+const SettingsPage = lazy(() => import('./pages/admin/settings-page'));
 const AuthPage = lazy(() => import('./pages/auth-page'));
 
 import HomePage from "./pages/home-page";
@@ -46,16 +45,6 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: 'dashboard',
-            element: (
-              <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              </Suspense>
-            )
-          },
-          {
             path: 'appointments',
             element: (
               <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
@@ -66,18 +55,18 @@ const router = createBrowserRouter([
             )
           },
           {
-            path: 'schedule',
-            element: (
-              <ProtectedRoute>
-                <SchedulerManagerPage />
-              </ProtectedRoute>
-            )
-          },
-          {
             path: 'barbers',
             element: (
               <ProtectedRoute>
                 <BarbersPage />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'settings',
+            element: (
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             )
           },

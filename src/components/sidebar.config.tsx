@@ -1,14 +1,7 @@
-import { ChartBarIcon, FolderIcon, LayoutDashboardIcon, ListIcon } from "lucide-react"
+import { ListIcon, SettingsIcon, UserCircle } from "lucide-react"
 
 export const sidebarConfig = {
   pages: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: (
-        <LayoutDashboardIcon />
-      ),
-    },
     {
       title: "Appointments",
       url: "/appointments",
@@ -17,17 +10,17 @@ export const sidebarConfig = {
       ),
     },
     {
-      title: "Schedule",
-      url: "/schedule",
-      icon: (
-        <ChartBarIcon />
-      ),
-    },
-    {
       title: "Barbers",
       url: "/barbers",
       icon: (
-        <FolderIcon />
+        <UserCircle />
+      ),
+    },
+    {
+      title: "Settings",
+      url: "/settings",
+      icon: (
+        <SettingsIcon />
       ),
     },
   ],
