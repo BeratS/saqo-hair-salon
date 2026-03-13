@@ -13,6 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Constants } from "@/Constants"
 
@@ -24,7 +25,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="flex justify-between">
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
               render={<a href="#" />}
@@ -32,6 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Scissors className="size-5!" />
               <span className="text-base font-semibold">{Constants.SITE_TITLE}</span>
             </SidebarMenuButton>
+            <SidebarTrigger className="md:hidden" />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

@@ -3,7 +3,7 @@ import { addDoc, collection, serverTimestamp, Timestamp } from "firebase/firesto
 import { db } from "@/lib/firebase";
 import { mergeDateTime } from "@/utils/helper";
 
-interface IAppointment {
+export interface IAppointment {
   barberId: string;
   customerName: string;
   customerPhone: string;
