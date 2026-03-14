@@ -121,7 +121,7 @@ export default function BarbersConfig() {
                                     "{barber.bio}"
                                 </p>
 
-                                <div className="w-full h-[1px] bg-zinc-100 mb-8" />
+                                <div className="w-full h-px bg-zinc-100 mb-8" />
 
                                 <div className="flex gap-3 w-full">
                                     <button
@@ -142,7 +142,7 @@ export default function BarbersConfig() {
 
             {/* --- SHARED MODAL --- */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="sm:max-w-[500px] rounded-[3rem] p-10 bg-white">
+                <DialogContent className="sm:max-w-125 rounded-[3rem] p-10 bg-white">
                     <DialogHeader>
                         <DialogTitle className="text-3xl font-black uppercase tracking-tighter">
                             {editingBarber ? 'Edit Barber' : 'Add New Barber'}
@@ -184,7 +184,7 @@ export default function BarbersConfig() {
                                     required
                                     value={formData.bio}
                                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                                    className="rounded-2xl bg-zinc-50 border-none font-bold min-h-[100px]"
+                                    className="rounded-2xl bg-zinc-50 border-none font-bold min-h-25"
                                 />
                             </div>
                         </div>

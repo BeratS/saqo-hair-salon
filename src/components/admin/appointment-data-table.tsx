@@ -3,13 +3,15 @@
 import { addDays, addHours, format, isSameDay, startOfDay } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarIcon, ChevronRight, Phone, Plus, PlusIcon, Scissors, Search, SlidersHorizontal, X } from "lucide-react";
+import { CalendarIcon, ChevronRight, Phone, PlusIcon, Scissors, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
+
 import { Button } from "../ui/button";
 
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const MOCK_APPOINTMENTS = [
     {
         id: "booking_1",
@@ -119,7 +121,7 @@ function AppointmentDataTable() {
             <main className="flex-1 flex flex-col overflow-hidden bg-zinc-50/30">
                 <header className="p-8 flex justify-between items-center bg-white/50 backdrop-blur-md border-b border-zinc-100">
                     <div>
-                        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Viewing Schedule For</p>
+                        <p className="text-xxs font-black text-zinc-400 uppercase tracking-[0.2em]">Viewing Schedule For</p>
                         <h2 className="text-4xl font-black uppercase tracking-tighter">
                             {isSameDay(selectedDate, new Date()) ? "Today" : format(selectedDate, "EEEE, MMMM do")}
                         </h2>
@@ -178,10 +180,10 @@ function AppointmentRow({ appointment, onCancel }: any) {
                 <div>
                     <h4 className="font-black text-lg uppercase tracking-tight">{appointment.customerName}</h4>
                     <div className="flex gap-4 items-center">
-                        <span className="text-[10px] font-bold text-zinc-400 flex items-center gap-1 uppercase tracking-widest">
+                        <span className="text-xxs font-bold text-zinc-400 flex items-center gap-1 uppercase tracking-widest">
                             <Phone size={10} /> {appointment.customerPhone}
                         </span>
-                        <span className="text-[10px] font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-zinc-100 px-2 py-0.5 rounded-md">
+                        <span className="text-xxs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-zinc-100 px-2 py-0.5 rounded-md">
                             <Scissors size={10} /> {appointment.barberId}
                         </span>
                     </div>

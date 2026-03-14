@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { format } from 'date-fns';
-import { Plus, Clock, Calendar as CalendarIcon, Trash2, Save, MoreHorizontal, Pencil } from 'lucide-react';
-import { cn } from "@/lib/utils";
+import { Calendar as CalendarIcon, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 export default function SettingsPage() {
     // Mock State
@@ -44,7 +44,7 @@ export default function SettingsPage() {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
                     <div>
                         <h3 className="text-xl font-black uppercase mb-1">Standard Schedule</h3>
-                        <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest leading-relaxed max-w-xs">
+                        <p className="text-zinc-400 text-xxs font-bold uppercase tracking-widest leading-relaxed max-w-xs">
                             Mon — Sat default working hours
                         </p>
                     </div>
@@ -52,12 +52,12 @@ export default function SettingsPage() {
                     <div className="flex items-center gap-8">
                         <div className="flex items-center gap-6 bg-zinc-50 p-6 rounded-[2.5rem] border border-zinc-100 px-10">
                             <div className="text-center">
-                                <p className="text-[10px] font-black uppercase text-zinc-400 mb-1">Open</p>
+                                <p className="text-xxs font-black uppercase text-zinc-400 mb-1">Open</p>
                                 <p className="text-3xl font-black">{globalHours.open}</p>
                             </div>
-                            <div className="h-10 w-[2px] bg-zinc-200" />
+                            <div className="h-10 w-0.5 bg-zinc-200" />
                             <div className="text-center">
-                                <p className="text-[10px] font-black uppercase text-zinc-400 mb-1">Close</p>
+                                <p className="text-xxs font-black uppercase text-zinc-400 mb-1">Close</p>
                                 <p className="text-3xl font-black">{globalHours.close}</p>
                             </div>
                         </div>
@@ -69,18 +69,18 @@ export default function SettingsPage() {
                             }>
                                 <Pencil size={16} className="mr-2" /> Edit Global
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px] rounded-[3rem] p-10">
+                            <DialogContent className="sm:max-w-106.25 rounded-[3rem] p-10">
                                 <DialogHeader>
                                     <DialogTitle className="text-3xl font-black uppercase tracking-tighter">Global Hours</DialogTitle>
                                 </DialogHeader>
                                 <div className="grid gap-6 py-6">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Opening Time</Label>
+                                            <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Opening Time</Label>
                                             <Input type="time" value={globalHours.open} onChange={(e) => setGlobalHours({ ...globalHours, open: e.target.value })} className="h-14 rounded-2xl bg-zinc-50 border-none font-bold" />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Closing Time</Label>
+                                            <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Closing Time</Label>
                                             <Input type="time" value={globalHours.close} onChange={(e) => setGlobalHours({ ...globalHours, close: e.target.value })} className="h-14 rounded-2xl bg-zinc-50 border-none font-bold" />
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@ export default function SettingsPage() {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
                     <div>
                         <h3 className="text-xl font-black uppercase">Special Dates</h3>
-                        <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-1">Specific overrides for holidays</p>
+                        <p className="text-zinc-400 text-xxs font-bold uppercase tracking-widest mt-1">Specific overrides for holidays</p>
                     </div>
 
                     {/* --- OVERRIDE MODAL --- */}
@@ -109,13 +109,13 @@ export default function SettingsPage() {
                         }>
                             <Plus size={18} className="mr-2" strokeWidth={3} /> Add Override
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[450px] rounded-[3rem] p-10">
+                        <DialogContent className="sm:max-w-112.5 rounded-[3rem] p-10">
                             <DialogHeader>
                                 <DialogTitle className="text-3xl font-black uppercase tracking-tighter">New Override</DialogTitle>
                             </DialogHeader>
                             <div className="space-y-6 py-4">
                                 <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Select Date</Label>
+                                    <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Select Date</Label>
                                     <Popover>
                                         <PopoverTrigger render={
                                             <Button variant="outline" className={cn("w-full h-14 rounded-2xl font-bold border-none bg-zinc-50 justify-start", !newDate && "text-zinc-400")} />
@@ -130,16 +130,16 @@ export default function SettingsPage() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Open</Label>
+                                        <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Open</Label>
                                         <Input type="time" value={newHours.open} onChange={(e) => setNewHours({ ...newHours, open: e.target.value })} className="h-14 rounded-2xl bg-zinc-50 border-none font-bold text-center" />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Close</Label>
+                                        <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Close</Label>
                                         <Input type="time" value={newHours.close} onChange={(e) => setNewHours({ ...newHours, close: e.target.value })} className="h-14 rounded-2xl bg-zinc-50 border-none font-bold text-center" />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Label (Optional)</Label>
+                                    <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Label (Optional)</Label>
                                     <Input placeholder="Short Day / Holiday" value={newHours.note} onChange={(e) => setNewHours({ ...newHours, note: e.target.value })} className="h-14 rounded-2xl bg-zinc-50 border-none font-bold px-4" />
                                 </div>
                             </div>
@@ -155,10 +155,10 @@ export default function SettingsPage() {
                     <Table>
                         <TableHeader className="bg-zinc-100/50">
                             <TableRow className="border-none">
-                                <TableHead className="font-black uppercase text-[10px] tracking-widest h-14 pl-8">Date</TableHead>
-                                <TableHead className="font-black uppercase text-[10px] tracking-widest h-14 text-center">New Hours</TableHead>
-                                <TableHead className="font-black uppercase text-[10px] tracking-widest h-14">Note</TableHead>
-                                <TableHead className="w-[80px] pr-8 text-right"></TableHead>
+                                <TableHead className="font-black uppercase text-xxs tracking-widest h-14 pl-8">Date</TableHead>
+                                <TableHead className="font-black uppercase text-xxs tracking-widest h-14 text-center">New Hours</TableHead>
+                                <TableHead className="font-black uppercase text-xxs tracking-widest h-14">Note</TableHead>
+                                <TableHead className="w-20 pr-8 text-right"></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -167,7 +167,7 @@ export default function SettingsPage() {
                                     <TableCell className="font-bold pl-8 py-6">
                                         <div className="flex flex-col">
                                             <span className="text-sm font-black uppercase tracking-tight">{format(exc.date, "EEEE")}</span>
-                                            <span className="text-[10px] text-zinc-400 font-bold uppercase">{format(exc.date, "MMM dd, yyyy")}</span>
+                                            <span className="text-xxs text-zinc-400 font-bold uppercase">{format(exc.date, "MMM dd, yyyy")}</span>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-center font-black">
@@ -195,7 +195,7 @@ export default function SettingsPage() {
 
                     {exceptions.length === 0 && (
                         <div className="py-24 text-center bg-white">
-                            <p className="text-zinc-300 font-black uppercase text-[10px] tracking-[0.3em]">No custom days set</p>
+                            <p className="text-zinc-300 font-black uppercase text-xxs tracking-[0.3em]">No custom days set</p>
                         </div>
                     )}
                 </div>
