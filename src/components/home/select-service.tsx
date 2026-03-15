@@ -53,7 +53,7 @@ function SelectService({
                             {/* Floating "VIP" Badge for All Inclusive */}
                             {isSpecial && (
                                 <div className={cn(
-                                    "absolute top-0 right-30 sm:right-40 px-3 py-1 rounded-b-xl text-[10px] font-black uppercase tracking-tighter transition-all",
+                                    "absolute top-0 right-30 sm:right-40 px-3 py-1 rounded-b-xl text-xxs font-black uppercase tracking-tighter transition-all",
                                     isSelected ? "bg-amber-400 text-black" : "bg-zinc-100 text-zinc-500"
                                 )}>
                                     Value Pack

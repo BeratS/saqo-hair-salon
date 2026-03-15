@@ -4,11 +4,13 @@ import { addDays, addHours, format, isSameDay, startOfDay } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 import { AnimatePresence, motion } from 'framer-motion';
 import { CalendarIcon, ChevronRight, Phone, PlusIcon, Scissors, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
+import useAppointments from "@/hooks/useAppointments";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
+import ConfirmDelete from "../widgets/confirm-delete";
 
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -55,21 +57,8 @@ export const MOCK_APPOINTMENTS = [
 ];
 
 function AppointmentDataTable() {
-    const [selectedDate, setSelectedDate] = useState(new Date());
 
-    // 1. Generate our 14-day window (skipping Sundays)
-    const sidebarDates = useMemo(() => {
-        return Array.from({ length: 20 }, (_, i) => addDays(new Date(), i))
-            .filter(d => d.getDay() !== 0)
-            .slice(0, 14);
-    }, []);
-
-    // 2. Filter Mock Data for the selected day
-    const dailyAppointments = useMemo(() => {
-        return MOCK_APPOINTMENTS.filter(app =>
-            isSameDay(app.scheduledAt.toDate(), selectedDate)
-        );
-    }, [selectedDate]);
+    const { appointments, allAppointments, selectedDate, sidebarDates, setSelectedDate, handleCancelAppointment } = useAppointments()
 
     return (
         <div className="flex h-screen bg-[#FDFDFD] text-black">
@@ -84,6 +73,7 @@ function AppointmentDataTable() {
                     {sidebarDates.map((date) => {
                         const isSelected = isSameDay(date, selectedDate);
                         const isTodayDate = isSameDay(date, new Date());
+                        const hasBookings = allAppointments.some(app => isSameDay(app.scheduledAt.toDate(), date));
 
                         return (
                             <button
@@ -91,26 +81,29 @@ function AppointmentDataTable() {
                                 key={date.toISOString()}
                                 onClick={() => setSelectedDate(date)}
                                 className={cn(
-                                    "w-full flex items-center gap-4 p-4 rounded-[2rem] transition-all group",
+                                    "w-full flex items-center gap-4 p-4 rounded-[2rem] transition-all group cursor-pointer",
                                     isSelected
-                                        ? "bg-black/30 text-white shadow-xl shadow-black/10 scale-[1.02]"
+                                        ? "bg-zinc-100 text-white shadow-xl shadow-black/10 scale-[1.02]"
                                         : "hover:bg-zinc-50 text-zinc-500"
                                 )}
                             >
                                 <div className={cn(
                                     "w-12 h-12 rounded-2xl flex flex-col items-center justify-center border",
-                                    isSelected ? "border-zinc-800 bg-zinc-600" : "border-zinc-100 bg-zinc-50"
+                                    isSelected ? "border-yellow-300 bg-[#e7e7c5] text-black" : "border-zinc-100 bg-zinc-50"
                                 )}>
                                     <span className="text-xxs font-black uppercase">{format(date, "MMM")}</span>
                                     <span className="text-lg font-black leading-none">{format(date, "d")}</span>
                                 </div>
                                 <div className="text-left">
-                                    <p className={cn("text-base font-black uppercase tracking-widest mb-1", isSelected ? "text-white" : "text-black")}>
+                                    <p className={cn("text-base font-black uppercase tracking-widest mb-1 text-black")}>
                                         {isTodayDate ? "Today" : format(date, "EEEE")}
                                     </p>
-                                    <p className="text-xxs font-bold opacity-70 uppercase tracking-tight text-red-500">8 Slots Available</p>
+                                    <p className={cn("text-xs opacity-70 uppercase tracking-tight text-black/70")}>
+                                        <b>8</b> Slots Available
+                                    </p>
                                 </div>
                                 {isSelected && <ChevronRight size={14} className="ml-auto opacity-50" />}
+                                {hasBookings && <div className="ml-auto h-1 w-1 bg-black rounded-full mt-1" />}
                             </button>
                         );
                     })}
@@ -123,8 +116,11 @@ function AppointmentDataTable() {
                     <div>
                         <p className="text-xxs font-black text-zinc-400 uppercase tracking-[0.2em]">Viewing Schedule For</p>
                         <h2 className="text-4xl font-black uppercase tracking-tighter">
-                            {isSameDay(selectedDate, new Date()) ? "Today" : format(selectedDate, "EEEE, MMMM do")}
+                            {isSameDay(selectedDate, new Date()) ? "Today" : format(selectedDate, "dd - EEEE, MMM")}
                         </h2>
+                        <h3 className="text-base font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
+                            {appointments.length} {appointments.length === 1 ? "Booking" : "Bookings"}
+                        </h3>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -152,9 +148,12 @@ function AppointmentDataTable() {
                             exit={{ opacity: 0, x: -20 }}
                             className="space-y-4 max-w-4xl mx-auto"
                         >
-                            {dailyAppointments.length > 0 ? (
-                                dailyAppointments.map(app => (
-                                    <AppointmentRow key={app.id} appointment={app} />
+                            {appointments.length > 0 ? (
+                                appointments.map(app => (
+                                    <AppointmentRow
+                                        key={app.id}
+                                        appointment={app}
+                                        onCancel={handleCancelAppointment} />
                                 ))
                             ) : (
                                 <EmptyState date={selectedDate} />
@@ -170,8 +169,14 @@ function AppointmentDataTable() {
 function AppointmentRow({ appointment, onCancel }: any) {
     const time = format(appointment.scheduledAt.toDate(), "HH:mm");
 
+    const serviceIds = appointment.serviceIds;
+    console.log(serviceIds);
+    
     return (
-        <div className="group bg-white border border-zinc-100 p-5 rounded-[2rem] flex items-center justify-between hover:shadow-lg hover:shadow-black/5 transition-all">
+        <div className={cn(
+            "group bg-white border border-zinc-100 p-5 rounded-[2rem] flex items-center justify-between hover:shadow-lg hover:shadow-black/5 transition-all",
+            appointment.isPast && "opacity-70 grayscale"
+        )}>
             <div className="flex items-center gap-8">
                 <span className="text-2xl font-black italic w-16">{time}</span>
 
@@ -193,16 +198,19 @@ function AppointmentRow({ appointment, onCancel }: any) {
             <div className="flex items-center gap-4">
                 <span className="text-base font-black mr-4 w-20 text-right">{appointment.totalPrice} den</span>
                 {/* Action Buttons */}
-                <div className="flex gap-2">
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => onCancel(appointment.id)}
-                        className="min-w-15 min-h-15 p-4 rounded-2xl border border-zinc-100 text-zinc-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
-                    >
-                        <X size={24} className="min-w-6 min-h-6" />
-                    </Button>
-                </div>
+                {!appointment.isPast && (
+                    <div className="flex gap-2">
+                        <ConfirmDelete onConfirm={() => onCancel(appointment.id)}>
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                className="min-w-15 min-h-15 p-4 rounded-2xl border border-zinc-100 text-zinc-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
+                            >
+                                <X size={24} className="min-w-6 min-h-6" />
+                            </Button>
+                        </ConfirmDelete>
+                    </div>
+                )}
             </div>
         </div>
     );

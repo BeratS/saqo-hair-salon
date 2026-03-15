@@ -1,10 +1,3 @@
-interface IBarber {
-  id: number;
-  name: string;
-  role: string;
-  image: string;
-}
-
 interface IBookingState {
   barber: IBarber | null;
   date: Date | null;
@@ -20,4 +13,22 @@ interface IBookingService {
   name: string;
   price: number;
   description?: string;
+}
+
+interface IServiceMenu {
+  id?: string;
+  name: string;
+  description: string;
+  price: number;
+  duration: number; // in minutes
+  order: number;
+}
+
+interface IBarber {
+  id?: string;
+  name: string;
+  role: string;
+  bio: string;
+  active: boolean;
+  imageUrl?: string; // Optional for now
 }

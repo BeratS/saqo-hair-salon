@@ -20,7 +20,7 @@ function PickBarbers({ booking, setBarber }: IProps) {
                 <h2 className="text-4xl font-black tracking-tighter uppercase leading-none">
                     Select Artist
                 </h2>
-                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-[0.3em]">
+                <p className="text-xxs text-zinc-400 font-bold uppercase tracking-[0.3em]">
                     Expertise for your style
                 </p>
             </div>

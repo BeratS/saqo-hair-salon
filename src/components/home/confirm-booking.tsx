@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { Phone, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -15,12 +16,31 @@ function ConfirmBooking({
     handleInputChange,
     confirmBooking
 }: IProps) {
+
+    const [initialInputData] = useState<{ name: string; phone: string } | null>(() => {
+        const savedUser = localStorage.getItem('bookingUser');
+        if (savedUser) {
+            const { name, phone } = JSON.parse(savedUser);
+            return { name, phone };
+        }
+        return null;
+    });
+
+    useEffect(() => {
+        // On mount, check if we have saved user info in localStorage
+        if (initialInputData) {
+            handleInputChange({ target: { name: 'name', value: initialInputData.name } } as React.ChangeEvent<HTMLInputElement>);
+            handleInputChange({ target: { name: 'phone', value: initialInputData.phone } } as React.ChangeEvent<HTMLInputElement>);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className="space-y-6 px-2">
             <h2 className="text-3xl font-black">Confirm your<br />Booking?</h2>
             <div className="space-y-3">
                 <div className="bg-primary/10 border-2 border-primary/20 p-5 rounded-[2rem] mb-6">
-                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2">Summary</p>
+                    <p className="text-xxs font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2">Summary</p>
                     <p className="font-bold text-sm">
                         {booking.barber?.name} • {booking.date && format(booking.date, 'MMMM do')} @ {booking.time}
                     </p>
@@ -31,6 +51,7 @@ function ConfirmBooking({
                     <User className="absolute left-4 top-5 text-zinc-400" size={18} />
                     <input
                         name="name"
+                        value={booking.name || ''}
                         onChange={handleInputChange}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
                         placeholder="Your Name"
@@ -40,6 +61,7 @@ function ConfirmBooking({
                     <Phone className="absolute left-4 top-5 text-zinc-400" size={18} />
                     <input
                         name="phone"
+                        value={booking.phone || ''}
                         onChange={handleInputChange}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
                         placeholder="Phone Number"

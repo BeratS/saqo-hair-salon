@@ -1,19 +1,30 @@
 import { endOfDay, startOfDay } from "date-fns";
-import { addDoc, collection, serverTimestamp, Timestamp } from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    onSnapshot,
+    orderBy,
+    query,
+    serverTimestamp,
+    Timestamp,
+    where
+} from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
 import { mergeDateTime } from "@/utils/helper";
 
 export interface IAppointment {
-  barberId: string;
-  customerName: string;
-  customerPhone: string;
-  serviceIds: string[];
-  scheduledAt: Timestamp; 
-  readableTime: string;
-  totalPrice: number;
-  status: 'pending' | 'confirmed' | 'cancelled';
-  createdAt: Timestamp;
+    barberId: string;
+    customerName: string;
+    customerPhone: string;
+    serviceIds: string[];
+    scheduledAt: Timestamp;
+    readableTime: string;
+    totalPrice: number;
+    status: 'pending' | 'confirmed' | 'cancelled';
+    createdAt: Timestamp;
 }
 
 /**
@@ -43,16 +54,54 @@ export const createAppointment = async (booking: IBookingState) => {
     return docRef.id;
 };
 
-export const getAppointments = async () => {
-    // Implement fetching appointments from Firestore
-    // Query Logic for "Today"
-    const todayStart = startOfDay(new Date());
-    const todayEnd = endOfDay(new Date());
 
-    // const q = query(
-    //     collection(db, "appointments"),
-    //     where("scheduledAt", ">=", Timestamp.fromDate(todayStart)),
-    //     where("scheduledAt", "<=", Timestamp.fromDate(todayEnd)),
-    //     orderBy("scheduledAt", "asc")
-    // );
-}
+/**
+ * Get all appointments by range date
+ */
+export const getAppointmentsByRange = (
+    startDate: Date,
+    endDate: Date,
+    callback: (data: any[]) => void
+) => {
+    const appointmentsRef = collection(db, "appointments");
+
+    // Ensure we capture the full range from 00:00:00 of start to 23:59:59 of end
+    const rangeStart = startOfDay(startDate);
+    const rangeEnd = endOfDay(endDate);
+
+    const q = query(
+        appointmentsRef,
+        where("scheduledAt", ">=", Timestamp.fromDate(rangeStart)),
+        where("scheduledAt", "<=", Timestamp.fromDate(rangeEnd)),
+        orderBy("scheduledAt", "asc")
+    );
+
+    // Return the unsubscribe function so the hook can clean up the listener
+    return onSnapshot(q, (snapshot) => {
+        const appointments = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+            // Ensure scheduledAt is converted if needed elsewhere, 
+            // though keeping it as Timestamp is fine for the hook
+        }));
+
+        callback(appointments);
+    }, (error) => {
+        console.error("Firestore Subscription Error:", error);
+    });
+};
+
+/**
+ * Deletes an appointment by its document ID
+ * @param appointmentId The Firestore document ID of the appointment to delete
+ * @returns A promise that resolves when the deletion is complete
+ */
+export const deleteAppointment = async (appointmentId: string) => {
+  try {
+    const docRef = doc(db, "appointments", appointmentId);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    throw error;
+  }
+};

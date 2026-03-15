@@ -1,4 +1,4 @@
-import { ListIcon, SettingsIcon, UserCircle } from "lucide-react"
+import { ListIcon, MenuSquare,SettingsIcon, UserCircle } from "lucide-react"
 
 export const sidebarConfig = {
   pages: [
@@ -7,6 +7,13 @@ export const sidebarConfig = {
       url: "/appointments",
       icon: (
         <ListIcon />
+      ),
+    },
+    {
+      title: "Services (Menu)",
+      url: "/menu",
+      icon: (
+        <MenuSquare />
       ),
     },
     {

@@ -1,4 +1,4 @@
-import { addDays, startOfDay } from 'date-fns';
+import { addDays } from 'date-fns';
 import { type ChangeEvent, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
@@ -65,6 +65,12 @@ const useBooking = () => {
 
     const confirmBooking = async () => {
         try {
+            // Save to localStorage for persistence
+            localStorage.setItem('bookingUser', JSON.stringify({
+                name: booking.name,
+                phone: booking.phone
+            }));
+
             setIsLoading(true); // Start loading state
 
             await createAppointment(booking);

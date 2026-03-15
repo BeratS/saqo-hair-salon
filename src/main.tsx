@@ -21,6 +21,7 @@ const BarbersPage = lazy(() => import('./pages/admin/barbers-page'));
 const AppointmentPage = lazy(() => import('./pages/admin/appointment-page'));
 const AdminMainPage = lazy(() => import('./pages/admin/main-page'));
 const SettingsPage = lazy(() => import('./pages/admin/settings-page'));
+const MenuPage = lazy(() => import('./pages/admin/menu-page'));
 const AuthPage = lazy(() => import('./pages/auth-page'));
 
 import HomePage from "./pages/home-page";
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
                   <AppointmentPage />
                 </ProtectedRoute>
               </Suspense>
+            )
+          },
+          {
+            path: 'menu',
+            element: (
+              <ProtectedRoute>
+                <MenuPage />
+              </ProtectedRoute>
             )
           },
           {

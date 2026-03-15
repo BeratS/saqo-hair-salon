@@ -100,11 +100,11 @@ function PickTime({
                                 isSelected ? 'bg-primary text-white border-yellow-60 shadow-lg' : 'bg-white border-zinc-100 text-zinc-400'
                             )}
                         >
-                            <span className="text-[10px] font-bold uppercase">{format(date, 'eee')}</span>
+                            <span className="text-xxs font-bold uppercase">{format(date, 'eee')}</span>
                             <span className={`text-2xl font-black tracking-tighter ${isSelected ? 'text-white' : 'text-black'}`}>
                                 {format(date, 'd')}
                             </span>
-                            <span className="text-[10px] font-bold uppercase">{format(date, 'MMM')}</span>
+                            <span className="text-xxs font-bold uppercase">{format(date, 'MMM')}</span>
                         </motion.div>
                     );
                 })}
@@ -114,7 +114,7 @@ function PickTime({
             <div className="flex-1 space-y-4 overflow-y-auto pr-1 no-scrollbar pb-20">
                 <div className="flex items-center gap-2">
                     <div className="h-px flex-1 bg-zinc-100"></div>
-                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Available Slots</span>
+                    <span className="text-xxs font-bold text-zinc-400 uppercase tracking-widest">Available Slots</span>
                     <div className="h-px flex-1 bg-zinc-100"></div>
                 </div>
 
