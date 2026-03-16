@@ -15,18 +15,6 @@ import {
 import { db } from "@/lib/firebase";
 import { mergeDateTime } from "@/utils/helper";
 
-export interface IAppointment {
-    barberId: string;
-    customerName: string;
-    customerPhone: string;
-    serviceIds: string[];
-    scheduledAt: Timestamp;
-    readableTime: string;
-    totalPrice: number;
-    status: 'pending' | 'confirmed' | 'cancelled';
-    createdAt: Timestamp;
-}
-
 /**
  * Saves a new appointment to Cloud Firestore
  * @param booking The current booking state from your hook

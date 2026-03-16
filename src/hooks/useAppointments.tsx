@@ -7,7 +7,7 @@ const useAppointments = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     // We store the full 2-week block in state to avoid re-fetching on click
-    const [allAppointments, setAllAppointments] = useState<any[]>([]);
+    const [allAppointments, setAllAppointments] = useState<IAppointment[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 

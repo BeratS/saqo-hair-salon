@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Camera, PenTool, Plus, Scissors, ShieldCheck, Trash2, User } from 'lucide-react';
+import { Camera, PenTool, Plus, ShieldCheck, Trash2, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';

@@ -1,18 +1,25 @@
+interface IAppointment {
+  id: string;
+  barberId: string;
+  customerName: string;
+  customerPhone: string;
+  serviceIds: string[];
+  scheduledAt: Timestamp;
+  readableTime: string;
+  totalPrice: number;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  createdAt: Timestamp;
+  isPast?: boolean; // Optional flag for UI purposes
+}
+
 interface IBookingState {
   barber: IBarber | null;
   date: Date | null;
   time: string | null;
   name: string;
   phone: string;
-  selectedServices: IBookingService[];
+  selectedServices: IServiceMenu[];
   totalPrice: number;
-}
-
-interface IBookingService {
-  id: string;
-  name: string;
-  price: number;
-  description?: string;
 }
 
 interface IServiceMenu {
@@ -22,6 +29,7 @@ interface IServiceMenu {
   price: number;
   duration: number; // in minutes
   order: number;
+  isPremium?: boolean; // Flag to indicate if it's a premium service
 }
 
 interface IBarber {

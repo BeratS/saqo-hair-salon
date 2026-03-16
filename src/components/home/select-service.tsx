@@ -4,15 +4,16 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
-import { SERVICES } from "./booking-constants";
 
 interface IProps {
+    services: IServiceMenu[];
     booking: IBookingState;
-    toggleService: (service: IBookingService) => void;
+    toggleService: (service: IServiceMenu) => void;
     nextStep: () => void;
 }
 
 function SelectService({
+    services,
     booking,
     toggleService,
     nextStep,
@@ -24,9 +25,9 @@ function SelectService({
             </h2>
 
             <div className="flex-1 overflow-y-auto no-scrollbar space-y-3 pb-32 px-1">
-                {SERVICES.map((service) => {
+                {services.map((service) => {
                     const isSelected = booking.selectedServices.find(s => s.id === service.id);
-                    const isSpecial = service.id === 'all-inclusive';
+                    const isSpecial = service.isPremium;
 
                     return (
                         <motion.div

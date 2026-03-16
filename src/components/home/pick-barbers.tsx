@@ -1,18 +1,15 @@
-import { Check, ScissorsIcon, Star } from 'lucide-react';
-import { AnimatePresence,motion } from 'motion/react';
+import { Check, ScissorsIcon, Star, User } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 
 import { cn } from "@/lib/utils";
 
-const BARBERS: IBarber[] = [
-    { id: 1, name: "Saqo", role: "Master Barber", image: "https://www.shutterstock.com/image-vector/smiling-male-barber-apron-holds-600nw-2628838971.jpg" },
-];
-
 interface IProps {
+    barbers: IBarber[];
     booking: IBookingState;
     setBarber: (barber: IBarber) => void;
 }
 
-function PickBarbers({ booking, setBarber }: IProps) {
+function PickBarbers({ barbers, booking, setBarber }: IProps) {
     return (
         <div className="flex flex-col h-full space-y-8">
             {/* Minimalist Heading */}
@@ -26,7 +23,7 @@ function PickBarbers({ booking, setBarber }: IProps) {
             </div>
 
             <div className="flex-1 space-y-6 overflow-y-auto no-scrollbar pt-2 pb-10">
-                {BARBERS.map((b) => {
+                {barbers.map((b) => {
                     const isSelected = booking.barber?.id === b.id;
 
                     return (
@@ -53,14 +50,17 @@ function PickBarbers({ booking, setBarber }: IProps) {
                                             isSelected ? "opacity-30 border-white" : "border-black"
                                         )}
                                     />
-                                    <img
-                                        src={b.image}
+                                    {/* <img
+                                        src={b.imageUrl || `https://ui-avatars.com/api/?name=${b.name}&background=random&size=128`} // Fallback to generated avatar
                                         className={cn(
                                             "w-24 h-24 rounded-full object-cover transition-all duration-500",
                                             isSelected ? "scale-105" : "grayscale-50% group-hover:grayscale-0"
                                         )}
                                         alt={b.name}
-                                    />
+                                    /> */}
+                                    <div className="w-28 h-28 bg-zinc-50 border-2 border-zinc-200 rounded-[3rem] flex items-center justify-center relative group-hover:border-black/70 transition-all">
+                                        <User size={48} className="text-zinc-200 group-hover:text-black/70 transition-colors" />
+                                    </div>
                                     
                                     <AnimatePresence>
                                         {isSelected && (
@@ -84,12 +84,12 @@ function PickBarbers({ booking, setBarber }: IProps) {
                                         </p>
                                         {isSelected && <Star size={14} className="fill-white text-white" />}
                                     </div>
-                                    <p className={cn(
+                                    {/* <p className={cn(
                                         "text-[11px] font-bold uppercase tracking-widest",
                                         isSelected ? "text-zinc-400" : "text-zinc-500"
                                     )}>
                                         {b.role}
-                                    </p>
+                                    </p> */}
                                     
                                     {/* Availability Tag */}
                                     <div className={cn(

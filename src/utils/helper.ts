@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import type { Timestamp } from "firebase/firestore";
 
 import { Constants } from "@/Constants";
 
@@ -6,6 +7,33 @@ import { Constants } from "@/Constants";
 export function wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+/**
+ * Converts a Firestore Timestamp to the same comparable 'yyyy-MM-dd HH:mm' string.
+ */
+export const getAppointmentKey = (timestamp: Timestamp): string => {
+    return format(timestamp.toDate(), 'yyyy-MM-dd HH:mm');
+};
+
+/**
+ * Normalizes a Date and a Time Slot string into a comparable 'yyyy-MM-dd HH:mm' string.
+ */
+export const getSlotKey = (date: Date, slotTime: string): string => {
+    const datePart = format(date, 'yyyy-MM-dd');
+    
+    // Convert "2:30 PM" -> "14:30"
+    const [time, ampm] = slotTime.split(' ');
+    // eslint-disable-next-line prefer-const
+    let [hours, minutes] = time.split(':').map(Number);
+    
+    if (ampm === 'PM' && hours !== 12) hours += 12;
+    if (ampm === 'AM' && hours === 12) hours = 0;
+
+    const hourPart = String(hours).padStart(2, '0');
+    const minPart = String(minutes).padStart(2, '0');
+
+    return `${datePart} ${hourPart}:${minPart}`;
+};
 
 /**
  * Converts "2:30 PM" to "143000" (HHMMSS)

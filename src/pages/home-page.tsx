@@ -18,6 +18,8 @@ import { useMeta } from '@/hooks/useMeta';
 
 const MainPage = () => {
   const {
+    barbers,
+    services,
     isLoading,
     bookingError,
     step,
@@ -25,6 +27,7 @@ const MainPage = () => {
     setBaseDate,
     booking,
     timeSlots,
+    weekStrip,
     dateSlots,
     handleInputChange,
     setBarber,
@@ -35,6 +38,7 @@ const MainPage = () => {
     confirmBooking,
     toggleService,
     handleResetStep,
+    isSlotBooked,
   } = useBooking();
 
   useMeta(
@@ -72,6 +76,7 @@ const MainPage = () => {
               {/* STEP 0: BARBER SELECTION */}
               {!bookingError && step === BookingStepsEnum.Barber && (
                 <PickBarbers
+                  barbers={barbers}
                   booking={booking}
                   setBarber={setBarber} />
               )}
@@ -83,15 +88,18 @@ const MainPage = () => {
                   setBaseDate={setBaseDate}
                   booking={booking}
                   timeSlots={timeSlots}
+                  weekStrip={weekStrip}
                   dateSlots={dateSlots}
                   setDate={setDate}
                   setTime={setTime}
+                  isSlotBooked={isSlotBooked}
                 />
               )}
 
               {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
               {!bookingError && step === BookingStepsEnum.Services && (
                 <SelectService
+                  services={services}
                   booking={booking}
                   toggleService={toggleService}
                   nextStep={nextStep}

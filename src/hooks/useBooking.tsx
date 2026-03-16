@@ -1,9 +1,13 @@
-import { addDays } from 'date-fns';
+import { addDays, isSameDay } from 'date-fns';
 import { type ChangeEvent, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
 import { createAppointment } from '@/services/booking';
-import { wait } from '@/utils/helper';
+import { getAppointmentKey, getSlotKey, wait } from '@/utils/helper';
+
+import useAppointments from './useAppointments';
+import { useBerberData } from './useBerberData';
+import { useEffect } from 'react';
 
 
 const useBooking = () => {
@@ -21,12 +25,28 @@ const useBooking = () => {
         selectedServices: [],
         totalPrice: 0,
     });
-    
+
+    const { barbers, services } = useBerberData()
+
+    const { allAppointments } = useAppointments()
+
     // Generate 14 days (today + 2 weeks) - no Sundays
     const dateSlots = useMemo(() => {
         return Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
             .filter(date => date.getDay() !== 0); // 0 is Sunday
     }, []); // Empty array means it only runs once on mount
+
+    const weekStrip = useMemo<Date[]>(() => {
+        // 1. Find the index of the currently selected baseDate in our 14-day pool
+        const startIndex = dateSlots.findIndex(date => isSameDay(date, baseDate!));
+
+        // 2. If for some reason it's not found (e.g. it's a Sunday), default to 0
+        const start = startIndex === -1 ? 0 : startIndex;
+
+        // 3. Slice 7 days starting from that selection
+        // We use .slice(start, start + 7) to show the "window" of time
+        return dateSlots.slice(start, start + 5);
+    }, [baseDate, dateSlots]);
 
     // 10 AM - 8 PM Slots
     const timeSlots = useMemo<string[]>(() => {
@@ -40,6 +60,22 @@ const useBooking = () => {
         }
         return slots;
     }, []);
+
+    const isSlotBooked = (date: Date, slotTime: string) => {
+        // Generate the key for the current UI slot we are checking
+        const currentSlotKey = getSlotKey(date, slotTime);
+
+        return allAppointments.some((app) => {
+            // Only check appointments that aren't cancelled
+            if (app.status === 'cancelled') return false;
+
+            // Generate the key for the existing appointment in Firebase
+            const appKey = getAppointmentKey(app.scheduledAt);
+
+            // Simple string comparison
+            return appKey === currentSlotKey;
+        });
+    };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -79,16 +115,16 @@ const useBooking = () => {
 
             nextStep(); // Success!
         } catch (error: any) {
-            console.error("Booking failed:",  error?.message);
+            console.error("Booking failed:", error?.message);
             setBookingError(error?.message ?? 'Failed to book appointment'); // Show that red error UI we made
         } finally {
             setIsLoading(false);
         }
     };
 
-    const toggleService = (service: IBookingService) => {
+    const toggleService = (service: IServiceMenu) => {
         setBooking(prev => {
-            const isAllInclusive = service.id === 'all-inclusive';
+            const isAllInclusive = service.isPremium;
 
             // If selecting All Inclusive, clear others
             if (isAllInclusive) return {
@@ -98,7 +134,7 @@ const useBooking = () => {
             };
 
             // If other service is selected and All Inclusive was active, clear All Inclusive
-            const filtered = prev.selectedServices.filter(s => s.id !== 'all-inclusive');
+            const filtered = prev.selectedServices.filter(s => s.isPremium !== true);
 
             const exists = filtered.find(s => s.id === service.id);
             if (exists) return {
@@ -128,7 +164,16 @@ const useBooking = () => {
         setBookingError('');
     }
 
+    useEffect(() => {
+        if (!booking.date && dateSlots.length > 0) {
+            setBooking(prev => ({ ...prev, date: dateSlots[0] }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateSlots]);
+
     return {
+        barbers,
+        services,
         bookingError,
         isLoading,
         step,
@@ -137,6 +182,7 @@ const useBooking = () => {
         setBaseDate,
         booking,
         timeSlots,
+        weekStrip,
         dateSlots,
         handleInputChange,
         setBarber,
@@ -146,7 +192,8 @@ const useBooking = () => {
         prevStep,
         confirmBooking,
         toggleService,
-        handleResetStep
+        handleResetStep,
+        isSlotBooked
     };
 };
 

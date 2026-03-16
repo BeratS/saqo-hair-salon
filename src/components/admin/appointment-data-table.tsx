@@ -1,64 +1,21 @@
-
-
-import { addDays, addHours, format, isSameDay, startOfDay } from "date-fns";
-import { Timestamp } from "firebase/firestore";
+import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
 import { CalendarIcon, ChevronRight, Phone, PlusIcon, Scissors, Search, X } from "lucide-react";
-import { useMemo } from "react";
 
 import useAppointments from "@/hooks/useAppointments";
+import { useBerberData } from "@/hooks/useBerberData";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
 import ConfirmDelete from "../widgets/confirm-delete";
 
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const MOCK_APPOINTMENTS = [
-    {
-        id: "booking_1",
-        barberId: "Saqo Master",
-        customerName: "Vedat Muriqi",
-        customerPhone: "+389 70 123 456",
-        serviceIds: ["haircut", "beard"],
-        // Set for 2 hours from now today
-        scheduledAt: Timestamp.fromDate(addHours(new Date(), 2)),
-        readableTime: "Today @ 17:00",
-        totalPrice: 600,
-        status: "pending",
-        createdAt: Timestamp.now(),
-    },
-    {
-        id: "booking_2",
-        barberId: "Leon",
-        customerName: "Besart Ibishi",
-        customerPhone: "+389 71 999 888",
-        serviceIds: ["all-inclusive"],
-        // Set for 4 hours from now today
-        scheduledAt: Timestamp.fromDate(addHours(new Date(), 4)),
-        readableTime: "Today @ 19:00",
-        totalPrice: 1200,
-        status: "confirmed",
-        createdAt: Timestamp.now(),
-    },
-    {
-        id: "booking_3",
-        barberId: "Saqo Master",
-        customerName: "Shkupi FC",
-        customerPhone: "+389 72 444 555",
-        serviceIds: ["haircut"],
-        // Tomorrow
-        scheduledAt: Timestamp.fromDate(addDays(addHours(startOfDay(new Date()), 10), 1)),
-        readableTime: "Tomorrow @ 10:00",
-        totalPrice: 450,
-        status: "pending",
-        createdAt: Timestamp.now(),
-    }
-];
-
 function AppointmentDataTable() {
 
-    const { appointments, allAppointments, selectedDate, sidebarDates, setSelectedDate, handleCancelAppointment } = useAppointments()
+    const {
+        appointments, allAppointments, selectedDate, sidebarDates, setSelectedDate, handleCancelAppointment
+    } = useAppointments()
+
+    const { barbers, services } = useBerberData()
 
     return (
         <div className="flex h-screen bg-[#FDFDFD] text-black">
@@ -153,6 +110,7 @@ function AppointmentDataTable() {
                                     <AppointmentRow
                                         key={app.id}
                                         appointment={app}
+                                        {...{ barbers, services }}
                                         onCancel={handleCancelAppointment} />
                                 ))
                             ) : (
@@ -166,15 +124,24 @@ function AppointmentDataTable() {
     );
 }
 
-function AppointmentRow({ appointment, onCancel }: any) {
+interface IAppointmentRowProps {
+    appointment: IAppointment;
+    barbers: IBarber[];
+    services: IServiceMenu[];
+    onCancel: (id: string) => void;
+}
+
+function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointmentRowProps) {
     const time = format(appointment.scheduledAt.toDate(), "HH:mm");
 
     const serviceIds = appointment.serviceIds;
-    console.log(serviceIds);
-    
+    const allServices = services.filter(s => serviceIds.includes(s.id!));
+
+    const berber = barbers.find(b => b.id === appointment.barberId);
+
     return (
         <div className={cn(
-            "group bg-white border border-zinc-100 p-5 rounded-[2rem] flex items-center justify-between hover:shadow-lg hover:shadow-black/5 transition-all",
+            "group bg-white border border-zinc-100 p-4 rounded-[2rem] flex items-center justify-between hover:shadow-lg hover:shadow-black/5 transition-all",
             appointment.isPast && "opacity-70 grayscale"
         )}>
             <div className="flex items-center gap-8">
@@ -182,15 +149,22 @@ function AppointmentRow({ appointment, onCancel }: any) {
 
                 <div className="h-10 w-0.5 bg-zinc-100" />
 
-                <div>
-                    <h4 className="font-black text-lg uppercase tracking-tight">{appointment.customerName}</h4>
+                <div className="flex flex-col gap-1">
                     <div className="flex gap-4 items-center">
-                        <span className="text-xxs font-bold text-zinc-400 flex items-center gap-1 uppercase tracking-widest">
+                        <h4 className="font-black text-lg uppercase tracking-tight">{appointment.customerName}</h4>
+                        <span className="text-xs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-zinc-100 px-2 py-0.5 rounded-md">
                             <Phone size={10} /> {appointment.customerPhone}
                         </span>
-                        <span className="text-xxs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-zinc-100 px-2 py-0.5 rounded-md">
-                            <Scissors size={10} /> {appointment.barberId}
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <span className="text-xs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-blue-200 px-2 py-0.5 rounded-md">
+                            <Scissors size={10} /> {berber?.name}
                         </span>
+                        {allServices.map(service => (
+                            <span key={service.id} className="text-xs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-primary/50 px-2 py-0.5 rounded-md">
+                                <Scissors size={10} /> {service.name}
+                            </span>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -23,8 +23,10 @@ interface IProps {
     booking: any;
     timeSlots: string[];
     dateSlots: Date[];
+    weekStrip: Date[];
     setDate: (date: Date) => void;
     setTime: (time: string) => void;
+    isSlotBooked: (date: Date, slotTime: string) => boolean;
 }
 
 function PickTime({
@@ -32,22 +34,12 @@ function PickTime({
     setBaseDate,
     booking,
     timeSlots,
+    weekStrip,
     dateSlots,
     setDate,
     setTime,
+    isSlotBooked,
 }: IProps) {
-
-    const weekStrip = useMemo<Date[]>(() => {
-        // 1. Find the index of the currently selected baseDate in our 14-day pool
-        const startIndex = dateSlots.findIndex(date => isSameDay(date, baseDate!));
-
-        // 2. If for some reason it's not found (e.g. it's a Sunday), default to 0
-        const start = startIndex === -1 ? 0 : startIndex;
-
-        // 3. Slice 7 days starting from that selection
-        // We use .slice(start, start + 7) to show the "window" of time
-        return dateSlots.slice(start, start + 5);
-    }, [baseDate, dateSlots]);
 
     return (
         <div className="flex flex-col h-full space-y-6">
@@ -121,6 +113,11 @@ function PickTime({
                 <div className="grid grid-cols-3 gap-3">
                     {timeSlots.map((time: string) => {
                         const isTimeSelected = booking.time === time;
+                        const booked = isSlotBooked(booking.date, time);
+
+                        // Option A: Hide completely
+                        if (booked) return null;
+
                         return (
                             <Button
                                 key={time}

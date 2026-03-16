@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { addService, deleteService, subscribeToServices, updateService } from "@/services/service";
 
+import { Switch } from '../ui/switch';
 import ConfirmDelete from '../widgets/confirm-delete';
 
 export default function ServiceConfig() {
@@ -16,7 +17,7 @@ export default function ServiceConfig() {
 
     // Form State
     const [formData, setFormData] = useState({
-        name: '', description: '', price: '', duration: '', order: 1
+        name: '', description: '', price: '', duration: '', order: 1, isPremium: false
     });
 
     useEffect(() => {
@@ -32,12 +33,13 @@ export default function ServiceConfig() {
                 description: service.description || '',
                 price: service.price.toString(),
                 duration: service.duration.toString(),
-                order: Number(service.order) || 1
+                order: Number(service.order) || 1,
+                isPremium: service.isPremium || false,
             });
         } else {
             setEditingService(null);
             setFormData({
-                name: '', description: '', price: '', duration: '', order: 1
+                name: '', description: '', price: '', duration: '', order: 1, isPremium: false
             });
         }
         setIsModalOpen(true);
@@ -147,17 +149,29 @@ export default function ServiceConfig() {
                                 <Input required type="number" value={formData.duration} onChange={e => setFormData({ ...formData, duration: e.target.value })} placeholder="30" className="h-14 rounded-2xl bg-zinc-50 border-none font-bold text-center" />
                             </div>
                         </div>
-                        <div className="space-y-2">
-                            <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">
-                                Display Priority (1 = Top)
-                            </Label>
-                            <Input
-                                type="number"
-                                value={formData.order}
-                                onChange={e => setFormData({ ...formData, order: e.target.valueAsNumber })}
-                                placeholder="1"
-                                className="h-14 rounded-2xl bg-zinc-50 border-none font-bold"
-                            />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">
+                                    Priority (1 = Top)
+                                </Label>
+                                <Input
+                                    type="number"
+                                    value={formData.order}
+                                    onChange={e => setFormData({ ...formData, order: e.target.valueAsNumber })}
+                                    placeholder="1"
+                                    className="h-14 rounded-2xl bg-zinc-50 border-none font-bold"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400">Is Premium</Label>
+                                <div className="p-3">
+                                <Switch id="is-premium"
+                                    checked={formData.isPremium}
+                                    onCheckedChange={(checked) => setFormData({ ...formData, isPremium: checked })}
+                                    className="cursor-pointer"
+                                    size={'lg'} />
+                                </div>
+                            </div>
                         </div>
                         <DialogFooter>
                             <Button type="submit" className="w-full h-16 bg-black text-white rounded-[2rem] font-black uppercase tracking-widest">
