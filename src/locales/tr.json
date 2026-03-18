@@ -60,5 +60,9 @@
     "Thursday": "Perşembe",
     "Friday": "Cuma",
     "Saturday": "Cumartesi",
-    "Sunday": "Pazar"
+    "Sunday": "Pazar",
+    "Cancel Reservation": "Rezervasyonu İptal Et",
+    "Need Help?": "Yardıma mı ihtiyacınız var?",
+    "Enter your phone number and we will request to cancel your appointments": "Telefon numaranızı girin ve randevularınızı iptal etmek için talep göndereceğiz",
+    "Cancel it": "İptal Et"
 }

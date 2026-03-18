@@ -60,5 +60,9 @@
     "Thursday": "Thursday",
     "Friday": "Friday",
     "Saturday": "Saturday",
-    "Sunday": "Sunday"
+    "Sunday": "Sunday",
+    "Cancel Reservation": "Cancel Reservation",
+    "Need Help?": "Need Help?",
+    "Enter your phone number and we will request to cancel your appointments": "Enter your phone number and we will request to cancel your appointments",
+    "Cancel it": "Cancel it"
 }

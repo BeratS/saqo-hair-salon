@@ -60,5 +60,9 @@
     "Thursday": "Donnerstag",
     "Friday": "Freitag",
     "Saturday": "Samstag",
-    "Sunday": "Sonntag"
+    "Sunday": "Sonntag",
+    "Cancel Reservation": "Reservierung stornieren",
+    "Need Help?": "Benötigen Sie Hilfe?",
+    "Enter your phone number and we will request to cancel your appointments": "Geben Sie Ihre Telefonnummer ein und wir werden um Stornierung Ihrer Termine bitten",
+    "Cancel it": "Stornieren"
 }

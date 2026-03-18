@@ -2,7 +2,10 @@ import { Check, ScissorsIcon, Star, User } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
+import { Constants } from '@/Constants';
 import { cn } from "@/lib/utils";
+
+import CancelReservation from './cancel-reservation';
 
 interface IProps {
     barbers: IBarber[];
@@ -25,7 +28,7 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                 </p>
             </div>
 
-            <div className="flex-1 space-y-6 overflow-y-auto no-scrollbar pt-2 pb-10">
+            <div className="flex-1 space-y-6 overflow-y-auto no-scrollbar pt-2 pb-10 gap-4">
                 {barbers.map((b) => {
                     const isSelected = booking.barber?.id === b.id;
 
@@ -113,6 +116,29 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                         </motion.div>
                     );
                 })}
+            </div>
+
+            {/* --- STICKY FOOTER --- */}
+            <div className="pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
+                <CancelReservation />
+
+                {/* Contact Info / Phone */}
+                <div className="flex flex-col items-end">
+                    <p className="text-xxs font-black uppercase tracking-widest text-zinc-300 leading-none mb-1">
+                        {t('Need Help?')}
+                    </p>
+                    <a
+                        href={`tel:${Constants.CONTACT_NUMBER}`}
+                        className="flex items-center gap-2 group"
+                    >
+                        <span className="text-sm font-black tracking-tighter group-hover:underline">
+                            {Constants.CONTACT_NUMBER}
+                        </span>
+                        <div className="w-8 h-8 bg-zinc-50 rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
+                            <User size={14} /> {/* Or a Phone Icon if preferred */}
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     );

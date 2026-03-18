@@ -60,5 +60,9 @@
     "Thursday": "Четвртак",
     "Friday": "Петок",
     "Saturday": "Сабота",
-    "Sunday": "Недела"
+    "Sunday": "Недела",
+    "Cancel Reservation": "Откажи резервација",
+    "Need Help?": "Ви треба помош?",
+    "Enter your phone number and we will request to cancel your appointments": "Внесете го вашиот телефонски број и ние ќе побарамe да ги откажеме вашите термини",
+    "Cancel it": "Откажи го"
 }

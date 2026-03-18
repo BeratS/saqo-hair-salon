@@ -60,5 +60,9 @@
     "Thursday": "E enjte",
     "Friday": "E premte",
     "Saturday": "E shtunë",
-    "Sunday": "E diel"
+    "Sunday": "E diel",
+    "Cancel Reservation": "Anuloni Rezervimin",
+    "Need Help?": "Keni nevojë për ndihmë?",
+    "Enter your phone number and we will request to cancel your appointments": "Vendosni numrin tuaj të telefonit dhe do bëjni kërkes për anulimin e rezervimeve tuaja",
+    "Cancel it": "Anulojeni"
 }
