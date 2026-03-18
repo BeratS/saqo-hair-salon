@@ -1,11 +1,14 @@
 import { Scissors } from "lucide-react";
 import { motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 
 export function BookingLoading() {
+  const { t } = useTranslation();
+
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-md"
     >
@@ -16,7 +19,7 @@ export function BookingLoading() {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="absolute inset-0 bg-zinc-200 rounded-full blur-2xl"
         />
-        
+
         {/* Animated Scissors Icon */}
         <motion.div
           animate={{ rotate: [0, 15, -15, 0] }}
@@ -27,14 +30,18 @@ export function BookingLoading() {
         </motion.div>
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
         className="mt-8 text-center"
       >
-        <h3 className="text-xl font-black uppercase tracking-tighter">Reserving your seat</h3>
-        <p className="text-zinc-500 text-sm font-medium mt-1">Talking to Saqo's database...</p>
+        <h3 className="text-xl font-black uppercase tracking-tighter">
+          {t('Reserving your seat...')}
+        </h3>
+        <p className="text-zinc-500 text-sm font-medium mt-1">
+          {t('We are waiting for you with pleasure in our hair salon')}
+        </p>
       </motion.div>
     </motion.div>
   );

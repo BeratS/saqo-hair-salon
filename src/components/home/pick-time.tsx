@@ -1,7 +1,7 @@
 import { format, isSameDay } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -40,12 +40,13 @@ function PickTime({
     setTime,
     isSlotBooked,
 }: IProps) {
+  const { t } = useTranslation();
 
     return (
         <div className="flex flex-col h-full space-y-6">
             {/* HEADER & JUMP BUTTON */}
             <div className="flex justify-between items-end px-1">
-                <h2 className="text-3xl font-black leading-tight">Pick your<br />Schedule</h2>
+                <h2 className="text-3xl font-black leading-tight" dangerouslySetInnerHTML={{__html: t('Pick your<br />Schedule')}} />
                 <Sheet>
                     <SheetTrigger render={
                         <Button variant="outline" className="rounded-2xl border-2 h-16 px-6 shadow-sm hover:bg-zinc-50" />
@@ -59,7 +60,7 @@ function PickTime({
 
                         <SheetHeader className="mb-6">
                             <SheetTitle className="text-3xl font-black uppercase text-center tracking-widest">
-                                Pick a Date
+                                {t('Pick a Date')}
                             </SheetTitle>
                         </SheetHeader>
 
@@ -73,7 +74,7 @@ function PickTime({
                         <SheetClose render={
                             <Button className="w-full py-8 rounded-[2rem] bg-black text-white font-black text-lg uppercase tracking-widest mt-6 active:scale-95 transition-transform" />
                         }>
-                            Apply Selection
+                            {t('Apply Selection')}
                         </SheetClose>
                     </SheetContent>
                 </Sheet>
@@ -83,6 +84,7 @@ function PickTime({
             <div className="grid grid-cols-5 gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
                 {weekStrip.map((date: Date, i: number) => {
                     const isSelected = booking.date?.toDateString() === date.toDateString();
+                    const isToday = isSameDay(date, new Date());
                     return (
                         <motion.div
                             key={i}
@@ -92,11 +94,13 @@ function PickTime({
                                 isSelected ? 'bg-primary text-white border-yellow-60 shadow-lg' : 'bg-white border-zinc-100 text-zinc-400'
                             )}
                         >
-                            <span className="text-xxs font-bold uppercase">{format(date, 'eee')}</span>
+                            <span className="text-xxs font-bold uppercase">{t(format(date, 'MMM'))}</span>
                             <span className={`text-2xl font-black tracking-tighter ${isSelected ? 'text-white' : 'text-black'}`}>
-                                {format(date, 'd')}
+                                {t(format(date, 'd'))}
                             </span>
-                            <span className="text-xxs font-bold uppercase">{format(date, 'MMM')}</span>
+                            <span className="text-xxs font-bold uppercase">
+                                {isToday ? t("Today") : t(format(date, "EEEE"))}
+                            </span>
                         </motion.div>
                     );
                 })}
@@ -106,7 +110,9 @@ function PickTime({
             <div className="flex-1 space-y-4 overflow-y-auto pr-1 no-scrollbar pb-20">
                 <div className="flex items-center gap-2">
                     <div className="h-px flex-1 bg-zinc-100"></div>
-                    <span className="text-xxs font-bold text-zinc-400 uppercase tracking-widest">Available Slots</span>
+                    <span className="text-xxs font-bold text-zinc-400 uppercase tracking-widest">
+                        {t('Available Slots')}
+                    </span>
                     <div className="h-px flex-1 bg-zinc-100"></div>
                 </div>
 

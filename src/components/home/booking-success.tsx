@@ -51,7 +51,7 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
           {t('Your seat is reserved.')}
         </h3>
         <p className="text-zinc-500 font-medium mb-8">
-          We’re excited to see you at <span className="text-black font-bold">Saqo Hair Salon</span>.
+          {t('We’re excited to see you at')} <span className="text-black font-bold">{Constants.SITE_TITLE}</span>.
         </p>
       </motion.div>
 
@@ -65,25 +65,25 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
       >
         <CardItem
           icon={<User size={20} className="text-black" />}
-          label="Barber"
+          label={t('Barber')}
           value={`${booking.barber?.name || "Master Barber"} - (${Constants.SITE_TITLE})`}
         />
 
         <CardItem
           icon={<Calendar size={20} className="text-black" />}
-          label="Date & Time"
+          label={t('Date & Time')}
           value={`${booking.date ? booking.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : 'Today'} • ${booking.time}`}
         />
 
         <CardItem
           icon={<Phone size={20} className="text-black" />}
-          label="Contact"
+          label={t('Contact')}
           value={Constants.CONTACT_NUMBER}
         />
 
         <CardItem
           icon={<MapPin size={20} className="text-black" />}
-          label="Location"
+          label={t('Location')}
           value={Constants.ADDRESS}
         />
 
@@ -100,10 +100,10 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
         <Button type="button"
           onClick={() => window.open(generateCalendarLink(booking), '_blank')}
           className="w-full py-8 bg-black text-white border-2 border-transparent hover:bg-black/90 hover:border-primary font-bold text-lg shadow-xl active:scale-95 transition-transform">
-          Add to Calendar
+          {t('Add to Calendar')}
         </Button>
         <Button type="button" onClick={resetStep} className="w-full py-8 border-2 border-transparent hover:border-black font-bold text-lg shadow-xl active:scale-95 transition-transform">
-          Make Another Booking
+          {t('Make Another Booking')}
         </Button>
       </motion.div>
     </div>

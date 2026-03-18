@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Phone, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,8 @@ function ConfirmBooking({
     confirmBooking
 }: IProps) {
 
+    const { t } = useTranslation();
+    
     const [initialInputData] = useState<{ name: string; phone: string } | null>(() => {
         const savedUser = localStorage.getItem('bookingUser');
         if (savedUser) {
@@ -37,14 +40,14 @@ function ConfirmBooking({
 
     return (
         <div className="space-y-6 px-2">
-            <h2 className="text-3xl font-black">Confirm your<br />Booking?</h2>
+            <h2 className="text-3xl font-black" dangerouslySetInnerHTML={{ __html: t('Confirm your<br />Booking?') }} />
             <div className="space-y-3">
                 <div className="bg-primary/10 border-2 border-primary/20 p-5 rounded-[2rem] mb-6">
-                    <p className="text-xxs font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2">Summary</p>
+                    <p className="text-xxs font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2">{t('Summary')}</p>
                     <p className="font-bold text-sm">
                         {booking.barber?.name} • {booking.date && format(booking.date, 'MMMM do')} @ {booking.time}
                     </p>
-                    <p className="font-bold text-base mt-2">Total: {booking.totalPrice ?? 0} den</p>
+                    <p className="font-bold text-base mt-2">{t('Total')}: {booking.totalPrice ?? 0} {t('den')}</p>
                 </div>
 
                 <div className="relative">
@@ -54,7 +57,7 @@ function ConfirmBooking({
                         value={booking.name || ''}
                         onChange={handleInputChange}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
-                        placeholder="Your Name"
+                        placeholder={t('Your FullName')}
                     />
                 </div>
                 <div className="relative">
@@ -64,7 +67,7 @@ function ConfirmBooking({
                         value={booking.phone || ''}
                         onChange={handleInputChange}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
-                        placeholder="Phone Number"
+                        placeholder={t('Phone Number')}
                     />
                 </div>
             </div>
@@ -74,7 +77,7 @@ function ConfirmBooking({
                 disabled={!booking.name || !booking.phone}
                 className="w-full py-8 rounded-[2rem] bg-black text-white text-xl font-bold mt-4 shadow-xl disabled:bg-zinc-300 active:scale-95 transition-all"
             >
-                Confirm Booking
+                {t('Confirm Booking')}
             </Button>
         </div>
     );

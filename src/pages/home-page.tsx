@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 
 // Hooks
 import { BookingStepsEnum } from '@/components/home/booking-constants';
@@ -41,9 +42,11 @@ const MainPage = () => {
     isSlotBooked,
   } = useBooking();
 
+  const { t } = useTranslation();
+
   useMeta(
     Constants.SITE_TITLE,
-    `Welcome to ${Constants.SITE_TITLE}, your go-to destination for stylish haircuts and exceptional service in Zurich. Book your appointment today!`
+    t('Welcome to {{siteTitle}}, your go-to destination for stylish haircuts and exceptional service in Skopje. Book your appointment today!', { siteTitle: Constants.SITE_TITLE })
   );
 
   return (

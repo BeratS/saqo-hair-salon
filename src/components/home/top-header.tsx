@@ -14,11 +14,11 @@ import { listedBookingSteps } from "./booking-constants";
 
 
 const LanguageList = [
+    { code: 'sq', name: 'Shqip' },
+    { code: 'mk', name: 'Македонски' },
+    { code: 'tr', name: 'Türkçe' },
     { code: 'en', name: 'English' },
     { code: 'de', name: 'Deutsch' },
-    { code: 'mk', name: 'Македонски' },
-    { code: 'sq', name: 'Shqip' },
-    { code: 'tr', name: 'Türkçe' }
 ];
 
 interface IProps {
@@ -27,7 +27,7 @@ interface IProps {
 }
 
 function TopHeader({ step, prevStep }: IProps) {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const handleLanguageChange = (value: string | null) => {
         const selectedLanguage = value || 'en';
@@ -102,7 +102,7 @@ function TopHeader({ step, prevStep }: IProps) {
                 {listedBookingSteps.map((s, i) => (
                     <div key={s} className="flex flex-col items-center gap-2">
                         <div className={`h-1.5 w-18 rounded-full transition-all duration-500 ${i <= step ? 'bg-black' : 'bg-zinc-100'}`} />
-                        <span className={`text-[9px] font-bold uppercase tracking-widest ${i === step ? 'text-black' : 'text-zinc-400'}`}>{s}</span>
+                        <span className={`text-[9px] font-bold uppercase tracking-widest ${i === step ? 'text-black' : 'text-zinc-400'}`}>{t(s)}</span>
                     </div>
                 ))}
             </div>

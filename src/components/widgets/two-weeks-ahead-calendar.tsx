@@ -1,6 +1,7 @@
 
 import { format, isSameDay } from "date-fns";
 import { motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,8 @@ interface IProps {
 }
 
 export default function TwoWeekAheadCalendar({ selectedDate, dateSlots, onSelect }: IProps) {
+    const { t } = useTranslation();
+
     return (
         <div className="space-y-3 max-h-[50vh] overflow-y-auto no-scrollbar py-2 px-1 grid grid-cols-4 gap-2">
             {dateSlots.map((date) => {
@@ -35,15 +38,15 @@ export default function TwoWeekAheadCalendar({ selectedDate, dateSlots, onSelect
                                 "w-12 h-12 flex flex-col items-center justify-center ",
                             )}>
                                 <span className="text-sm font-black uppercase tracking-tighter opacity-50">
-                                    {format(date, "MMM")}
+                                    {t(format(date, "MMM"))}
                                 </span>
                                 <span className="text-2xl font-black leading-none">
-                                    {format(date, "d")}
+                                    {t(format(date, "d"))}
                                 </span>
                             </div>
 
                             <p className="font-black uppercase tracking-widest text-sm text-center">
-                                {isToday ? "Today" : format(date, "EEEE")}
+                                {isToday ? t("Today") : t(format(date, "EEEE"))}
                             </p>
                         </div>
                     </motion.button>

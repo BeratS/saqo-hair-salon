@@ -1,5 +1,6 @@
 import { Check, ScissorsIcon, Star, User } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from "@/lib/utils";
 
@@ -10,15 +11,17 @@ interface IProps {
 }
 
 function PickBarbers({ barbers, booking, setBarber }: IProps) {
+    const { t } = useTranslation();
+
     return (
         <div className="flex flex-col h-full space-y-8">
             {/* Minimalist Heading */}
             <div className="text-center space-y-1">
                 <h2 className="text-4xl font-black tracking-tighter uppercase leading-none">
-                    Select Berber
+                    {t('Select Artist')}
                 </h2>
                 <p className="text-xxs text-zinc-400 font-bold uppercase tracking-[0.3em]">
-                    Expertise for your style
+                    {t('Expertise for your style')}
                 </p>
             </div>
 
@@ -34,15 +37,15 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                             onClick={() => setBarber(b)}
                             className={cn(
                                 "relative group overflow-hidden rounded-[3rem] border-2 transition-all duration-500 cursor-pointer",
-                                isSelected 
-                                    ? "border-black bg-black text-white shadow-2xl -translate-y-1" 
+                                isSelected
+                                    ? "border-black bg-black/70 text-white shadow-2xl -translate-y-1"
                                     : "border-zinc-100 bg-white hover:border-zinc-300"
                             )}
                         >
                             <div className="p-6 flex items-center gap-6">
                                 {/* Profile Image with Animated Ring */}
                                 <div className="relative shrink-0">
-                                    <motion.div 
+                                    <motion.div
                                         animate={{ rotate: isSelected ? 360 : 0 }}
                                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                                         className={cn(
@@ -61,10 +64,10 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                                     <div className="w-28 h-28 bg-zinc-50 border-2 border-zinc-200 rounded-[3rem] flex items-center justify-center relative group-hover:border-black/70 transition-all">
                                         <User size={48} className="text-zinc-200 group-hover:text-black/70 transition-colors" />
                                     </div>
-                                    
+
                                     <AnimatePresence>
                                         {isSelected && (
-                                            <motion.div 
+                                            <motion.div
                                                 initial={{ scale: 0, rotate: -45 }}
                                                 animate={{ scale: 1, rotate: 0 }}
                                                 exit={{ scale: 0 }}
@@ -90,14 +93,14 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                                     )}>
                                         {b.role}
                                     </p> */}
-                                    
+
                                     {/* Availability Tag */}
                                     <div className={cn(
                                         "mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter",
                                         isSelected ? "bg-zinc-800 text-white" : "bg-zinc-100 text-zinc-600"
                                     )}>
                                         <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-                                        Available Today
+                                        {t('Available Today')}
                                     </div>
                                 </div>
                             </div>

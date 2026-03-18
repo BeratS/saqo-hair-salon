@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react"; // Added for extra "cool" factor
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
 
@@ -18,10 +19,12 @@ function SelectService({
     toggleService,
     nextStep,
 }: IProps) {
+    const { t } = useTranslation();
+    
     return (
         <div className="flex flex-col h-full space-y-6">
             <h2 className="text-3xl text-center font-black leading-tight tracking-tighter">
-                Select Services
+                {t('Select Services')}
             </h2>
 
             <div className="flex-1 overflow-y-auto no-scrollbar space-y-3 pb-32 px-1">
@@ -46,7 +49,7 @@ function SelectService({
                             className={cn(
                                 "relative overflow-hidden py-4 px-6 rounded-[2.5rem] border-2 transition-all cursor-pointer",
                                 isSelected
-                                    ? 'bg-primary text-white shadow-xl'
+                                    ? 'bg-primary/90 text-white shadow-xl'
                                     : 'bg-white text-black hover:border-zinc-300',
                                 isSpecial && !isSelected && 'bg-amber-50/50 border-amber-200'
                             )}
@@ -54,17 +57,17 @@ function SelectService({
                             {/* Floating "VIP" Badge for All Inclusive */}
                             {isSpecial && (
                                 <div className={cn(
-                                    "absolute top-0 right-30 sm:right-40 px-3 py-1 rounded-b-xl text-xxs font-black uppercase tracking-tighter transition-all",
+                                    "absolute top-0 right-30 sm:right-40 px-3 py-1 rounded-b-xl text-xs font-black uppercase tracking-tighter transition-all border-x border-b border-amber-400",
                                     isSelected ? "bg-amber-400 text-black" : "bg-zinc-100 text-zinc-500"
                                 )}>
-                                    Value Pack
+                                    {t('Value Pack')}
                                 </div>
                             )}
 
                             <div className="relative z-10 flex justify-between items-baseline gap-2">
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg font-black uppercase whitespace-nowrap">
-                                        {service.name}
+                                        {t(service.name)}
                                     </span>
                                     {isSpecial && isSelected && (
                                         <motion.div
@@ -78,7 +81,7 @@ function SelectService({
                                 <div className={cn("flex-1 border-b-2 border-dotted mb-1 opacity-30",
                                     isSelected ? 'border-white' : 'border-zinc-400'
                                 )} />
-                                <span className="text-xl font-black">{service.price} den</span>
+                                <span className="text-xl font-black">{service.price} {t('den')}</span>
                             </div>
 
                             <AnimatePresence>
@@ -91,7 +94,7 @@ function SelectService({
                                             isSelected ? 'text-zinc-100' : 'text-zinc-500'
                                         )}
                                     >
-                                        {service.description}
+                                        {t(service.description)}
                                     </motion.p>
                                 )}
                             </AnimatePresence>
@@ -121,14 +124,14 @@ function SelectService({
                             onClick={nextStep}
                             className="w-full py-9 rounded-[2.5rem] bg-black text-white hover:bg-zinc-900 text-xl font-black uppercase shadow-2xl tracking-widest flex justify-between px-10 transition-transform active:scale-95"
                         >
-                            <span className="flex items-center gap-2">Next</span>
+                            <span className="flex items-center gap-2">{t('Next')}</span>
                             <motion.span
                                 key={booking.totalPrice}
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 className="tabular-nums"
                             >
-                                {booking.totalPrice} den
+                                {booking.totalPrice} {t('den')}
                             </motion.span>
                         </Button>
                     </div>

@@ -18,7 +18,7 @@ i18n
             tr: { translation: trTranslation },
         },
         lng: localStorage.getItem('language') || "en", // default language from localStorage
-        fallbackLng: "en",
+        fallbackLng: "sq", // fallback language
         interpolation: {
             escapeValue: false
         }
