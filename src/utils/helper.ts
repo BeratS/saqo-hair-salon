@@ -20,12 +20,12 @@ export const getAppointmentKey = (timestamp: Timestamp): string => {
  */
 export const getSlotKey = (date: Date, slotTime: string): string => {
     const datePart = format(date, 'yyyy-MM-dd');
-    
+
     // Convert "2:30 PM" -> "14:30"
     const [time, ampm] = slotTime.split(' ');
     // eslint-disable-next-line prefer-const
     let [hours, minutes] = time.split(':').map(Number);
-    
+
     if (ampm === 'PM' && hours !== 12) hours += 12;
     if (ampm === 'AM' && hours === 12) hours = 0;
 
@@ -112,4 +112,38 @@ export const generateCalendarLink = (booking: IBookingState) => {
     const endTime = format(date!, "yyyyMMdd") + 'T' + add30Mins(convertTo24h(time!));
 
     return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent('Services: ' + serviceNames)}&location=${encodeURIComponent(location)}&dates=${startTime}/${endTime}`;
+};
+
+export const splitTime = (timeStr: string): number[] => {
+    if (!timeStr) return [0, 0]; // Default fallback
+    return timeStr.split(':').map(Number);
+}
+
+export const generateTimeSlots = (
+    openHour: number,
+    openMin: number,
+    closeHour: number,
+    closeMin: number
+): string[] => {
+    const slots: string[] = [];
+    let currentHour = openHour;
+    let currentMin = openMin;
+
+    while (
+        currentHour < closeHour ||
+        (currentHour === closeHour && currentMin < closeMin)
+    ) {
+        const displayHour = currentHour > 12 ? currentHour - 12 : currentHour;
+        const ampm = currentHour >= 12 ? "PM" : "AM";
+        const minStr = currentMin === 0 ? "00" : "30";
+        slots.push(`${displayHour}:${minStr} ${ampm}`);
+
+        currentMin += 30;
+        if (currentMin >= 60) {
+            currentHour += 1;
+            currentMin = 0;
+        }
+    }
+
+    return slots;
 };

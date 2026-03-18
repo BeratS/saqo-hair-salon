@@ -40,3 +40,18 @@ interface IBarber {
   active: boolean;
   imageUrl?: string; // Optional for now
 }
+
+// Settings
+interface IGlobalSettings {
+  open: string;
+  close: string;
+}
+
+interface IScheduleException {
+  id?: string;
+  date: any; // Firestore Timestamp
+  open: string;
+  close: string;
+  note: string;
+  isWorking: boolean;
+}

@@ -15,7 +15,7 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
             {/* Minimalist Heading */}
             <div className="text-center space-y-1">
                 <h2 className="text-4xl font-black tracking-tighter uppercase leading-none">
-                    Select Artist
+                    Select Berber
                 </h2>
                 <p className="text-xxs text-zinc-400 font-bold uppercase tracking-[0.3em]">
                     Expertise for your style

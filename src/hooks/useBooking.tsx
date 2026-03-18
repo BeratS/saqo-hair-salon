@@ -1,13 +1,13 @@
 import { addDays, isSameDay } from 'date-fns';
-import { type ChangeEvent, useMemo, useState } from 'react';
+import { type ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
 import { createAppointment } from '@/services/booking';
-import { getAppointmentKey, getSlotKey, wait } from '@/utils/helper';
+import { generateTimeSlots, getAppointmentKey, getSlotKey, splitTime, wait } from '@/utils/helper';
 
 import useAppointments from './useAppointments';
 import { useBerberData } from './useBerberData';
-import { useEffect } from 'react';
+import { useBerberSettings } from './useBerberSettings';
 
 
 const useBooking = () => {
@@ -30,11 +30,30 @@ const useBooking = () => {
 
     const { allAppointments } = useAppointments()
 
+    const { exceptions, globalHours } = useBerberSettings()
+
+
+
     // Generate 14 days (today + 2 weeks) - no Sundays
     const dateSlots = useMemo(() => {
-        return Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
+        const openDays = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
             .filter(date => date.getDay() !== 0); // 0 is Sunday
-    }, []); // Empty array means it only runs once on mount
+
+        exceptions.forEach(ex => {
+            const exDate = ex.date.toDate()
+
+            if (ex.isWorking === true && exDate.getDay() === 0) {
+                openDays.push(exDate);
+            }
+
+            if (ex.isWorking === false && exDate.getDay() !== 0) {
+                const index = openDays.findIndex(d => isSameDay(d, exDate));
+                if (index !== -1) openDays.splice(index, 1);
+            }
+        });
+
+        return openDays.sort((a, b) => a.getTime() - b.getTime());
+    }, [exceptions]); // Empty array means it only runs once on mount
 
     const weekStrip = useMemo<Date[]>(() => {
         // 1. Find the index of the currently selected baseDate in our 14-day pool
@@ -50,16 +69,25 @@ const useBooking = () => {
 
     // 10 AM - 8 PM Slots
     const timeSlots = useMemo<string[]>(() => {
-        const slots: string[] = [];
-        for (let h = 10; h < 20; h += 0.5) {
-            const hour = Math.floor(h);
-            const min = h % 1 === 0 ? "00" : "30";
-            const displayHour = hour > 12 ? hour - 12 : hour;
-            const ampm = hour >= 12 ? "PM" : "AM";
-            slots.push(`${displayHour}:${min} ${ampm}`);
+        let { open, close } = globalHours;
+
+        // Check if there's an exception for the selected date
+        const dateException = exceptions.find(ex =>
+            isSameDay(ex.date.toDate(), booking.date!) && ex.isWorking === true
+        );
+
+        // Use exception hours if available, otherwise use global hours
+        if (dateException && dateException.open && dateException.close) {
+            open = dateException.open;
+            close = dateException.close;
         }
-        return slots;
-    }, []);
+
+        // Parse open and close times
+        const [openHour, openMin] = splitTime(open)
+        const [closeHour, closeMin] = splitTime(close)
+
+        return generateTimeSlots(openHour, openMin, closeHour, closeMin);
+    }, [globalHours, exceptions, booking.date]);
 
     const isSlotBooked = (date: Date, slotTime: string) => {
         // Generate the key for the current UI slot we are checking
