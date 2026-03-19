@@ -86,14 +86,9 @@ function AppointmentDataTable() {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
                             <input
                                 placeholder="Search Client..."
-                                className="pl-12 pr-6 py-3 bg-white border border-zinc-100 rounded-full text-xs font-bold focus:outline-none focus:ring-2 focus:ring-black/5 w-64"
+                                className="pl-12 pr-6 py-3 bg-zinc-100 border border-zinc-100 rounded-full text-xs font-bold focus:outline-none focus:ring-2 focus:ring-black/5 w-64"
                             />
                         </div>
-                        <button
-                            type="button"
-                            className="p-3 mr-4 bg-primary/60 border border-zinc-100 rounded-full hover:bg-primary hover:text-white transition-all cursor-pointer">
-                            <PlusIcon size={18} />
-                        </button>
                     </div>
                 </header>
 
