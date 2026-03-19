@@ -74,7 +74,7 @@ function AppointmentDataTable() {
                     <div>
                         <p className="text-xxs font-black text-zinc-400 uppercase tracking-[0.2em]">Viewing Schedule For</p>
                         <h2 className="text-4xl font-black uppercase tracking-tighter">
-                            {isSameDay(selectedDate, new Date()) ? "Today" : format(selectedDate, "dd - EEEE, MMM")}
+                            {isSameDay(selectedDate, new Date()) ? "Today" : format(selectedDate, "EEEE (dd, MMM)")}
                         </h2>
                         <h3 className="text-base font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
                             {appointments.length} {appointments.length === 1 ? "Booking" : "Bookings"}
