@@ -64,5 +64,6 @@
     "Cancel Reservation": "Anuloni Rezervimin",
     "Need Help?": "Keni nevojë për ndihmë?",
     "Enter your phone number and we will request to cancel your appointments": "Vendosni numrin tuaj të telefonit dhe do bëjni kërkes për anulimin e rezervimeve tuaja",
-    "Cancel it": "Anulojeni"
+    "Cancel it": "Anulojeni",
+    "Reason why you want to cancel booking?": "Arsyeja pse doni të anuloni rezervimin?"
 }

@@ -56,7 +56,7 @@ function AppointmentDataTable() {
                                         {isTodayDate ? "Today" : format(date, "EEEE")}
                                     </p>
                                     <p className={cn("text-xs opacity-70 uppercase tracking-tight text-black/70")}>
-                                        <b>8</b> Slots Available
+                                        <b>{appointments.length}</b> reservations
                                     </p>
                                 </div>
                                 {isSelected && <ChevronRight size={14} className="ml-auto opacity-50" />}

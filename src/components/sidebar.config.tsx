@@ -10,6 +10,13 @@ export const sidebarConfig = {
       ),
     },
     {
+      title: "Cancel Requests",
+      url: "/cancel-booking",
+      icon: (
+        <ListIcon />
+      ),
+    },
+    {
       title: "Services (Menu)",
       url: "/menu",
       icon: (
