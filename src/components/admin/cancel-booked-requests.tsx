@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCancelReservations } from "@/hooks/useCancelReservations";
 
+import ConfirmDelete from '../widgets/confirm-delete';
+
 export function CancellBookedRequests() {
     const { requests, loading, removeRequestAndAppointments } = useCancelReservations();
 
@@ -84,14 +86,16 @@ export function CancellBookedRequests() {
 
                                 {/* DELETE ACTION */}
                                 <TableCell className="pr-8 text-right">
-                                    <Button
-                                        variant="destructive"
-                                        onClick={() => removeRequestAndAppointments(req.id, req.customerPhone)}
-                                        className="rounded-full transition-all"
-                                    >
-                                        <Trash2 size={16} />
-                                        Delete
-                                    </Button>
+                                    <ConfirmDelete onConfirm={() => removeRequestAndAppointments(req.id, req.customerPhone)}>
+                                        <Button
+                                            type='button'
+                                            variant="destructive"
+                                            className="rounded-full transition-all"
+                                        >
+                                            <Trash2 size={16} />
+                                            Delete
+                                        </Button>
+                                    </ConfirmDelete>
                                 </TableCell>
                             </TableRow>
                         ))}
