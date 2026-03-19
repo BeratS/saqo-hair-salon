@@ -53,7 +53,6 @@ export function useCancelReservations() {
             // 4. Commit the batch
             await batch.commit();
 
-            console.log(`Successfully deleted request and ${querySnapshot.size} appointments.`);
         } catch (error) {
             console.error("Batch delete failed:", error);
         }

@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import { getAppointmentsByRange } from "@/services/booking";
 
+import { useBerberSettings } from "./useBerberSettings";
+
 const useAppointments = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -11,12 +13,28 @@ const useAppointments = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
-    // 1. Generate our 14-day window (skipping Sundays)
+    const { exceptions } = useBerberSettings()
+    
+    // Generate 14 days (today + 2 weeks) - no Sundays
     const sidebarDates = useMemo(() => {
-        return Array.from({ length: 20 }, (_, i) => addDays(new Date(), i))
-            .filter(d => d.getDay() !== 0)
-            .slice(0, 14);
-    }, []);
+        const openDays = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
+            .filter(date => date.getDay() !== 0); // 0 is Sunday
+
+        exceptions.forEach(ex => {
+            const exDate = ex.date.toDate()
+
+            if (ex.isWorking === true && exDate.getDay() === 0) {
+                openDays.push(exDate);
+            }
+
+            if (ex.isWorking === false && exDate.getDay() !== 0) {
+                const index = openDays.findIndex(d => isSameDay(d, exDate));
+                if (index !== -1) openDays.splice(index, 1);
+            }
+        });
+
+        return openDays.sort((a, b) => a.getTime() - b.getTime());
+    }, [exceptions]);
 
     // 2. Setup Real-time Listener for the FULL range
     useEffect(() => {

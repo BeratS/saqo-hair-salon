@@ -31,6 +31,7 @@ function AppointmentDataTable() {
                         const isSelected = isSameDay(date, selectedDate);
                         const isTodayDate = isSameDay(date, new Date());
                         const hasBookings = allAppointments.some(app => isSameDay(app.scheduledAt.toDate(), date));
+                        const selectedBookingLength = allAppointments.map(app => isSameDay(app.scheduledAt.toDate(), date) ? app : null).filter(Boolean);
 
                         return (
                             <button
@@ -56,7 +57,7 @@ function AppointmentDataTable() {
                                         {isTodayDate ? "Today" : format(date, "EEEE")}
                                     </p>
                                     <p className={cn("text-xs opacity-70 uppercase tracking-tight text-black/70")}>
-                                        <b>{appointments.length}</b> reservations
+                                        <b>{selectedBookingLength?.length ?? 0}</b> reservations
                                     </p>
                                 </div>
                                 {isSelected && <ChevronRight size={14} className="ml-auto opacity-50" />}

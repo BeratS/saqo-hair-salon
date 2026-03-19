@@ -32,8 +32,6 @@ const useBooking = () => {
 
     const { exceptions, globalHours } = useBerberSettings()
 
-
-
     // Generate 14 days (today + 2 weeks) - no Sundays
     const dateSlots = useMemo(() => {
         const openDays = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
