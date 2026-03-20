@@ -10,11 +10,16 @@ export const Constants = {
     INSTAGRAM: 'https://www.instagram.com/',
   },
   SHARER: {
-    X: (url: string, text?: string) => `https://x.com/intent/tweet?url=${url}`, // &via=getboldify&text=yourtext
-    FB: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    DISCORD: (url: string) => `https://discord.com/channels/@me`,
-    LINKEDIN: (url: string) => `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-    TELEGRAM: (url: string, text?: string) => `https://t.me/share/url?url=${url}`, // &text=YOUR_TEXT
+    X: (url = '', text = '') =>
+      `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
+    FB: (url = '') =>
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+    DISCORD: () =>
+      `https://discord.com/channels/@me`, // no direct share URL support
+    LINKEDIN: (url = '') =>
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+    TELEGRAM: (url = '', text = "") =>
+      `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
   },
   GOOGLE_MAPS: 'https://maps.app.goo.gl/sEYuGdvYvDmXgqeh9',
   ADDRESS: 'Arhiepiskop Dositej 11 Skopje, Çair 1000',

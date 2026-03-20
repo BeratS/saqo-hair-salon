@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";

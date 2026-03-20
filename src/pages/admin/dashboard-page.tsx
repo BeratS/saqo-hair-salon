@@ -1,9 +1,6 @@
 
-import { DataTable } from '@/components/data-table';
 import { ChartAreaInteractive } from '@/components/widgets/chart-area-interactive';
 import { SectionCards } from '@/components/widgets/section-cards';
-
-import data from "../../app/data.json";
 
 function DashboardPage() {
     return (
@@ -14,7 +11,6 @@ function DashboardPage() {
                     <div className="px-4 lg:px-6">
                         <ChartAreaInteractive />
                     </div>
-                    <DataTable data={data} />
                 </div>
             </div>
         </div>

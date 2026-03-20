@@ -1,6 +1,6 @@
 import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarIcon, ChevronRight, Phone, PlusIcon, Scissors, Search, X } from "lucide-react";
+import { CalendarIcon, ChevronRight, Phone, Scissors, Search, X } from "lucide-react";
 
 import useAppointments from "@/hooks/useAppointments";
 import { useBerberData } from "@/hooks/useBerberData";

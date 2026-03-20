@@ -1,5 +1,3 @@
-import { Download, Share } from 'lucide-react';
-
 import { usePWA } from '@/hooks/use-pwa';
 
 import { Button } from '../ui/button';
