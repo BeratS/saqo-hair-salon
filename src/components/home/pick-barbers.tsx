@@ -120,7 +120,7 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
             </div>
 
             {/* --- STICKY FOOTER --- */}
-            <div className="sticky-footer w-full flex flex-col gap-2">
+            <div className="sticky-footer w-full flex flex-col gap-2 px-4 pb-2">
                 <InstallPWA />
                 <div className="pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
                     <CancelReservation />

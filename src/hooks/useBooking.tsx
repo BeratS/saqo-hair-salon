@@ -1,4 +1,4 @@
-import { addDays, isSameDay } from 'date-fns';
+import { addDays, isAfter, isBefore, isSameDay, parse, startOfDay } from 'date-fns';
 import { type ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
@@ -32,59 +32,101 @@ const useBooking = () => {
 
     const { exceptions, globalHours } = useBerberSettings()
 
-    // Generate 14 days (today + 2 weeks) - no Sundays
     const dateSlots = useMemo(() => {
-        const openDays = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
-            .filter(date => date.getDay() !== 0); // 0 is Sunday
+        const now = new Date();
+        const today = startOfDay(now);
 
+        // 1. Generate initial 14 days (excluding Sundays)
+        let openDays = Array.from({ length: 14 }, (_, i) => addDays(today, i))
+            .filter(date => date.getDay() !== 0);
+
+        // 2. CHECK: Is it already past closing time today?
+        // Using globalHours.close directly
+        const closeToday = parse(globalHours.close, 'HH:mm', now);
+
+        if (isAfter(now, closeToday)) {
+            // Remove "Today" from the list
+            openDays = openDays.filter(date => !isSameDay(date, today));
+        }
+
+        // 3. Handle Exceptions
         exceptions.forEach(ex => {
-            const exDate = ex.date.toDate()
+            const exDate = ex.date.toDate();
+            const isExToday = isSameDay(exDate, today);
 
-            if (ex.isWorking === true && exDate.getDay() === 0) {
-                openDays.push(exDate);
+            if (ex.isWorking === true) {
+                const alreadyExists = openDays.some(d => isSameDay(d, exDate));
+                if (!alreadyExists && !isBefore(exDate, today)) {
+                    // If the exception is for today, check the specific exception closing time
+                    if (isExToday) {
+                        const exCloseToday = parse(ex.close, 'HH:mm', now);
+                        if (isBefore(now, exCloseToday)) {
+                            openDays.push(exDate);
+                        }
+                    } else {
+                        openDays.push(exDate);
+                    }
+                }
             }
 
-            if (ex.isWorking === false && exDate.getDay() !== 0) {
-                const index = openDays.findIndex(d => isSameDay(d, exDate));
-                if (index !== -1) openDays.splice(index, 1);
+            if (ex.isWorking === false) {
+                openDays = openDays.filter(d => !isSameDay(d, exDate));
             }
         });
 
         return openDays.sort((a, b) => a.getTime() - b.getTime());
-    }, [exceptions]); // Empty array means it only runs once on mount
+    }, [exceptions, globalHours]);
 
     const weekStrip = useMemo<Date[]>(() => {
-        // 1. Find the index of the currently selected baseDate in our 14-day pool
+        // 1. Safety check: If no dates are available at all (e.g., salon is on vacation)
+        if (dateSlots.length === 0) return [];
+
+        // 2. Find where the user's current selection sits in the 14-day pool
+        // If today just passed the closing time, it will be missing from dateSlots, returning -1
         const startIndex = dateSlots.findIndex(date => isSameDay(date, baseDate!));
 
-        // 2. If for some reason it's not found (e.g. it's a Sunday), default to 0
+        // 3. Fallback: If the selected date isn't found, start from the first available day
         const start = startIndex === -1 ? 0 : startIndex;
 
-        // 3. Slice 7 days starting from that selection
-        // We use .slice(start, start + 7) to show the "window" of time
+        // 4. Slice 5 days starting from that selection to show in the horizontal scroller
         return dateSlots.slice(start, start + 5);
     }, [baseDate, dateSlots]);
 
     // 10 AM - 8 PM Slots
     const timeSlots = useMemo<string[]>(() => {
+        if (!booking.date) return [];
+
+        const now = new Date();
+        const isToday = isSameDay(booking.date, now);
+
+        // Default to global hours
         let { open, close } = globalHours;
 
-        // Check if there's an exception for the selected date
+        // Override with exception if it exists for the selected date
         const dateException = exceptions.find(ex =>
             isSameDay(ex.date.toDate(), booking.date!) && ex.isWorking === true
         );
 
-        // Use exception hours if available, otherwise use global hours
-        if (dateException && dateException.open && dateException.close) {
+        if (dateException?.open && dateException?.close) {
             open = dateException.open;
             close = dateException.close;
         }
 
-        // Parse open and close times
-        const [openHour, openMin] = splitTime(open)
-        const [closeHour, closeMin] = splitTime(close)
+        const [openHour, openMin] = splitTime(open);
+        const [closeHour, closeMin] = splitTime(close);
 
-        return generateTimeSlots(openHour, openMin, closeHour, closeMin);
+        const allSlots = generateTimeSlots(openHour, openMin, closeHour, closeMin);
+
+        // Filter out past times if the user is booking for today
+        if (isToday) {
+            return allSlots.filter(slot => {
+                const slotTime = parse(slot, 'HH:mm', now);
+                // Buffer: Only show slots starting at least 5 minutes from now
+                return isAfter(slotTime, new Date(now.getTime() + 5 * 60000));
+            });
+        }
+
+        return allSlots;
     }, [globalHours, exceptions, booking.date]);
 
     const isSlotBooked = (date: Date, slotTime: string) => {

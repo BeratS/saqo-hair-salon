@@ -81,7 +81,7 @@ function PickTime({
             </div>
 
             {/* DATE STRIP (Sticky-style at top) */}
-            <div className="grid grid-cols-5 gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
+            <div className="grid grid-cols-5 gap-2 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
                 {weekStrip.map((date: Date, i: number) => {
                     const isSelected = booking.date?.toDateString() === date.toDateString();
                     const isToday = isSameDay(date, new Date());

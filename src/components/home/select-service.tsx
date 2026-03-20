@@ -117,7 +117,7 @@ function SelectService({
             {/* FIXED BOTTOM ACTION BAR */}
             <AnimatePresence>
                 {booking.selectedServices.length > 0 && (
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-white via-white/90 to-transparent pt-10">
+                    <div className="absolute z-10 bottom-0 left-0 right-0 p-4 bg-linear-to-t from-white via-white/90 to-transparent pt-10">
                         <Button
                             type="button"
                             disabled={booking.selectedServices.length === 0}
