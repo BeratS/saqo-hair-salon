@@ -61,7 +61,7 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
         variants={textVariants}
         initial="hidden"
         animate="visible"
-        className="w-full bg-zinc-50 rounded-[2.5rem] p-6 border-2 border-zinc-100 mb-8 space-y-4"
+        className="w-full bg-zinc-50 rounded-[2.5rem] p-4 border-2 border-zinc-100 mb-8 space-y-4"
       >
         <CardItem
           icon={<User size={20} className="text-black" />}
@@ -118,14 +118,14 @@ interface ICardItem {
 
 const CardItem = ({ icon, label, value }: ICardItem) => (
   <div className="flex items-center gap-4">
-    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+    <div className="min-w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
       {icon}
     </div>
     <div className="text-left">
       <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
         {label}
       </p>
-      <p className="font-bold text-lg">{value}</p>
+      <p className="font-bold text-base">{value}</p>
     </div>
   </div>
 )

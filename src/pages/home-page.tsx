@@ -15,6 +15,7 @@ import TopHeader from '@/components/home/top-header';
 import { Constants } from '@/Constants';
 import useBooking from '@/hooks/useBooking';
 import { useMeta } from '@/hooks/useMeta';
+import { cn } from '@/lib/utils';
 
 
 const MainPage = () => {
@@ -51,7 +52,10 @@ const MainPage = () => {
 
   return (
     <main className="flex justify-center items-center">
-      <div className="w-full min-h-dvh max-w-lg bg-white overflow-hidden relative flex flex-col">
+      <div className={cn(
+        "w-full min-h-screen max-w-lg bg-white overflow-hidden relative flex flex-col",
+        step === BookingStepsEnum.Barber && 'min-h-dvh'
+      )}>
 
         {/* HEADER SECTION */}
         <TopHeader step={step} prevStep={prevStep} />
