@@ -111,3 +111,9 @@ createRoot(document.getElementById("root")!).render(
     <Toaster expand={true} richColors position="top-right" duration={8000} />
   </StrictMode>
 );
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then((_) => console.log('Saqo Service Worker Active'))
+    .catch((err) => console.error('SW Registration Error', err));
+}

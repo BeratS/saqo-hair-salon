@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 // 1. Import the Auth SDK
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getMessaging } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -20,5 +21,8 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app); 
 
 export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+// 2. Initialize Messaging (Only if window is defined/browser environment)
+export const messaging = typeof window !== "undefined" ? getMessaging(app) : null;
+
 export const db = getFirestore(app);
 export default app;

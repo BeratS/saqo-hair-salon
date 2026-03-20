@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Constants } from '@/Constants';
 import { cn } from "@/lib/utils";
 
+import { InstallPWA } from '../widgets/install-pwa';
 import CancelReservation from './cancel-reservation';
 
 interface IProps {
@@ -119,25 +120,28 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
             </div>
 
             {/* --- STICKY FOOTER --- */}
-            <div className="pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
-                <CancelReservation />
+            <div className="sticky-footer w-full flex flex-col gap-2">
+                <InstallPWA />
+                <div className="pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
+                    <CancelReservation />
 
-                {/* Contact Info / Phone */}
-                <div className="flex flex-col items-end">
-                    <p className="text-xxs font-black uppercase tracking-widest text-zinc-300 leading-none mb-1">
-                        {t('Need Help?')}
-                    </p>
-                    <a
-                        href={`tel:${Constants.CONTACT_NUMBER}`}
-                        className="flex items-center gap-2 group"
-                    >
-                        <span className="text-sm font-black tracking-tighter group-hover:underline">
-                            {Constants.CONTACT_NUMBER}
-                        </span>
-                        <div className="w-8 h-8 bg-zinc-50 rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
-                            <User size={14} /> {/* Or a Phone Icon if preferred */}
-                        </div>
-                    </a>
+                    {/* Contact Info / Phone */}
+                    <div className="flex flex-col items-end">
+                        <p className="text-xxs font-black uppercase tracking-widest text-zinc-300 leading-none mb-1">
+                            {t('Need Help?')}
+                        </p>
+                        <a
+                            href={`tel:${Constants.CONTACT_NUMBER}`}
+                            className="flex items-center gap-2 group"
+                        >
+                            <span className="text-sm font-black tracking-tighter group-hover:underline">
+                                {Constants.CONTACT_NUMBER}
+                            </span>
+                            <div className="w-8 h-8 bg-zinc-50 rounded-full flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
+                                <User size={14} /> {/* Or a Phone Icon if preferred */}
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
