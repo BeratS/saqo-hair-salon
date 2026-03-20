@@ -10,7 +10,7 @@ import {
 import { Constants } from "@/Constants";
 
 import { Button } from "../ui/button";
-import { listedBookingSteps } from "./booking-constants";
+import { BookingStepsEnum, listedBookingSteps } from "./booking-constants";
 
 
 const LanguageList = [
@@ -41,7 +41,7 @@ function TopHeader({ step, prevStep }: IProps) {
             <div className="flex justify-between items-center mb-8 px-1">
                 {/* LEFT SIDE: Back or Logo */}
                 <div className="left-icon w-14 inline-flex">
-                    {step > 0 ? (
+                    {step > BookingStepsEnum.Barber && step < BookingStepsEnum.Done ? (
                         <Button
                             variant="secondary"
                             onClick={prevStep}

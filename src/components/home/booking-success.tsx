@@ -34,7 +34,7 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 text-center">
+    <div className="flex flex-col items-center justify-center h-full px-6 pb-4 text-center">
       {/* Animated Success Circle */}
       <motion.div
         variants={iconVariants}
