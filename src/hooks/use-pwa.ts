@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
+// Helper to check environment safely
 const getIsIOS = () => {
     if (typeof window === 'undefined') return false;
+    // Check for Safari/iOS while excluding Chrome on iOS which behaves differently
     return /iPhone|iPad|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 };
 
@@ -12,30 +14,42 @@ const getIsStandalone = () => {
 
 export function usePWA() {
     const [installPrompt, setInstallPrompt] = useState<any>(null);
-    const [isIOS] = useState<boolean>(getIsIOS());
-    const [isStandalone, setIsStandalone] = useState<boolean>(getIsStandalone());
+    const [isIOS, setIsIOS] = useState<boolean>(false); // Start false for SSR safety
+    const [isStandalone, setIsStandalone] = useState<boolean>(false);
 
     useEffect(() => {
+        // Run checks only on mount (client-side)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsIOS(getIsIOS());
+        setIsStandalone(getIsStandalone());
+
         // 1. Capture the Install Prompt (Android/Chrome)
         const handleInstallPrompt = (e: any) => {
             e.preventDefault();
             setInstallPrompt(e);
         };
 
-        // 2. Modern Listener for Display Mode Changes
+        // 2. Listener for Display Mode Changes
         const mediaQuery = window.matchMedia('(display-mode: standalone)');
-
         const handleDisplayChange = (e: MediaQueryListEvent) => {
             setIsStandalone(e.matches);
         };
 
-        // Use the standard addEventListener instead of addListener
         window.addEventListener('beforeinstallprompt', handleInstallPrompt);
         mediaQuery.addEventListener('change', handleDisplayChange);
+
+        // 3. Detect "appinstalled" event (Optional but clean)
+        const handleAppInstalled = () => {
+            setInstallPrompt(null);
+            setIsStandalone(true);
+            console.log("Saqo App was installed!");
+        };
+        window.addEventListener('appinstalled', handleAppInstalled);
 
         return () => {
             window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
             mediaQuery.removeEventListener('change', handleDisplayChange);
+            window.removeEventListener('appinstalled', handleAppInstalled);
         };
     }, []);
 

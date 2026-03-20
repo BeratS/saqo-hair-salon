@@ -50,8 +50,8 @@ const MainPage = () => {
   );
 
   return (
-    <main className="flex justify-center items-center min-h-screen">
-      <div className="w-full h-screen max-w-lg bg-white overflow-hidden relative flex flex-col">
+    <main className="flex justify-center items-center">
+      <div className="w-full min-h-dvh max-w-lg bg-white overflow-hidden relative flex flex-col">
 
         {/* HEADER SECTION */}
         <TopHeader step={step} prevStep={prevStep} />
