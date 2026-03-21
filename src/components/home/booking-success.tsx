@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Calendar, Phone, User } from 'lucide-react';
+import { Calendar, MapPin, Phone, User } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
@@ -64,11 +64,11 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
           value={Constants.CONTACT_NUMBER}
         />
 
-        {/* <CardItem
+        <CardItem
           icon={<MapPin size={20} className="text-black" />}
           label={t('Location')}
           value={Constants.ADDRESS}
-        /> */}
+        />
 
       </motion.div>
 

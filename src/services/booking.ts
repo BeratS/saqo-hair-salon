@@ -26,7 +26,11 @@ export const createAppointment = async (booking: IBookingState) => {
     // Combine them into one JS Date object
     const scheduledAt = mergeDateTime(booking.date, booking.time);
 
+    // 1. Pull the token we saved earlier
+    const fcmToken = localStorage.getItem('fcm_token');
+
     const appointmentData = {
+        fcmToken: fcmToken || null, // Add the token here!
         barberId: booking.barber?.id,
         customerName: booking.name,
         customerPhone: booking.phone,
