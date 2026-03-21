@@ -39,7 +39,7 @@ function ConfirmBooking({
     }, []);
 
     return (
-        <div className="space-y-6 px-2">
+        <div className="space-y-4 px-2 pb-2">
             <h2 className="text-3xl font-black" dangerouslySetInnerHTML={{ __html: t('Confirm your<br />Booking?') }} />
             <div className="space-y-3">
                 <div className="bg-primary/10 border-2 border-primary/20 p-5 rounded-[2rem] mb-6">

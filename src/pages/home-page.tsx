@@ -51,87 +51,86 @@ const MainPage = () => {
   );
 
   return (
-    <main className="flex justify-center items-center">
-      <div className={cn(
-        "w-full min-h-screen max-w-lg bg-white overflow-hidden relative flex flex-col",
-        step === BookingStepsEnum.Barber && 'min-h-dvh'
-      )}>
+    <main className={cn(
+      "w-full min-h-svh max-w-lg bg-white relative flex flex-col mx-auto",
+    )}>
 
-        {/* HEADER SECTION */}
-        <TopHeader step={step} prevStep={prevStep} />
+      {/* HEADER SECTION */}
+      <TopHeader step={step} prevStep={prevStep} />
 
-        {isLoading && (
-          <BookingLoading />
-        )}
+      {/* WRAPPER FOR LOADING */}
+      {isLoading && (
+        <BookingLoading />
+      )}
 
-        {/* STEP CONTENT */}
-        <div className="flex-1 relative px-6 overflow-y-auto overflow-x-hidden pb-24">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -20, opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className='absolute inset-2'
-            >
-              {/* Has Error */}
-              {bookingError && (
-                <FailBooking error={bookingError} resetStep={handleResetStep} />
-              )}
+      {/* STEP CONTENT - FIX START */}
+      <div className="flex flex-col flex-1 relative overflow-y-auto overflow-x-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -20, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            /* Removed 'absolute inset-2' - added padding here instead */
+            className='w-full flex-1 p-4 flex flex-col'
+          >
+            {/* Has Error */}
+            {bookingError && (
+              <FailBooking error={bookingError} resetStep={handleResetStep} />
+            )}
 
-              {/* STEP 0: BARBER SELECTION */}
-              {!bookingError && step === BookingStepsEnum.Barber && (
-                <PickBarbers
-                  barbers={barbers}
-                  booking={booking}
-                  setBarber={setBarber} />
-              )}
+            {/* STEP 0: BARBER SELECTION */}
+            {!bookingError && step === BookingStepsEnum.Barber && (
+              <PickBarbers
+                barbers={barbers}
+                booking={booking}
+                setBarber={setBarber} />
+            )}
 
-              {/* STEP 1: DATE SELECTION (TS ADAPTABLE) */}
-              {!bookingError && step === BookingStepsEnum.DateAndTime && (
-                <PickTime
-                  baseDate={baseDate}
-                  setBaseDate={setBaseDate}
-                  booking={booking}
-                  timeSlots={timeSlots}
-                  weekStrip={weekStrip}
-                  dateSlots={dateSlots}
-                  setDate={setDate}
-                  setTime={setTime}
-                  isSlotBooked={isSlotBooked}
-                />
-              )}
+            {/* STEP 1: DATE SELECTION */}
+            {!bookingError && step === BookingStepsEnum.DateAndTime && (
+              <PickTime
+                baseDate={baseDate}
+                setBaseDate={setBaseDate}
+                booking={booking}
+                timeSlots={timeSlots}
+                weekStrip={weekStrip}
+                dateSlots={dateSlots}
+                setDate={setDate}
+                setTime={setTime}
+                isSlotBooked={isSlotBooked}
+              />
+            )}
 
-              {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
-              {!bookingError && step === BookingStepsEnum.Services && (
-                <SelectService
-                  services={services}
-                  booking={booking}
-                  toggleService={toggleService}
-                  nextStep={nextStep}
-                />
-              )}
+            {/* STEP 2: SERVICES */}
+            {!bookingError && step === BookingStepsEnum.Services && (
+              <SelectService
+                services={services}
+                booking={booking}
+                toggleService={toggleService}
+                nextStep={nextStep}
+              />
+            )}
 
-              {/* STEP 2: DETAILS & FIREBASE SUBMIT */}
-              {!bookingError && step === BookingStepsEnum.Details && (
-                <ConfirmBooking
-                  booking={booking}
-                  handleInputChange={handleInputChange}
-                  confirmBooking={confirmBooking}
-                />
-              )}
+            {/* STEP 2: DETAILS */}
+            {!bookingError && step === BookingStepsEnum.Details && (
+              <ConfirmBooking
+                booking={booking}
+                handleInputChange={handleInputChange}
+                confirmBooking={confirmBooking}
+              />
+            )}
 
-              {/* STEP 3: SUCCESS SCREEN */}
-              {!bookingError && step === BookingStepsEnum.Done && (
-                <BookingSuccess
-                  booking={booking}
-                  resetStep={handleResetStep} />
-              )}
+            {/* STEP 3: SUCCESS */}
+            {!bookingError && step === BookingStepsEnum.Done && (
+              <BookingSuccess
+                booking={booking}
+                resetStep={handleResetStep} />
+            )}
 
-            </motion.div>
-          </AnimatePresence>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </main>
   );

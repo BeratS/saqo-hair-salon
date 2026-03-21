@@ -32,7 +32,7 @@ export default function BookingError({ error, resetStep }: IProps) {
       variants={containerVariants}
       initial="initial"
       animate="animate"
-      className="flex flex-col items-center justify-center h-full px-8 text-center"
+      className="absolute inset-0 z-10 bg-white flex flex-col flex-1 items-center justify-center h-full text-center"
     >
       {/* Animated Error Icon */}
       <motion.div

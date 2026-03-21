@@ -18,10 +18,10 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
     const { t } = useTranslation();
 
     return (
-        <div className="flex flex-col h-full space-y-8">
+        <div className="flex flex-col h-full space-y-8 flex-1">
             {/* Minimalist Heading */}
             <div className="text-center space-y-1">
-                <h2 className="text-4xl font-black tracking-tighter uppercase leading-none">
+                <h2 className="text-3xl font-black tracking-tighter uppercase leading-none">
                     {t('Select Artist')}
                 </h2>
                 <p className="text-xxs text-zinc-400 font-bold uppercase tracking-[0.3em]">
@@ -120,13 +120,13 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
             </div>
 
             {/* --- STICKY FOOTER --- */}
-            <div className="sticky-footer w-full flex flex-col gap-2 px-4 pb-2">
+            <div className="sticky-footer w-full flex flex-col gap-2 pb-2">
                 <InstallPWA />
                 <div className="pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
                     <CancelReservation />
 
                     {/* Contact Info / Phone */}
-                    <div className="flex flex-col items-end">
+                    <div className="flex flex-col items-end whitespace-nowrap">
                         <p className="text-xxs font-black uppercase tracking-widest text-zinc-300 leading-none mb-1">
                             {t('Need Help?')}
                         </p>

@@ -23,11 +23,11 @@ function SelectService({
     
     return (
         <div className="flex flex-col h-full space-y-6">
-            <h2 className="text-3xl text-center font-black leading-tight tracking-tighter">
+            <h2 className="text-2xl text-center font-black leading-tight tracking-tighter">
                 {t('Select Services')}
             </h2>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar space-y-3 pb-32 px-1">
+            <div className="flex-1 overflow-y-auto no-scrollbar space-y-3 pb-20">
                 {services.map((service) => {
                     const isSelected = booking.selectedServices.find(s => s.id === service.id);
                     const isSpecial = service.isPremium;
@@ -66,7 +66,7 @@ function SelectService({
 
                             <div className="relative z-10 flex justify-between items-baseline gap-2">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-lg font-black uppercase whitespace-nowrap">
+                                    <span className="sm:text-lg font-black uppercase text-balance">
                                         {t(service.name)}
                                     </span>
                                     {isSpecial && isSelected && (
@@ -81,7 +81,7 @@ function SelectService({
                                 <div className={cn("flex-1 border-b-2 border-dotted mb-1 opacity-30",
                                     isSelected ? 'border-white' : 'border-zinc-400'
                                 )} />
-                                <span className="text-xl font-black">{service.price} {t('den')}</span>
+                                <span className="text-xl font-black whitespace-nowrap">{service.price} {t('den')}</span>
                             </div>
 
                             <AnimatePresence>
@@ -117,10 +117,17 @@ function SelectService({
             {/* FIXED BOTTOM ACTION BAR */}
             <AnimatePresence>
                 {booking.selectedServices.length > 0 && (
-                    <div className="absolute z-10 bottom-0 left-0 right-0 p-4 bg-linear-to-t from-white via-white/90 to-transparent pt-10">
+                    <motion.div 
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 100, opacity: 0 }}
+                        /* We use 'absolute' if the parent 'MainPage' is a fixed-height container, 
+                           or 'fixed' if you want it relative to the whole phone screen. 
+                        */
+                        className="fixed md:absolute bottom-0 left-0 right-0 z-50 p-4 pb-8 bg-linear-to-t from-white via-white to-transparent"
+                    >
                         <Button
                             type="button"
-                            disabled={booking.selectedServices.length === 0}
                             onClick={nextStep}
                             className="w-full py-9 rounded-[2.5rem] bg-black text-white hover:bg-zinc-900 text-xl font-black uppercase shadow-2xl tracking-widest flex justify-between px-10 transition-transform active:scale-95"
                         >
@@ -134,7 +141,7 @@ function SelectService({
                                 {booking.totalPrice} {t('den')}
                             </motion.span>
                         </Button>
-                    </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </div>

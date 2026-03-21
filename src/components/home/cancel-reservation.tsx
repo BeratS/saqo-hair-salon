@@ -37,7 +37,7 @@ function CancelReservation() {
                     type="button"
                     variant="destructive"
                     onClick={() => { }}
-                    className="uppercase opacity-70 hover:opacity-100"
+                    className="uppercase opacity-70 hover:opacity-100 shrink! whitespace-pre-wrap py-6 px-4"
                 />
             }>
                 {t('Cancel Reservation')}

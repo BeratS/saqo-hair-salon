@@ -1,20 +1,12 @@
-import { Calendar, Check, MapPin, Phone, User } from 'lucide-react';
+import { format } from 'date-fns';
+import { Calendar, Phone, User } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from "@/components/ui/button";
 import { Constants } from '@/Constants';
+import { cn } from '@/lib/utils';
 import { generateCalendarLink } from '@/utils/helper';
-
-// Success Animation Variants
-const iconVariants = {
-  hidden: { scale: 0, rotate: -45 },
-  visible: {
-    scale: 1,
-    rotate: 0,
-    transition: { type: "spring", stiffness: 200, damping: 12, delay: 0.2 }
-  }
-} as const;
 
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -34,23 +26,13 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 pb-4 text-center">
-      {/* Animated Success Circle */}
-      <motion.div
-        variants={iconVariants}
-        initial="hidden"
-        animate="visible"
-        className="w-20 min-h-20 bg-black rounded-full flex items-center justify-center mb-6 shadow-2xl"
-      >
-        <Check size={40} className="text-white" strokeWidth={3} />
-      </motion.div>
-
+    <div className="relative flex flex-col items-center justify-center h-full pb-4 text-center">
       {/* Main Message */}
       <motion.div custom={0} variants={textVariants} initial="hidden" animate="visible">
-        <h3 className="text-2xl font-bold text-black mb-2">
+        <h3 className="relative text-2xl font-bold text-black mb-2">
           {t('Your seat is reserved.')}
         </h3>
-        <p className="text-zinc-500 font-medium mb-8">
+        <p className="relative text-zinc-500 font-medium mb-8 text-balance">
           {t('We’re excited to see you at')} <span className="text-black font-bold">{Constants.SITE_TITLE}</span>.
         </p>
       </motion.div>
@@ -61,18 +43,19 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
         variants={textVariants}
         initial="hidden"
         animate="visible"
-        className="w-full bg-zinc-50 rounded-[2.5rem] p-4 border-2 border-zinc-100 mb-8 space-y-4"
+        className="w-full bg-zinc-50 rounded-3xl p-2 border-2 border-zinc-100 mb-8 space-y-4"
       >
         <CardItem
           icon={<User size={20} className="text-black" />}
           label={t('Barber')}
           value={`${booking.barber?.name || "Master Barber"} - (${Constants.SITE_TITLE})`}
+          className="whitespace-nowrap"
         />
 
         <CardItem
           icon={<Calendar size={20} className="text-black" />}
           label={t('Date & Time')}
-          value={`${booking.date ? booking.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : 'Today'} • ${booking.time}`}
+          value={`${booking.date ? `${t(format(booking.date, "MMM"))} ${format(booking.date, "d")}` : 'Today'} • ${booking.time}`}
         />
 
         <CardItem
@@ -81,11 +64,11 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
           value={Constants.CONTACT_NUMBER}
         />
 
-        <CardItem
+        {/* <CardItem
           icon={<MapPin size={20} className="text-black" />}
           label={t('Location')}
           value={Constants.ADDRESS}
-        />
+        /> */}
 
       </motion.div>
 
@@ -113,15 +96,16 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
 interface ICardItem {
   icon: React.ReactNode,
   label: string,
-  value: string
+  value: string;
+  className?: string
 }
 
-const CardItem = ({ icon, label, value }: ICardItem) => (
+const CardItem = ({ icon, label, value, className }: ICardItem) => (
   <div className="flex items-center gap-4">
     <div className="min-w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
       {icon}
     </div>
-    <div className="text-left">
+    <div className={cn("text-left", className || '')}>
       <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
         {label}
       </p>

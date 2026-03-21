@@ -49,16 +49,16 @@ function PickTime({
                 <h2 className="text-3xl font-black leading-tight" dangerouslySetInnerHTML={{__html: t('Pick your<br />Schedule')}} />
                 <Sheet>
                     <SheetTrigger render={
-                        <Button variant="outline" className="rounded-2xl border-2 h-16 px-6 shadow-sm hover:bg-zinc-50" />
+                        <Button variant="outline" className="rounded-full border-2 min-w-16 w-16 h-16 shadow-sm hover:bg-zinc-50" />
                     }>
                         <CalendarIcon size={28} className="text-black" />
                     </SheetTrigger>
 
-                    <SheetContent side="bottom" className="max-w-xl mx-auto rounded-t-[3.5rem] px-4 pb-16 border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                    <SheetContent side="bottom" className="max-w-xl mx-auto rounded-t-[3.5rem] px-4 pb-10 border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                         {/* Grabber Handle for Visual Cue */}
                         <div className="mx-auto w-16 h-1.5 rounded-full bg-zinc-200 mt-2 mb-8" />
 
-                        <SheetHeader className="mb-6">
+                        <SheetHeader className="mb-6 p-0 pt-6 pb-4">
                             <SheetTitle className="text-3xl font-black uppercase text-center tracking-widest">
                                 {t('Pick a Date')}
                             </SheetTitle>
@@ -81,7 +81,7 @@ function PickTime({
             </div>
 
             {/* DATE STRIP (Sticky-style at top) */}
-            <div className="grid grid-cols-5 gap-2 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
+            <div className="grid grid-cols-5 gap-1 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-mobile snap-x">
                 {weekStrip.map((date: Date, i: number) => {
                     const isSelected = booking.date?.toDateString() === date.toDateString();
                     const isToday = isSameDay(date, new Date());
@@ -98,7 +98,7 @@ function PickTime({
                             <span className={`text-2xl font-black tracking-tighter ${isSelected ? 'text-white' : 'text-black'}`}>
                                 {t(format(date, 'd'))}
                             </span>
-                            <span className="text-xxs font-bold uppercase">
+                            <span className="text-xxs font-bold uppercase text-center">
                                 {isToday ? t("Today") : t(format(date, "EEEE"))}
                             </span>
                         </motion.div>
@@ -107,7 +107,7 @@ function PickTime({
             </div>
 
             {/* TIME GRID (Scrollable area) */}
-            <div className="flex-1 space-y-4 overflow-y-auto pr-1 no-scrollbar pb-20">
+            <div className="flex-1 space-y-4 overflow-y-auto pr-1 no-scrollbar pb-10">
                 <div className="flex items-center gap-2">
                     <div className="h-px flex-1 bg-zinc-100"></div>
                     <span className="text-xxs font-bold text-zinc-400 uppercase tracking-widest">
