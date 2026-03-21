@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 import type { Timestamp } from "firebase/firestore";
 
 import { Constants } from "@/Constants";
@@ -120,14 +120,20 @@ export const splitTime = (timeStr: string): number[] => {
 }
 
 export const generateTimeSlots = (
+    bookingDate: Date | null,
     openHour: number,
     openMin: number,
     closeHour: number,
     closeMin: number
 ): string[] => {
     const slots: string[] = [];
-    let currentHour = openHour;
-    let currentMin = openMin;
+    const dt = new Date()
+    const isTodayDate = isToday(bookingDate!)
+    const nowHour = dt.getHours();
+    const nowMin = dt.getMinutes();
+    
+    let currentHour = isTodayDate && nowHour > openHour ? nowHour : openHour;
+    let currentMin = isTodayDate && nowMin > openMin ? nowMin : openMin;
 
     while (
         currentHour < closeHour ||
