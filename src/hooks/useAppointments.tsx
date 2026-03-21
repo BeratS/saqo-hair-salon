@@ -1,6 +1,8 @@
 import { addDays, endOfDay, isSameDay, startOfDay } from "date-fns";
+import { collection, getDocs, query, Timestamp, where, writeBatch } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 
+import { db } from "@/lib/firebase";
 import { getAppointmentsByRange } from "@/services/booking";
 
 import { useBerberSettings } from "./useBerberSettings";
@@ -14,7 +16,7 @@ const useAppointments = () => {
     const [error, setError] = useState<Error | null>(null);
 
     const { exceptions } = useBerberSettings()
-    
+
     // Generate 14 days (today + 2 weeks) - no Sundays
     const sidebarDates = useMemo(() => {
         const openDays = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
@@ -85,6 +87,39 @@ const useAppointments = () => {
         console.log(`Cancel appointment with ID: ${id}`);
     }
 
+    const deleteOldAppointments = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete all past appointments? This cannot be undone.");
+        if (!confirmDelete) return;
+
+        try {
+            const appointmentsRef = collection(db, "appointments");
+            const now = Timestamp.now();
+
+            // 1. Query for all appointments scheduled BEFORE 'now'
+            const q = query(appointmentsRef, where("scheduledAt", "<", now));
+            const snapshot = await getDocs(q);
+
+            if (snapshot.empty) {
+                alert("No old appointments to delete!");
+                return;
+            }
+
+            // 2. Use a Batch for high performance
+            const batch = writeBatch(db);
+            snapshot.docs.forEach((doc: any) => {
+                batch.delete(doc.ref);
+            });
+
+            // 3. Commit the deletions
+            await batch.commit();
+
+            alert(`Successfully cleared ${snapshot.size} old appointments.`);
+        } catch (error) {
+            console.error("Error deleting old appointments:", error);
+            alert("Failed to delete appointments. Check console for details.");
+        }
+    };
+
     return {
         appointments: filteredAppointments, // Only today's bookings
         allAppointments,                   // Useful if you want to show "dots" on the sidebar
@@ -94,6 +129,7 @@ const useAppointments = () => {
         sidebarDates,
         setSelectedDate,
         handleCancelAppointment,
+        deleteOldAppointments,
     };
 };
 

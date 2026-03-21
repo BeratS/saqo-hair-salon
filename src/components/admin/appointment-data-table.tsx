@@ -1,6 +1,6 @@
 import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarIcon, ChevronRight, Phone, Scissors, Search, X } from "lucide-react";
+import { CalendarIcon, ChevronRight, Phone, Scissors, Search, Trash2, X } from "lucide-react";
 
 import useAppointments from "@/hooks/useAppointments";
 import { useBerberData } from "@/hooks/useBerberData";
@@ -12,7 +12,8 @@ import ConfirmDelete from "../widgets/confirm-delete";
 function AppointmentDataTable() {
 
     const {
-        appointments, allAppointments, selectedDate, sidebarDates, setSelectedDate, handleCancelAppointment
+        appointments, allAppointments, selectedDate, sidebarDates,
+        setSelectedDate, handleCancelAppointment, deleteOldAppointments
     } = useAppointments()
 
     const { barbers, services } = useBerberData()
@@ -89,6 +90,13 @@ function AppointmentDataTable() {
                                 className="pl-12 pr-6 py-3 bg-zinc-100 border border-zinc-100 rounded-full text-xs font-bold focus:outline-none focus:ring-2 focus:ring-black/5 w-64"
                             />
                         </div>
+                    <Button
+                        onClick={deleteOldAppointments}
+                        title="Delete Old Appointments"
+                        className="bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl flex gap-2 items-center"
+                    >
+                        <Trash2 size={18} />
+                    </Button>
                     </div>
                 </header>
 
