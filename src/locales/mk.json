@@ -67,5 +67,7 @@
     "Cancel it": "Откажи го",
     "Reason why you want to cancel booking?": "Причина зошто сакате да ја откажете резервацијата?",
     "Install App": "Инсталирај апликација",
-    "To install: tap Share and 'Add to Home Screen'": "За инсталирање: Сподели и 'Додај на почетен екран'"
+    "To install: tap Share and 'Add to Home Screen'": "За инсталирање: Сподели и 'Додај на почетен екран'",
+    "No Slots Left": "Нема слободни места",
+    "Everything is fully booked for this day. Please try another date.": "Сè е целосно резервирано за овој ден. Обидете се со друг датум."
 }

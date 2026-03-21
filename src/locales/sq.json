@@ -67,5 +67,7 @@
     "Cancel it": "Anulojeni",
     "Reason why you want to cancel booking?": "Arsyeja pse doni të anuloni rezervimin?",
     "Install App": "Instalo aplikacionin",
-    "To install: tap Share and 'Add to Home Screen'": "Për të instaluar: Cilësimet 'Shto si applikacion'"
+    "To install: tap Share and 'Add to Home Screen'": "Për të instaluar: Cilësimet 'Shto si applikacion'",
+    "No Slots Left": "Nuk ka vende të lira",
+    "Everything is fully booked for this day. Please try another date.": "Gjithçka është rezervuar plotësisht për këtë ditë. Ju lutemi provoni një datë tjetër."
 }

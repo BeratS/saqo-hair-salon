@@ -1,5 +1,5 @@
 import { format, isSameDay } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, CalendarX } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
@@ -40,13 +40,13 @@ function PickTime({
     setTime,
     isSlotBooked,
 }: IProps) {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <div className="flex flex-col h-full space-y-6">
             {/* HEADER & JUMP BUTTON */}
             <div className="flex justify-between items-end px-1">
-                <h2 className="text-3xl font-black leading-tight" dangerouslySetInnerHTML={{__html: t('Pick your<br />Schedule')}} />
+                <h2 className="text-3xl font-black leading-tight" dangerouslySetInnerHTML={{ __html: t('Pick your<br />Schedule') }} />
                 <Sheet>
                     <SheetTrigger render={
                         <Button variant="outline" className="rounded-full border-2 min-w-16 w-16 h-16 shadow-sm hover:bg-zinc-50" />
@@ -116,27 +116,45 @@ function PickTime({
                     <div className="h-px flex-1 bg-zinc-100"></div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                    {timeSlots.map((time: string) => {
-                        const isTimeSelected = booking.time === time;
-                        const booked = isSlotBooked(booking.date, time);
+                <div className="grid grid-cols-3 gap-3 pb-10">
+                    {timeSlots.length > 0 ? (
+                        timeSlots.map((time: string) => {
+                            const isTimeSelected = booking.time === time;
+                            const booked = isSlotBooked(booking.date, time);
 
-                        // Option A: Hide completely
-                        if (booked) return null;
+                            if (booked) return null;
 
-                        return (
-                            <Button
-                                key={time}
-                                variant="outline"
-                                disabled={!booking.date} // Disable time if no date is picked
-                                className={cn("rounded-3xl py-8.5 font-bold text-base border-2 transition-all",
-                                    isTimeSelected ? 'bg-primary text-white border-yellow-60' : 'bg-white hover:bg-zinc-50')}
-                                onClick={() => setTime(time)} // This handles selection and moves to next step
-                            >
-                                {time}
-                            </Button>
-                        );
-                    })}
+                            return (
+                                <Button
+                                    key={time}
+                                    variant="outline"
+                                    disabled={!booking.date}
+                                    className={cn(
+                                        "rounded-3xl py-8.5 font-bold text-base border-2 transition-all",
+                                        isTimeSelected
+                                            ? 'bg-primary text-white border-yellow-600 shadow-lg scale-[1.02]'
+                                            : 'bg-white hover:bg-zinc-50 border-zinc-100'
+                                    )}
+                                    onClick={() => setTime(time)}
+                                >
+                                    {time}
+                                </Button>
+                            );
+                        })
+                    ) : (
+                        /* EMPTY STATE UI */
+                        <div className="col-span-3 flex flex-col items-center justify-center py-8 px-4 bg-zinc-50 rounded-[2.5rem] border-2 border-dashed border-zinc-200">
+                            <div className="p-4 bg-white rounded-full shadow-sm mb-4">
+                                <CalendarX size={32} className="text-zinc-400" />
+                            </div>
+                            <h3 className="font-black text-lg uppercase tracking-tight text-zinc-900">
+                                {t('No Slots Left')}
+                            </h3>
+                            <p className="text-sm text-zinc-500 text-center mt-1 font-medium">
+                                {t('Everything is fully booked for this day. Please try another date.')}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
