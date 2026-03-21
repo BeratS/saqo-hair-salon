@@ -120,30 +120,54 @@ export const splitTime = (timeStr: string): number[] => {
 }
 
 export const generateTimeSlots = (
-    bookingDate: Date | null,
+    selectedDate: Date | null,
     openHour: number,
     openMin: number,
     closeHour: number,
     closeMin: number
 ): string[] => {
     const slots: string[] = [];
-    const dt = new Date()
-    const isTodayDate = isToday(bookingDate!)
-    const nowHour = dt.getHours();
-    const nowMin = dt.getMinutes();
-    
-    let currentHour = isTodayDate && nowHour > openHour ? nowHour : openHour;
-    let currentMin = isTodayDate && nowMin > openMin ? nowMin : openMin;
+    const dt = new Date();
+    const isTodayDate = selectedDate ? isToday(selectedDate) : false;
+
+    let startHour = openHour;
+    let startMin = openMin;
+
+    if (isTodayDate) {
+        const nowHour = dt.getHours();
+        const nowMin = dt.getMinutes();
+
+        // 1. If we have already passed the opening time
+        if (nowHour > openHour || (nowHour === openHour && nowMin >= openMin)) {
+            // Logic: Round up to the next 30-minute block
+            if (nowMin < 30) {
+                // If 11:20 -> Start at 11:30
+                startHour = nowHour;
+                startMin = 30;
+            } else {
+                // If 11:40 -> Start at 12:00
+                startHour = nowHour + 1;
+                startMin = 0;
+            }
+        }
+    }
+
+    // 2. Loop from our calculated start time until closing
+    let currentHour = startHour;
+    let currentMin = startMin;
 
     while (
         currentHour < closeHour ||
         (currentHour === closeHour && currentMin < closeMin)
     ) {
-        const displayHour = currentHour > 12 ? currentHour - 12 : currentHour;
+        // Format for 12-hour clock (e.g., 11:30 AM)
+        const displayHour = currentHour > 12 ? currentHour - 12 : (currentHour === 0 ? 12 : currentHour);
         const ampm = currentHour >= 12 ? "PM" : "AM";
         const minStr = currentMin === 0 ? "00" : "30";
+        
         slots.push(`${displayHour}:${minStr} ${ampm}`);
 
+        // Increment by 30 minutes
         currentMin += 30;
         if (currentMin >= 60) {
             currentHour += 1;
