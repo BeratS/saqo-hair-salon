@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Constants } from "@/Constants";
 
+import pkg from '../../../package.json';
 import { Button } from "../ui/button";
 import { BookingStepsEnum, listedBookingSteps } from "./booking-constants";
 
@@ -37,6 +38,8 @@ function TopHeader({ step, prevStep }: IProps) {
 
     return (
         <div className="p-6 pt-8 bg-white sticky top-0 z-50 border-b border-zinc-100">
+
+            <p className="absolute top-1 right-1 text-xs opacity-30">v.{pkg.version}</p>
 
             <div className="flex justify-between items-center mb-8 px-1">
                 {/* LEFT SIDE: Back or Logo */}
