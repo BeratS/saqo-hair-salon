@@ -88,18 +88,25 @@ const useBooking = () => {
     }, [globalHours, exceptions, booking.date]);
 
     const isSlotBooked = (date: Date, slotTime: string) => {
-        // Generate the key for the current UI slot we are checking
-        const currentSlotKey = getSlotKey(date, slotTime);
+        // 1. Create a Date object for the current UI slot
+        const [time, ampm] = slotTime.split(' ');
+        // eslint-disable-next-line prefer-const
+        let [hours, minutes] = splitTime(time)
+        if (ampm === 'PM' && hours !== 12) hours += 12;
+        if (ampm === 'AM' && hours === 12) hours = 0;
 
+        const slotDate = new Date(date);
+        slotDate.setHours(hours, minutes, 0, 0);
+        const slotTimeMs = slotDate.getTime();
+
+        // 2. Compare against appointment timestamps
         return allAppointments.some((app) => {
-            // Only check appointments that aren't cancelled
             if (app.status === 'cancelled') return false;
 
-            // Generate the key for the existing appointment in Firebase
-            const appKey = getAppointmentKey(app.scheduledAt);
+            // Convert Firestore Timestamp to ms
+            const appTimeMs = app.scheduledAt.toMillis();
 
-            // Simple string comparison
-            return appKey === currentSlotKey;
+            return appTimeMs === slotTimeMs;
         });
     };
 
