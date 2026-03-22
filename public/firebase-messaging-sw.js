@@ -46,3 +46,13 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
+
+// 5. Force the new Service Worker to take over immediately
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+  console.log('Saqo SW Activated and Claimed Clients');
+});
