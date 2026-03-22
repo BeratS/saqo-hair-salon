@@ -113,9 +113,9 @@ const CardItem = ({ icon, href, label, value, className }: ICardItem) => (
         {label}
       </p>
       {href ? (
-        <a href={href} rel="noreferrer noopener" target="_blank" className='font-bold'>
+        <a href={href} rel="noreferrer noopener" target="_blank" className='font-bold inline-flex items-center gap-2.5'>
           {value}
-          <span className='ml-2 border rounded-sm px-1'>🡥</span>
+          <svg className='border rounded-sm px-1' width="24" height="24" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.7"><path d="M13.5 10.5C13.5 10.7761 13.2761 11 13 11C12.7238 11 12.5 10.7761 12.5 10.5V4.20703L3.35348 13.3535C3.15822 13.5488 2.84171 13.5488 2.64645 13.3535C2.45118 13.1583 2.45118 12.8417 2.64645 12.6465L11.7929 3.5H5.49996C5.22382 3.5 4.99996 3.27614 4.99996 3C4.99996 2.72386 5.22382 2.5 5.49996 2.5H13C13.2761 2.5 13.5 2.72386 13.5 3V10.5Z" fill="#164F44"></path></g></svg>
         </a>
       ) : (
         <p className="font-bold text-base">{value}</p>
