@@ -43,7 +43,7 @@ export default function AuthPage() {
         await signInWithEmailAndPassword(auth, data.email, data.password);
         toast.success("Welcome back!");
         // Navigation is handled by AuthContext/Router
-        navigate("/manage"); // Navigate to home after login
+        navigate("/manage/appointments"); // Navigate to home after login
       }
     } catch (error: any) {
       const msg = errorMessages(error.message)

@@ -26,7 +26,7 @@ import { useAuth } from "@/context/AuthContext"
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const { user } = useAuth();
+  const { user, onLogout } = useAuth();
 
   return (
     <SidebarMenu>
@@ -72,15 +72,19 @@ export function NavUser() {
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BellIcon
                 />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuSeparator /> */}
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.preventDefault();
+                onLogout();
+              }}>
               <LogOutIcon
               />
               Log out
