@@ -12,6 +12,7 @@ import PickBarbers from '@/components/home/pick-barbers';
 import PickTime from '@/components/home/pick-time';
 import SelectService from '@/components/home/select-service';
 import TopHeader from '@/components/home/top-header';
+import { useGrantNotifications } from '@/components/widgets/use-grant-notifications';
 import { Constants } from '@/Constants';
 import useBooking from '@/hooks/useBooking';
 import { useMeta } from '@/hooks/useMeta';
@@ -49,6 +50,8 @@ const MainPage = () => {
     Constants.SITE_TITLE,
     t('Welcome to {{siteTitle}}, your go-to destination for stylish haircuts and exceptional service in Skopje. Book your appointment today!', { siteTitle: Constants.SITE_TITLE })
   );
+
+  useGrantNotifications()
 
   return (
     <main className={cn(

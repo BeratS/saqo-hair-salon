@@ -26,7 +26,9 @@ createRoot(document.getElementById("root")!).render(
 );
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+  navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+    scope: '/'
+  })
     .then((reg) => {
       // Force a check for a new version of the SW
       reg.update();

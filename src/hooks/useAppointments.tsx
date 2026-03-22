@@ -1,6 +1,7 @@
 import { addDays, endOfDay, isSameDay, startOfDay } from "date-fns";
-import { collection, getDocs, query, Timestamp, where, writeBatch } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, Timestamp, where, writeBatch } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { db } from "@/lib/firebase";
 import { getAppointmentsByRange } from "@/services/booking";
@@ -82,10 +83,14 @@ const useAppointments = () => {
             });
     }, [allAppointments, selectedDate]);
 
-    const handleCancelAppointment = (id: string) => {
-        // Implement cancellation logic here (e.g., update Firestore, show toast, etc.)
-        console.log(`Cancel appointment with ID: ${id}`);
-    }
+    const handleCancelAppointment = async (id: string) => {
+        try {
+            await deleteDoc(doc(db, "appointments", id));
+            toast.success("Appointment removed from records");
+        } catch (error) {
+            toast.error("Could not delete appointment");
+        }
+    };
 
     const deleteOldAppointments = async () => {
         const confirmDelete = window.confirm("Are you sure you want to delete all past appointments? This cannot be undone.");

@@ -27,8 +27,12 @@ messaging.onBackgroundMessage((payload) => {
     icon: '/android-chrome-192x192.png',
     badge: '/favicon.ico',
     tag: 'appointment-reminder',
+    vibrate: [200, 100, 200], // Vibration pattern
+    renotify: true,           // Vibrate even if a notification with this tag exists
+    requireInteraction: true, // Keeps the notification on screen until user clicks
+    // -----------------------------------------
     data: {
-      url: '/' // Opens the salon app when the notification is clicked
+      url: payload.data?.url || '/'
     }
   };
 
