@@ -179,7 +179,7 @@ const useBooking = () => {
     const handleResetStep = () => {
         setBooking({
             barber: null,
-            date: null,
+            date: weekStrip[0] || null,
             time: null,
             name: '',
             phone: '',
@@ -191,11 +191,14 @@ const useBooking = () => {
     }
 
     useEffect(() => {
-        if (!booking.date && dateSlots.length > 0) {
-            setBooking(prev => ({ ...prev, date: dateSlots[0] }));
+        if (
+            weekStrip.length > 0 &&
+            (!booking.date || booking.date !== weekStrip[0])
+        ) {
+            setBooking(prev => ({ ...prev, date: weekStrip[0] }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dateSlots]);
+    }, [weekStrip]);
 
     return {
         barbers,
