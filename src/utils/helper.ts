@@ -1,5 +1,4 @@
 import { format, isToday } from "date-fns";
-import type { Timestamp } from "firebase/firestore";
 
 import { Constants } from "@/Constants";
 
