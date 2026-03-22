@@ -1,6 +1,6 @@
 "use client"
 
-import { BellIcon, EllipsisVerticalIcon, LogOutIcon } from "lucide-react"
+import { EllipsisVerticalIcon, LogOutIcon } from "lucide-react"
 
 import {
   Avatar,
