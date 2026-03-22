@@ -57,17 +57,14 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                                             isSelected ? "opacity-30 border-white" : "border-black"
                                         )}
                                     />
-                                    {/* <img
-                                        src={b.imageUrl || `https://ui-avatars.com/api/?name=${b.name}&background=random&size=128`} // Fallback to generated avatar
+                                    <img
+                                        src={b.imageUrl || `/logo.png`}
                                         className={cn(
                                             "w-24 h-24 rounded-full object-cover transition-all duration-500",
                                             isSelected ? "scale-105" : "grayscale-50% group-hover:grayscale-0"
                                         )}
                                         alt={b.name}
-                                    /> */}
-                                    <div className="w-28 h-28 bg-zinc-50 border-2 border-zinc-200 rounded-[3rem] flex items-center justify-center relative group-hover:border-black/70 transition-all">
-                                        <User size={48} className="text-zinc-200 group-hover:text-black/70 transition-colors" />
-                                    </div>
+                                    />
 
                                     <AnimatePresence>
                                         {isSelected && (

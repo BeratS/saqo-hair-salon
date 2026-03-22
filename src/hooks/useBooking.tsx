@@ -1,9 +1,9 @@
-import { addDays, isSameDay } from 'date-fns';
+import { addDays, format, isSameDay } from 'date-fns';
 import { type ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
 import { createAppointment } from '@/services/booking';
-import { generateTimeSlots, getSlotTime, splitTime, wait } from '@/utils/helper';
+import { generateTimeSlots, getSlotKey, splitTime, wait } from '@/utils/helper';
 
 import useAppointments from './useAppointments';
 import { useBerberData } from './useBerberData';
@@ -90,16 +90,19 @@ const useBooking = () => {
     const isSlotBooked = (date: Date, slotTime: string) => {
         if (!date || !slotTime) return false;
 
-        const slotTimeMs = getSlotTime(date, slotTime)
+        // 1. Create the string for the current UI slot (e.g., "2026-03-22 11:00")
+        const uiKey = getSlotKey(date, slotTime);
 
-        // 2. Compare against appointment timestamps
         return allAppointments.some((app) => {
+            // Skip cancelled ones
             if (app.status === 'cancelled') return false;
 
-            // Convert Firestore Timestamp to ms
-            const appTimeMs = app.scheduledAt.toMillis();
+            // 2. Create the string for the DB appointment
+            // We use toDate() then format it to the same string pattern
+            const dbKey = format(app.scheduledAt.toDate(), 'yyyy-MM-dd HH:mm');
 
-            return appTimeMs === slotTimeMs;
+            // 3. Compare strings - much safer than milliseconds!
+            return uiKey === dbKey;
         });
     };
 

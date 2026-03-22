@@ -10,19 +10,24 @@ export function wait(ms: number) {
 /**
  * Normalizes a Date and a Time Slot string into a comparable 'yyyy-MM-dd HH:mm' string.
  */
-export const getSlotTime = (date: Date, slotTime: string): number => {
-    // 1. Create a Date object for the current UI slot
+export const getSlotKey = (date: Date, slotTime: string): string => {
+    // 1. Format the date part (e.g., "2026-03-22")
+    const datePart = format(date, 'yyyy-MM-dd');
+
+    // 2. Parse "11:00 AM" or "2:30 PM" into 24-hour time (e.g., "11:00" or "14:30")
     const [time, ampm] = slotTime.split(' ');
     // eslint-disable-next-line prefer-const
-    let [hours, minutes] = splitTime(time)
+    let [hours, minutes] = time.split(':').map(Number);
+
     if (ampm === 'PM' && hours !== 12) hours += 12;
     if (ampm === 'AM' && hours === 12) hours = 0;
 
-    const slotDate = new Date(date);
-    slotDate.setHours(hours, minutes, 0, 0);
-    const slotTimeMs = slotDate.getTime();
+    const hourPart = String(hours).padStart(2, '0');
+    const minPart = String(minutes).padStart(2, '0');
 
-    return slotTimeMs;
+    // 3. Combine them into one "Key"
+    return `${datePart} ${hourPart}:${minPart}`;
+    // Result: "2026-03-22 11:00"
 };
 
 /**
