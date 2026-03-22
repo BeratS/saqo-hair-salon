@@ -85,6 +85,7 @@ function TopHeader({ step, prevStep }: IProps) {
                     <DropdownMenuContent align="end" className="rounded-2xl border-2 p-1 min-w-40">
                         {LanguageList.map((lng) => (
                             <DropdownMenuItem
+                                key={lng.code}
                                 onClick={() => handleLanguageChange(lng.code)}
                                 className="rounded-xl font-bold uppercase text-xs p-3 cursor-pointer"
                             >
