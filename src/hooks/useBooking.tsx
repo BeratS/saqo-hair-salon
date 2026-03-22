@@ -3,7 +3,7 @@ import { type ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
 import { createAppointment } from '@/services/booking';
-import { generateTimeSlots, getAppointmentKey, getSlotKey, splitTime, wait } from '@/utils/helper';
+import { generateTimeSlots, getSlotTime, splitTime, wait } from '@/utils/helper';
 
 import useAppointments from './useAppointments';
 import { useBerberData } from './useBerberData';
@@ -88,16 +88,9 @@ const useBooking = () => {
     }, [globalHours, exceptions, booking.date]);
 
     const isSlotBooked = (date: Date, slotTime: string) => {
-        // 1. Create a Date object for the current UI slot
-        const [time, ampm] = slotTime.split(' ');
-        // eslint-disable-next-line prefer-const
-        let [hours, minutes] = splitTime(time)
-        if (ampm === 'PM' && hours !== 12) hours += 12;
-        if (ampm === 'AM' && hours === 12) hours = 0;
+        if (!date || !slotTime) return false;
 
-        const slotDate = new Date(date);
-        slotDate.setHours(hours, minutes, 0, 0);
-        const slotTimeMs = slotDate.getTime();
+        const slotTimeMs = getSlotTime(date, slotTime)
 
         // 2. Compare against appointment timestamps
         return allAppointments.some((app) => {

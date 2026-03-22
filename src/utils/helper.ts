@@ -9,30 +9,21 @@ export function wait(ms: number) {
 }
 
 /**
- * Converts a Firestore Timestamp to the same comparable 'yyyy-MM-dd HH:mm' string.
- */
-export const getAppointmentKey = (timestamp: Timestamp): string => {
-    return format(timestamp.toDate(), 'yyyy-MM-dd HH:mm');
-};
-
-/**
  * Normalizes a Date and a Time Slot string into a comparable 'yyyy-MM-dd HH:mm' string.
  */
-export const getSlotKey = (date: Date, slotTime: string): string => {
-    const datePart = format(date, 'yyyy-MM-dd');
-
-    // Convert "2:30 PM" -> "14:30"
+export const getSlotTime = (date: Date, slotTime: string): number => {
+    // 1. Create a Date object for the current UI slot
     const [time, ampm] = slotTime.split(' ');
     // eslint-disable-next-line prefer-const
-    let [hours, minutes] = time.split(':').map(Number);
-
+    let [hours, minutes] = splitTime(time)
     if (ampm === 'PM' && hours !== 12) hours += 12;
     if (ampm === 'AM' && hours === 12) hours = 0;
 
-    const hourPart = String(hours).padStart(2, '0');
-    const minPart = String(minutes).padStart(2, '0');
+    const slotDate = new Date(date);
+    slotDate.setHours(hours, minutes, 0, 0);
+    const slotTimeMs = slotDate.getTime();
 
-    return `${datePart} ${hourPart}:${minPart}`;
+    return slotTimeMs;
 };
 
 /**
@@ -164,7 +155,7 @@ export const generateTimeSlots = (
         const displayHour = currentHour > 12 ? currentHour - 12 : (currentHour === 0 ? 12 : currentHour);
         const ampm = currentHour >= 12 ? "PM" : "AM";
         const minStr = currentMin === 0 ? "00" : "30";
-        
+
         slots.push(`${displayHour}:${minStr} ${ampm}`);
 
         // Increment by 30 minutes
