@@ -22,7 +22,7 @@ export const Constants = {
       `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
   },
   GOOGLE_MAPS: 'https://maps.app.goo.gl/sEYuGdvYvDmXgqeh9',
-  ADDRESS: 'Arhiepiskop Dositej 11 Skopje, Çair 1000',
+  ADDRESS: 'Çair, Shkup',
   LOCATION: 'North Macedonia, Skopje, Çair 1000',
   EMAIL: 'info@saqohairsalon.com',
   CONTACT_NUMBER: '+389 70 336 332',

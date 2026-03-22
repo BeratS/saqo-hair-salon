@@ -26,27 +26,21 @@ createRoot(document.getElementById("root")!).render(
 );
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
-      .then((registration) => {
-        // Check for updates every time the app is opened
-        registration.update();
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then((reg) => {
+      // Force a check for a new version of the SW
+      reg.update();
 
-        console.log('SW Registered');
-
-        // Listen for the 'waiting' state to alert the user or auto-reload
-        registration.onupdatefound = () => {
-          const installingWorker = registration.installing;
-          if (installingWorker) {
-            installingWorker.onstatechange = () => {
-              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // New content is available; force a reload
-                window.location.reload();
-              }
-            };
-          }
-        };
-      })
-      .catch((err) => console.error('SW Error', err));
-  });
+      reg.onupdatefound = () => {
+        const newWorker = reg.installing;
+        if (newWorker) {
+          newWorker.onstatechange = () => {
+            // If a new version is installed, reload the page to show the new UI
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              window.location.reload();
+            }
+          };
+        }
+      };
+    });
 }

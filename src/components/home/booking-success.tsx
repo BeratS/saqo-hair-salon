@@ -43,7 +43,7 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
         variants={textVariants}
         initial="hidden"
         animate="visible"
-        className="w-full bg-zinc-50 rounded-3xl p-2 border-2 border-zinc-100 mb-8 space-y-4"
+        className="w-full bg-zinc-50 rounded-3xl p-2 border-2 border-zinc-100 mb-8 space-y-2.5"
       >
         <CardItem
           icon={<User size={20} className="text-black" />}
@@ -61,12 +61,14 @@ export default function BookingSuccess({ booking, resetStep }: IProps) {
         <CardItem
           icon={<Phone size={20} className="text-black" />}
           label={t('Contact')}
+          href={`tel:${Constants.CONTACT_NUMBER}`}
           value={Constants.CONTACT_NUMBER}
         />
 
         <CardItem
           icon={<MapPin size={20} className="text-black" />}
           label={t('Location')}
+          href={Constants.GOOGLE_MAPS}
           value={Constants.ADDRESS}
         />
 
@@ -97,10 +99,11 @@ interface ICardItem {
   icon: React.ReactNode,
   label: string,
   value: string;
+  href?: string;
   className?: string
 }
 
-const CardItem = ({ icon, label, value, className }: ICardItem) => (
+const CardItem = ({ icon, href, label, value, className }: ICardItem) => (
   <div className="flex items-center gap-4">
     <div className="min-w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
       {icon}
@@ -109,7 +112,14 @@ const CardItem = ({ icon, label, value, className }: ICardItem) => (
       <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
         {label}
       </p>
-      <p className="font-bold text-base">{value}</p>
+      {href ? (
+        <a href={href} rel="noreferrer noopener" target="_blank" className='font-bold'>
+          {value}
+          <span className='ml-2 border rounded-sm px-1'>🡥</span>
+        </a>
+      ) : (
+        <p className="font-bold text-base">{value}</p>
+      )}
     </div>
   </div>
 )
