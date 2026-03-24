@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { PatternFormat } from "react-number-format";
 
 import { Constants } from "@/Constants";
 import { submitCancellation } from "@/services/cancellations";
@@ -7,7 +8,6 @@ import { removeSpaces } from "@/utils/helper";
 
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
 function CancelReservation() {
@@ -59,12 +59,20 @@ function CancelReservation() {
 
                 <div className="pt-4 pb-6 space-y-4">
                     <div className="relative">
-                        <Input
+                        <PatternFormat
+                            format="### ### ###" // The # represents where the user can type a number
+                            mask="_"             // Shows 07_ ___ ___ before they type
+                            value={formData.phoneNumber || ''}
+                            onValueChange={(values) => {
+                                // values.value is the raw string (e.g. "070123456")
+                                // values.formattedValue is the pretty string (e.g. "070 123 456")
+                                setFormData({ ...formData, phoneNumber: values.value })
+                            }}
+                            // Standard input props
+                            name="phone"
+                            className="w-full p-4 rounded-2xl text-base bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
                             type="tel"
                             placeholder={`${t('Phone Number')}: ${Constants.CONTACT_NUMBER_SHORT}`}
-                            value={formData.phoneNumber}
-                            onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                            className="h-16 rounded-2xl bg-zinc-50 border-none font-black text-xl px-6 focus-visible:ring-2 focus-visible:ring-black transition-all"
                         />
                     </div>
                     <div className="relative">

@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { Phone, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { PatternFormat } from 'react-number-format';
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ function ConfirmBooking({
 }: IProps) {
 
     const { t } = useTranslation();
-    
+
     const [initialInputData] = useState<{ name: string; phone: string } | null>(() => {
         const savedUser = localStorage.getItem('bookingUser');
         if (savedUser) {
@@ -64,11 +65,19 @@ function ConfirmBooking({
                 </div>
                 <div className="relative">
                     <Phone className="absolute left-4 top-5 text-zinc-400" size={18} />
-                    <input
-                        name="phone"
+                    <PatternFormat
+                        format="### ### ###" // The # represents where the user can type a number
+                        mask="_"             // Shows 07_ ___ ___ before they type
                         value={booking.phone || ''}
-                        onChange={handleInputChange}
+                        onValueChange={(values) => {
+                            // values.value is the raw string (e.g. "070123456")
+                            // values.formattedValue is the pretty string (e.g. "070 123 456")
+                            handleInputChange({ target: { value: values.value } } as any);
+                        }}
+                        // Standard input props
+                        name="phone"
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
+                        type="tel"
                         placeholder={`${t('Phone Number')}: ${Constants.CONTACT_NUMBER_SHORT}`}
                     />
                 </div>
