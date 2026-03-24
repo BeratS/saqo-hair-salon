@@ -1,6 +1,7 @@
 import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarIcon, ChevronRight, Phone, Scissors, Search, Trash2, X } from "lucide-react";
+import { CalendarIcon, ChevronDown, ChevronRight, Phone, Scissors, Search, Trash2, X } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import useAppointments from "@/hooks/useAppointments";
 import { useBerberData } from "@/hooks/useBerberData";
@@ -9,7 +10,15 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import ConfirmDelete from "../widgets/confirm-delete";
 
+interface IGroupedAppointments {
+    upcoming: IAppointment[];
+    past: IAppointment[];
+}
+
 function AppointmentDataTable() {
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [showPast, setShowPast] = useState(false);
 
     const {
         appointments, allAppointments, selectedDate, sidebarDates,
@@ -18,8 +27,45 @@ function AppointmentDataTable() {
 
     const { barbers, services } = useBerberData()
 
+    const filteredAppointments = useMemo(() => {
+        if (!searchTerm.trim()) return appointments;
+
+        const lowerSearch = searchTerm.toLowerCase();
+
+        return appointments.filter(app => {
+            const nameMatch = app.customerName?.toLowerCase().includes(lowerSearch);
+            const phoneMatch = app.customerPhone?.includes(lowerSearch);
+            // You can also add Barber name match if you have the data joined
+            return nameMatch || phoneMatch;
+        });
+    }, [appointments, searchTerm]);
+
+    const { upcoming, past } = useMemo<IGroupedAppointments>(() => {
+        const now = new Date();
+
+        // If there are no appointments, return empty arrays immediately
+        if (!filteredAppointments.length) {
+            return { upcoming: [], past: [] };
+        }
+
+        return filteredAppointments.reduce<IGroupedAppointments>(
+            (acc, app) => {
+                // .toMillis() is a Firebase Timestamp method
+                const isPast = app.scheduledAt.toMillis() < now;
+
+                if (isPast) {
+                    acc.past.push(app);
+                } else {
+                    acc.upcoming.push(app);
+                }
+                return acc;
+            },
+            { upcoming: [], past: [] } // Initial value matches IGroupedAppointments
+        );
+    }, [filteredAppointments]);
+
     return (
-        <div className="flex h-screen bg-[#FDFDFD] text-black">
+        <div className="flex min-h-screen bg-[#FDFDFD] text-black">
             {/* LEFT SIDE: 14-DAY CALENDAR STRIP */}
             <aside className="w-80 border-r border-zinc-100 bg-white flex flex-col">
                 <div className="p-8 pb-4">
@@ -86,6 +132,8 @@ function AppointmentDataTable() {
                         <div className="relative">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
                             <input
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                                 placeholder="Search Client..."
                                 className="pl-12 pr-6 py-3 bg-zinc-100 border border-zinc-100 rounded-full text-xs font-bold focus:outline-none focus:ring-2 focus:ring-black/5 w-64"
                             />
@@ -101,27 +149,59 @@ function AppointmentDataTable() {
                 </header>
 
                 <div className="flex-1 overflow-y-auto p-8 no-scrollbar">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={selectedDate.toISOString()}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="space-y-4 max-w-4xl mx-auto"
-                        >
-                            {appointments.length > 0 ? (
-                                appointments.map(app => (
+                    <div className="max-w-4xl mx-auto space-y-8">
+
+                        {/* --- PAST APPOINTMENTS SECTION --- */}
+                        {past.length > 0 && (
+                            <div className="border-b border-zinc-100 pb-4">
+                                <button
+                                    onClick={() => setShowPast(!showPast)}
+                                    className="flex items-center gap-2 text-xxs font-black text-zinc-400 uppercase tracking-widest hover:text-black transition-colors"
+                                >
+                                    {showPast ? "Hide" : "Show"} {past.length} Previous {past.length === 1 ? "Booking" : "Bookings"}
+                                    <ChevronDown className={`transform transition-transform ${showPast ? 'rotate-180' : ''}`} size={12} />
+                                </button>
+
+                                <AnimatePresence>
+                                    {showPast && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            className="overflow-hidden mt-4 space-y-2"
+                                        >
+                                            {past.map(app => (
+                                                <div key={app.id} className="opacity-40 grayscale scale-[0.97] origin-left">
+                                                    <AppointmentRow
+                                                        appointment={app}
+                                                        {...{ barbers, services }}
+                                                        onCancel={handleCancelAppointment}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        )}
+
+                        {/* --- UPCOMING APPOINTMENTS SECTION --- */}
+                        <div className="space-y-4">
+                            {upcoming.length > 0 ? (
+                                upcoming.map(app => (
                                     <AppointmentRow
                                         key={app.id}
                                         appointment={app}
                                         {...{ barbers, services }}
-                                        onCancel={handleCancelAppointment} />
+                                        onCancel={handleCancelAppointment}
+                                    />
                                 ))
                             ) : (
                                 <EmptyState date={selectedDate} />
                             )}
-                        </motion.div>
-                    </AnimatePresence>
+                        </div>
+
+                    </div>
                 </div>
             </main>
         </div>

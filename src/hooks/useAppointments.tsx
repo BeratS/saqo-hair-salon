@@ -18,19 +18,35 @@ const useAppointments = () => {
 
     const { exceptions } = useBerberSettings()
 
-    // Generate 14 days (today + 2 weeks) - no Sundays
     const sidebarDates = useMemo(() => {
+        // 1. Get Today at 00:00:00 to ensure we don't hide 'today' by accident
+        const today = startOfDay(new Date());
+
+        // 2. Generate initial 14 days and filter out Sundays + Old Dates
         const openDays = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i))
-            .filter(date => date.getDay() !== 0); // 0 is Sunday
+            .filter(date => {
+                const isSunday = date.getDay() === 0;
+                const isPast = startOfDay(date) < today; // <--- HIDES OLD DATES
+                return !isSunday && !isPast;
+            });
 
         exceptions.forEach(ex => {
-            const exDate = ex.date.toDate()
+            const exDate = ex.date.toDate();
+            const normalizedExDate = startOfDay(exDate);
 
+            // Don't even process exceptions that are in the past
+            if (normalizedExDate < today) return;
+
+            // If Exception says WORK on a Sunday
             if (ex.isWorking === true && exDate.getDay() === 0) {
-                openDays.push(exDate);
+                // Check if we already added it to avoid duplicates
+                if (!openDays.some(d => isSameDay(d, exDate))) {
+                    openDays.push(exDate);
+                }
             }
 
-            if (ex.isWorking === false && exDate.getDay() !== 0) {
+            // If Exception says DON'T WORK on a normal day (Holiday/Day off)
+            if (ex.isWorking === false) {
                 const index = openDays.findIndex(d => isSameDay(d, exDate));
                 if (index !== -1) openDays.splice(index, 1);
             }
