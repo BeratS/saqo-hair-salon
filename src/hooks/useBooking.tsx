@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { BookingStepsEnum } from '@/components/home/booking-constants';
 import { useAuth } from '@/context/AuthContext';
 import { createAppointment } from '@/services/booking';
-import { generateTimeSlots, getSlotKey, splitTime, wait } from '@/utils/helper';
+import { generateTimeSlots, getSlotKey, removeSpaces, splitTime, wait } from '@/utils/helper';
 
 import useAppointments from './useAppointments';
 import { useBerberData } from './useBerberData';
@@ -134,9 +134,11 @@ const useBooking = () => {
     const confirmBooking = async () => {
         try {
 
+            const phoneNumber = removeSpaces(booking.phone)
+
             // 1. Check if this phone number already has an active (non-cancelled) booking
             const hasActiveBooking = !user ? allAppointments.some(app =>
-                app.customerPhone === booking.phone
+                app.customerPhone === phoneNumber
             ) : false;
 
             if (hasActiveBooking) {
@@ -150,7 +152,7 @@ const useBooking = () => {
             // Save to localStorage
             localStorage.setItem('bookingUser', JSON.stringify({
                 name: booking.name,
-                phone: booking.phone
+                phone: phoneNumber
             }));
 
             setIsLoading(true);

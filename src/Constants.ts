@@ -26,6 +26,7 @@ export const Constants = {
   LOCATION: 'North Macedonia, Skopje, Çair 1000',
   EMAIL: 'info@saqohairsalon.com',
   CONTACT_NUMBER: '+389 70 336 332',
+  CONTACT_NUMBER_SHORT: '070 336 332',
 }
 
 export const DATE_FORMAT = {

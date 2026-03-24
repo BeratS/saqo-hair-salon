@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 // UI Components
 import { Button } from "@/components/ui/button";
+import { Constants } from '@/Constants';
+import { removeSpaces } from '@/utils/helper';
 
 interface IProps {
     booking: IBookingState;
@@ -33,7 +35,7 @@ function ConfirmBooking({
         // On mount, check if we have saved user info in localStorage
         if (initialInputData) {
             handleInputChange({ target: { name: 'name', value: initialInputData.name } } as React.ChangeEvent<HTMLInputElement>);
-            handleInputChange({ target: { name: 'phone', value: initialInputData.phone } } as React.ChangeEvent<HTMLInputElement>);
+            handleInputChange({ target: { name: 'phone', value: removeSpaces(initialInputData.phone) } } as React.ChangeEvent<HTMLInputElement>);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -67,7 +69,7 @@ function ConfirmBooking({
                         value={booking.phone || ''}
                         onChange={handleInputChange}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
-                        placeholder={t('Phone Number')}
+                        placeholder={`${t('Phone Number')}: ${Constants.CONTACT_NUMBER_SHORT}`}
                     />
                 </div>
             </div>

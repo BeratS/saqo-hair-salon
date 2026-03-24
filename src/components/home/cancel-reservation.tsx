@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Constants } from "@/Constants";
 import { submitCancellation } from "@/services/cancellations";
+import { removeSpaces } from "@/utils/helper";
 
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -21,7 +23,10 @@ function CancelReservation() {
     });
 
     const handleCancelSubmit = async () => {
-        await submitCancellation(formData)
+        await submitCancellation({
+            phoneNumber: removeSpaces(formData.phoneNumber),
+            note: formData.note,
+        })
         // Reset
         setIsCancelModalOpen(false);
         setFormData({
@@ -56,7 +61,7 @@ function CancelReservation() {
                     <div className="relative">
                         <Input
                             type="tel"
-                            placeholder={t('Phone Number')}
+                            placeholder={`${t('Phone Number')}: ${Constants.CONTACT_NUMBER_SHORT}`}
                             value={formData.phoneNumber}
                             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                             className="h-16 rounded-2xl bg-zinc-50 border-none font-black text-xl px-6 focus-visible:ring-2 focus-visible:ring-black transition-all"

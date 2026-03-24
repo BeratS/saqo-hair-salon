@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
-import { mergeDateTime } from "@/utils/helper";
+import { mergeDateTime, removeSpaces } from "@/utils/helper";
 
 /**
  * Saves a new appointment to Cloud Firestore
@@ -33,7 +33,7 @@ export const createAppointment = async (booking: IBookingState) => {
         fcmToken: fcmToken || null, // Add the token here!
         barberId: booking.barber?.id,
         customerName: booking.name,
-        customerPhone: booking.phone,
+        customerPhone: removeSpaces(booking.phone),
         serviceIds: booking.selectedServices.map(s => s.id),
         scheduledAt: Timestamp.fromDate(scheduledAt),
         readableTime: `${booking.date.toDateString()} ${booking.time}`,

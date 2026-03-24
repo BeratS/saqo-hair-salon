@@ -7,6 +7,10 @@ export function wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export function removeSpaces(str: string) {
+  return str.replace(/\s+/g, '');
+}
+
 /**
  * Normalizes a Date and a Time Slot string into a comparable 'yyyy-MM-dd HH:mm' string.
  */
