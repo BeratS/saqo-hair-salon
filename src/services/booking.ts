@@ -39,6 +39,7 @@ export const createAppointment = async (booking: IBookingState) => {
         readableTime: `${booking.date.toDateString()} ${booking.time}`,
         totalPrice: booking.totalPrice,
         status: "pending",
+        reminderSent: false,
         createdAt: serverTimestamp(),
     };
 
