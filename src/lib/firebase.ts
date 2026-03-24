@@ -1,9 +1,8 @@
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-// 1. Import the Auth SDK
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -17,12 +16,26 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// 2. Initialize and Export Auth
 export const auth = getAuth(app); 
-
-export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
-// 2. Initialize Messaging (Only if window is defined/browser environment)
-export const messaging = typeof window !== "undefined" ? getMessaging(app) : null;
-
 export const db = getFirestore(app);
+export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+
+// --- FIXED MESSAGING LOGIC ---
+export const getMessagingInstance = async () => {
+  if (typeof window === "undefined") return null;
+
+  const supported = await isSupported();
+  if (!supported) {
+    console.warn("FCM is not supported in this environment (e.g. Instagram/FB browser).");
+    return null;
+  }
+
+  try {
+    return getMessaging(app);
+  } catch (err) {
+    console.error("Failed to initialize messaging:", err);
+    return null;
+  }
+};
+
 export default app;

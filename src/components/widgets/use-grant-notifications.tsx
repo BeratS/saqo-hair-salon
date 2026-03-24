@@ -1,13 +1,15 @@
 import { getToken } from 'firebase/messaging';
 import { useEffect } from 'react';
 
-import { messaging } from '@/lib/firebase';
+import { getMessagingInstance } from '@/lib/firebase';
 
 
 export function useGrantNotifications() {
     useEffect(() => {
         const setupNotifications = async () => {
             try {
+                const messaging = await getMessagingInstance()
+
                 // Only run on browsers that support it
                 if (!('Notification' in window) || !messaging) return;
 
