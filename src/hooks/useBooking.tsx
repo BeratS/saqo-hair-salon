@@ -1,5 +1,6 @@
 import { addDays, format, isSameDay } from 'date-fns';
 import { type ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
@@ -13,6 +14,8 @@ import { useBerberSettings } from './useBerberSettings';
 
 
 const useBooking = () => {
+    const { t } = useTranslation();
+    
     const [step, setStep] = useState<number>(BookingStepsEnum.Barber);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [bookingError, setBookingError] = useState<string>('');
@@ -142,8 +145,8 @@ const useBooking = () => {
             ) : false;
 
             if (hasActiveBooking) {
-                toast.error("You already have an upcoming appointment!", {
-                    description: "Please cancel your existing one before booking a new one.",
+                toast.error(t("You already have an upcoming appointment!"), {
+                    description: t("Please cancel your existing one before booking a new one."),
                     duration: 8000,
                 });
                 return;
