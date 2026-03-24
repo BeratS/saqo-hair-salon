@@ -69,5 +69,7 @@
     "Install App": "Uygulamayı Yükle",
     "To install: tap Share and 'Add to Home Screen'": "Yüklemek için: Ana Ekrana Ekle'ye dokunun",
     "No Slots Left": "Yer Kalmadı",
-    "Everything is fully booked for this day. Please try another date.": "Bu gün için her şey tamamen dolu. Lütfen başka bir tarih deneyin."
+    "Everything is fully booked for this day. Please try another date.": "Bu gün için her şey tamamen dolu. Lütfen başka bir tarih deneyin.",
+    "You already have an upcoming appointment!": "Zaten önceden planlanmış bir randevunuz var!",
+    "Please cancel your existing one before booking a new one.": "Lütfen yeni bir randevu almadan önce mevcut randevunuzu iptal edin."
 }

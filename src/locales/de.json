@@ -69,5 +69,7 @@
     "Install App": "App installieren",
     "To install: tap Share and 'Add to Home Screen'": "So installieren Sie die App: Zum Startbildschirm hinzufügen",
     "No Slots Left": "Keine Plätze mehr verfügbar",
-    "Everything is fully booked for this day. Please try another date.": "Für diesen Tag ist alles ausgebucht. Bitte versuchen Sie es mit einem anderen Datum."
+    "Everything is fully booked for this day. Please try another date.": "Für diesen Tag ist alles ausgebucht. Bitte versuchen Sie es mit einem anderen Datum.",
+    "You already have an upcoming appointment!": "Sie haben bereits einen Termin!",
+    "Please cancel your existing one before booking a new one.": "Bitte stornieren Sie Ihren bestehenden Termin, bevor Sie einen neuen buchen."
 }

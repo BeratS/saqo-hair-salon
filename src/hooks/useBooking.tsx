@@ -1,7 +1,9 @@
 import { addDays, format, isSameDay } from 'date-fns';
 import { type ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 import { BookingStepsEnum } from '@/components/home/booking-constants';
+import { useAuth } from '@/context/AuthContext';
 import { createAppointment } from '@/services/booking';
 import { generateTimeSlots, getSlotKey, splitTime, wait } from '@/utils/helper';
 
@@ -27,6 +29,7 @@ const useBooking = () => {
     });
 
     const { barbers, services } = useBerberData()
+    const { user } = useAuth()
 
     const { allAppointments } = useAppointments()
 
@@ -130,22 +133,37 @@ const useBooking = () => {
 
     const confirmBooking = async () => {
         try {
-            // Save to localStorage for persistence
+
+            // 1. Check if this phone number already has an active (non-cancelled) booking
+            const hasActiveBooking = !user ? allAppointments.some(app =>
+                app.customerPhone === booking.phone
+            ) : false;
+
+            if (hasActiveBooking) {
+                toast.error("You already have an upcoming appointment!", {
+                    description: "Please cancel your existing one before booking a new one.",
+                    duration: 8000,
+                });
+                return;
+            }
+
+            // Save to localStorage
             localStorage.setItem('bookingUser', JSON.stringify({
                 name: booking.name,
                 phone: booking.phone
             }));
 
-            setIsLoading(true); // Start loading state
+            setIsLoading(true);
 
+            // Make sure your createAppointment helper adds the 'reminderSent: false' we discussed!
             await createAppointment(booking);
 
-            await wait(1000)
+            await wait(1000);
+            nextStep();
 
-            nextStep(); // Success!
         } catch (error: any) {
             console.error("Booking failed:", error?.message);
-            setBookingError(error?.message ?? 'Failed to book appointment'); // Show that red error UI we made
+            setBookingError(error?.message ?? 'Failed to book appointment');
         } finally {
             setIsLoading(false);
         }

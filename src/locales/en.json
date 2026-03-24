@@ -69,5 +69,7 @@
     "Install App": "Install App",
     "To install: tap Share and 'Add to Home Screen'": "To install: tap Share and 'Add to Home Screen'",
     "No Slots Left": "No Slots Left",
-    "Everything is fully booked for this day. Please try another date.": "Everything is fully booked for this day. Please try another date."
+    "Everything is fully booked for this day. Please try another date.": "Everything is fully booked for this day. Please try another date.",
+    "You already have an upcoming appointment!": "You already have an upcoming appointment!",
+    "Please cancel your existing one before booking a new one.": "Please cancel your existing one before booking a new one."
 }

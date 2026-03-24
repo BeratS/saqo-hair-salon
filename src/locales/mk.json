@@ -69,5 +69,7 @@
     "Install App": "Инсталирај апликација",
     "To install: tap Share and 'Add to Home Screen'": "За инсталирање: Сподели и 'Додај на почетен екран'",
     "No Slots Left": "Нема слободни места",
-    "Everything is fully booked for this day. Please try another date.": "Сè е целосно резервирано за овој ден. Обидете се со друг датум."
+    "Everything is fully booked for this day. Please try another date.": "Сè е целосно резервирано за овој ден. Обидете се со друг датум.",
+    "You already have an upcoming appointment!": "Веќе имате закажен термин!",
+    "Please cancel your existing one before booking a new one.": "Ве молиме откажете го постоечкиот пред да резервирате нов."
 }
