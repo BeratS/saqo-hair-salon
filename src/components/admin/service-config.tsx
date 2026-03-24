@@ -9,6 +9,7 @@ import { addService, deleteService, subscribeToServices, updateService } from "@
 
 import { Switch } from '../ui/switch';
 import ConfirmDelete from '../widgets/confirm-delete';
+import { cn } from '@/lib/utils';
 
 export default function ServiceConfig() {
     const [services, setServices] = useState<IServiceMenu[]>([]);
@@ -85,7 +86,10 @@ export default function ServiceConfig() {
                 {sortedServices?.map((service) => (
                     <div key={service.id} className="flex items-center justify-between p-6 bg-zinc-50 rounded-[2.5rem] group hover:bg-zinc-100 transition-all">
                         <div className="flex items-center gap-6">
-                            <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-zinc-100 group-hover:border-black transition-colors">
+                            <div className={cn(
+                                "w-14 h-14 rounded-2xl flex items-center justify-center border border-zinc-100 group-hover:border-black transition-colors",
+                                service.isPremium ? 'bg-primary/40 border-primary' : 'bg-white'
+                            )}>
                                 <Scissors size={20} />
                             </div>
                             <div>
