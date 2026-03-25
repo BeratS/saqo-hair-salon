@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import {
-    createBrowserRouter,
-    Navigate
+  createBrowserRouter,
+  Navigate
 } from "react-router-dom";
 
 const BarbersPage = lazy(() => import('./pages/admin/barbers-page'));
@@ -35,6 +35,10 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         children: [
+          {
+            index: true,
+            element: <Navigate to="appointments" replace />
+          },
           {
             path: 'appointments',
             element: (

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PatternFormat } from "react-number-format";
+import { toast } from "sonner";
 
 import { Constants } from "@/Constants";
+import useAppointments from "@/hooks/useAppointments";
 import { submitCancellation } from "@/services/cancellations";
 import { removeSpaces } from "@/utils/helper";
 
@@ -12,6 +14,10 @@ import { Textarea } from "../ui/textarea";
 
 function CancelReservation() {
     const { t } = useTranslation();
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    const { allAppointments, handleUpdateAppointment } = useAppointments()
 
     // Inside PickBarbers function
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -23,16 +29,58 @@ function CancelReservation() {
     });
 
     const handleCancelSubmit = async () => {
-        await submitCancellation({
-            phoneNumber: removeSpaces(formData.phoneNumber),
-            note: formData.note,
-        })
-        // Reset
-        setIsCancelModalOpen(false);
-        setFormData({
-            phoneNumber: '',
-            note: '',
-        })
+        const cleanPhone = removeSpaces(formData.phoneNumber);
+
+        // 1. Filter ONLY the appointments that match THIS specific phone number
+        const matches = allAppointments.filter(app => {
+            const appPhone = removeSpaces(app.customerPhone || '');
+            const isMatch = appPhone === cleanPhone;
+            const isNotCancelled = app.status !== 'cancelled';
+
+            return isMatch && isNotCancelled;
+        });
+
+        // 2. Validation: If no matches for THIS phone, stop.
+        if (matches.length === 0) {
+            toast.error(t("No active reservation found"), {
+                description: t("Check the phone number and try again."),
+                duration: 6000
+            });
+            return;
+        }
+
+        try {
+            setIsLoading?.(true);
+
+            // 3. Map ONLY over the matched IDs
+            const updatePromises = matches.map(app =>
+                handleUpdateAppointment(app.id)
+            );
+
+            // Submit the cancellation record/log
+            const cancellationLog = submitCancellation({
+                phoneNumber: cleanPhone,
+                note: formData.note,
+            });
+
+            // Execute all updates for this specific user's appointments
+            await Promise.all([...updatePromises, cancellationLog]);
+
+            toast.success(t("Reservation Cancelled"), {
+                description: t("Your appointment has been successfully removed."),
+                duration: 5000, 
+            });
+
+            // 4. Reset UI
+            setIsCancelModalOpen(false);
+            setFormData({ phoneNumber: '', note: '' });
+
+        } catch (error) {
+            console.error("Cancellation failed:", error);
+            toast.error(t("Something went wrong. Please try again."));
+        } finally {
+            setIsLoading?.(false);
+        }
     };
 
     return (
@@ -88,7 +136,7 @@ function CancelReservation() {
                 <DialogFooter className="sm:justify-start">
                     <Button
                         onClick={handleCancelSubmit}
-                        disabled={formData?.phoneNumber?.length !== 9}
+                        disabled={isLoading || formData?.phoneNumber?.length !== 9}
                         className="w-full h-16 bg-black text-white rounded-[2rem] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-20"
                     >
                         {t('Cancel it')}

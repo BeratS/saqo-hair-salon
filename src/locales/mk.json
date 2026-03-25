@@ -28,6 +28,7 @@
     "We are waiting for you with pleasure in our hair salon": "Со задоволство ве очекуваме во нашиот салон за коса",
     "We encountered an issue while processing your booking. Please try again or contact support if the problem persists.": "Наидовме на проблем при обработка на вашата резервација. Обидете се повторно или контактирајте поддршка ако проблемот продолжи.",
     "Something<br />Went Wrong": "Нешто<br />Не е во ред",
+    "Something went wrong. Please try again.": "Нешто не е во ред. Обидете повторно.",
     "Contact Support": "Контактирајте поддршка",
     "Confirm your<br />Booking?": "Потврдете ја вашата<br />резервација?",
     "Summary": "Резиме",
@@ -71,5 +72,9 @@
     "No Slots Left": "Нема слободни места",
     "Everything is fully booked for this day. Please try another date.": "Сè е целосно резервирано за овој ден. Обидете се со друг датум.",
     "You already have an upcoming appointment!": "Веќе имате закажен термин!",
-    "Please cancel your existing one before booking a new one.": "Ве молиме откажете го постоечкиот пред да резервирате нов."
+    "Please cancel your existing one before booking a new one.": "Ве молиме откажете го постоечкиот пред да резервирате нов.",
+    "No active reservation found": "Не е пронајдена активна резервација",
+    "Check the phone number and try again.": "Проверете го телефонскиот број и обидете се повторно.",
+    "Reservation Cancelled": "Резервацијата е откажана",
+    "Your appointment has been successfully removed.": "Вашиот состанок е успешно отстранет."
 }

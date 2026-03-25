@@ -1,5 +1,5 @@
 import { addDays, endOfDay, isSameDay, startOfDay } from "date-fns";
-import { collection, deleteDoc, doc, getDocs, query, Timestamp, where, writeBatch } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -99,6 +99,23 @@ const useAppointments = () => {
             });
     }, [allAppointments, selectedDate]);
 
+    const handleUpdateAppointment = async (id: string) => {
+        try {
+            const appointmentRef = doc(db, "appointments", id);
+
+            // We update the status instead of deleting the whole row
+            await updateDoc(appointmentRef, {
+                status: 'cancelled',
+                updatedAt: Timestamp.now() // Good for tracking when it was cancelled
+            });
+
+            // toast.success("Appointment cancelled successfully");
+        } catch (error) {
+            console.error("Error cancelling:", error);
+            // toast.error("Could not cancel appointment");
+        }
+    };
+
     const handleCancelAppointment = async (id: string) => {
         try {
             await deleteDoc(doc(db, "appointments", id));
@@ -149,6 +166,7 @@ const useAppointments = () => {
         selectedDate,
         sidebarDates,
         setSelectedDate,
+        handleUpdateAppointment,
         handleCancelAppointment,
         deleteOldAppointments,
     };

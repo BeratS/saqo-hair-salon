@@ -28,6 +28,7 @@
     "We are waiting for you with pleasure in our hair salon": "We are waiting for you with pleasure in our hair salon",
     "We encountered an issue while processing your booking. Please try again or contact support if the problem persists.": "We encountered an issue while processing your booking. Please try again or contact support if the problem persists.",
     "Something<br />Went Wrong": "Something<br />Went Wrong",
+    "Something went wrong. Please try again.": "Something went wrong. Please try again.",
     "Contact Support": "Contact Support",
     "Confirm your<br />Booking?": "Confirm your<br />Booking?",
     "Summary": "Summary",
@@ -71,5 +72,9 @@
     "No Slots Left": "No Slots Left",
     "Everything is fully booked for this day. Please try another date.": "Everything is fully booked for this day. Please try another date.",
     "You already have an upcoming appointment!": "You already have an upcoming appointment!",
-    "Please cancel your existing one before booking a new one.": "Please cancel your existing one before booking a new one."
+    "Please cancel your existing one before booking a new one.": "Please cancel your existing one before booking a new one.",
+    "No active reservation found": "No active reservation found",
+    "Check the phone number and try again.": "Check the phone number and try again.",
+    "Reservation Cancelled": "Reservation Cancelled",
+    "Your appointment has been successfully removed.": "Your appointment has been successfully removed."
 }

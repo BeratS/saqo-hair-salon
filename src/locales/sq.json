@@ -28,6 +28,7 @@
     "We are waiting for you with pleasure in our hair salon": "Ne ju presim me kënaqësi në salonin tonë të flokëve",
     "We encountered an issue while processing your booking. Please try again or contact support if the problem persists.": "Hasëm një problem gjatë përpunimit të rezervimit tuaj. Ju lutemi provoni përsëri ose kontaktoni suportin nëse problemi vazhdon.",
     "Something<br />Went Wrong": "Dështoi<br />Rezervimi",
+    "Something went wrong. Please try again.": "Diçka nuk shkoi në rregull. Provoni përseri.",
     "Contact Support": "Kontaktoni Suportin",
     "Confirm your<br />Booking?": "Konfirmoni<br />Rezervimin?",
     "Summary": "Përmbledhje",
@@ -71,5 +72,9 @@
     "No Slots Left": "Nuk ka vende të lira",
     "Everything is fully booked for this day. Please try another date.": "Gjithçka është rezervuar plotësisht për këtë ditë. Ju lutemi provoni një datë tjetër.",
     "You already have an upcoming appointment!": "Ju vecse keni bërë rezervimin tuaj!",
-    "Please cancel your existing one before booking a new one.": "Ju lutemi anuloni takimin tuaj ekzistues përpara se të rezervoni një të ri."
+    "Please cancel your existing one before booking a new one.": "Ju lutemi anuloni takimin tuaj ekzistues përpara se të rezervoni një të ri.",
+    "No active reservation found": "Nuk ekziston asnjë rezervim aktiv",
+    "Check the phone number and try again.": "Nuk ka rezervim me këtë numër të telefonit dhe provoni përsëri.",
+    "Reservation Cancelled": "Rezervimi u anulua",
+    "Your appointment has been successfully removed.": "Takimi juaj është hequr me sukses."
 }
