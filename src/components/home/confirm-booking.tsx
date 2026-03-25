@@ -85,7 +85,7 @@ function ConfirmBooking({
 
             <Button
                 onClick={confirmBooking}
-                disabled={!booking.name || booking.phone.length !== 9}
+                disabled={!booking?.name || booking?.phone?.length !== 9}
                 className="w-full py-8 rounded-[2rem] bg-black text-white text-xl font-bold mt-4 shadow-xl disabled:bg-zinc-300 active:scale-95 transition-all"
             >
                 {t('Confirm Booking')}

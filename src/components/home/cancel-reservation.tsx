@@ -88,7 +88,7 @@ function CancelReservation() {
                 <DialogFooter className="sm:justify-start">
                     <Button
                         onClick={handleCancelSubmit}
-                        disabled={!formData.phoneNumber}
+                        disabled={formData?.phoneNumber?.length !== 9}
                         className="w-full h-16 bg-black text-white rounded-[2rem] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-20"
                     >
                         {t('Cancel it')}
