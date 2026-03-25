@@ -5,7 +5,7 @@ Professional hair salon services in Skopje.
 ---
 
 ## 📍 Location
-Skopje, North Macedonia
+Cair, Skopje, North Macedonia
 
 ## ✂️ About Us
 Saqo Hair Salon is a modern and professional hair salon dedicated to providing high-quality hair care and styling services. Our experienced stylists are passionate about helping you look and feel your best.
