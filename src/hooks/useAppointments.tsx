@@ -1,4 +1,4 @@
-import { addDays, endOfDay, isSameDay, startOfDay } from "date-fns";
+import { addDays, endOfDay, isSameDay, startOfDay, subMonths } from "date-fns";
 import { collection, deleteDoc, doc, getDocs, query, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -131,14 +131,25 @@ const useAppointments = () => {
 
         try {
             const appointmentsRef = collection(db, "appointments");
-            const now = Timestamp.now();
 
-            // 1. Query for all appointments scheduled BEFORE 'now'
-            const q = query(appointmentsRef, where("scheduledAt", "<", now));
+            // Starting from 1 month and old
+            const MIN_ONE_MONTH = 1
+
+            // 2. Set the "Past Date" to exactly 1 month ago from today
+            const oneMonthAgo = subMonths(startOfDay(new Date()), MIN_ONE_MONTH);
+
+            // 3. Convert to Timestamp
+            const threshold = Timestamp.fromDate(oneMonthAgo);
+
+            // 4. Find anything BEFORE that 1-month mark
+            const q = query(appointmentsRef, where("scheduledAt", "<", threshold));
+
             const snapshot = await getDocs(q);
 
             if (snapshot.empty) {
-                alert("No old appointments to delete!");
+                toast.info("No old records to clear", {
+                    description: "All past history from previous days is already clean."
+                });
                 return;
             }
 
