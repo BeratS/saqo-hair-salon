@@ -112,9 +112,8 @@ const useBooking = () => {
         });
     };
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setBooking((prev) => ({ ...prev, [name]: value }));
+    const handleInputChange = (key: string, value: string) => {
+        setBooking((prev) => ({ ...prev, [key]: value }));
     };
 
     const setBarber = (barber: IBarber) => {

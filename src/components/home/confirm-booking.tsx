@@ -11,7 +11,7 @@ import { removeSpaces } from '@/utils/helper';
 
 interface IProps {
     booking: IBookingState;
-    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleInputChange: (key: string, e: string) => void;
     confirmBooking: () => void;
 }
 
@@ -35,8 +35,8 @@ function ConfirmBooking({
     useEffect(() => {
         // On mount, check if we have saved user info in localStorage
         if (initialInputData) {
-            handleInputChange({ target: { name: 'name', value: initialInputData.name } } as React.ChangeEvent<HTMLInputElement>);
-            handleInputChange({ target: { name: 'phone', value: removeSpaces(initialInputData.phone) } } as React.ChangeEvent<HTMLInputElement>);
+            handleInputChange('name', initialInputData.name);
+            handleInputChange('phone', removeSpaces(initialInputData.phone));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -58,7 +58,7 @@ function ConfirmBooking({
                     <input
                         name="name"
                         value={booking.name || ''}
-                        onChange={handleInputChange}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('name', e.target.value)}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-zinc-50 border-2 border-transparent focus:border-black outline-none transition-all font-semibold"
                         placeholder={t('Your FullName')}
                     />
@@ -72,7 +72,7 @@ function ConfirmBooking({
                         onValueChange={(values) => {
                             // values.value is the raw string (e.g. "070123456")
                             // values.formattedValue is the pretty string (e.g. "070 123 456")
-                            handleInputChange({ target: { value: values.value } } as any);
+                            handleInputChange('phone', values.value);
                         }}
                         // Standard input props
                         name="phone"
@@ -85,7 +85,7 @@ function ConfirmBooking({
 
             <Button
                 onClick={confirmBooking}
-                disabled={!booking.name || !booking.phone}
+                disabled={!booking.name || booking.phone.length !== 9}
                 className="w-full py-8 rounded-[2rem] bg-black text-white text-xl font-bold mt-4 shadow-xl disabled:bg-zinc-300 active:scale-95 transition-all"
             >
                 {t('Confirm Booking')}
