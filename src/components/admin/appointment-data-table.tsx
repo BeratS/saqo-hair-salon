@@ -1,6 +1,6 @@
 import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarIcon, ChevronDown, ChevronRight, Phone, Scissors, Search, Trash2, X } from "lucide-react";
+import { CalendarIcon, CheckIcon, ChevronDown, ChevronRight, Clock, Phone, Scissors, Search, Star, Trash2, User, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import useAppointments from "@/hooks/useAppointments";
@@ -65,15 +65,15 @@ function AppointmentDataTable() {
     }, [filteredAppointments]);
 
     return (
-        <div className="flex min-h-screen bg-[#FDFDFD] text-black">
+        <div className="flex flex-col md:flex-row min-h-screen bg-[#FDFDFD] text-black">
             {/* LEFT SIDE: 14-DAY CALENDAR STRIP */}
-            <aside className="w-80 border-r border-zinc-100 bg-white flex flex-col">
-                <div className="p-8 pb-4">
+            <aside className="w-full md:w-80 border-b md:border-r border-zinc-100 bg-white flex flex-col sticky top-0 z-30">
+                <div className="p-4 md:p-8 pb-4">
                     <h1 className="text-3xl font-black uppercase tracking-tighter">Saqo</h1>
                     <p className="text-xxs font-bold text-zinc-400 uppercase tracking-widest mt-1">Schedule Manager</p>
                 </div>
 
-                <div className="flex-1 overflow-y-auto no-scrollbar px-4 pb-10 space-y-2">
+                <div className="flex md:flex-col overflow-x-auto md:overflow-y-auto no-scrollbar px-1 pb-4 md:pb-10 gap-2 md:space-y-2">
                     {sidebarDates.map((date) => {
                         const isSelected = isSameDay(date, selectedDate);
                         const isTodayDate = isSameDay(date, new Date());
@@ -86,10 +86,10 @@ function AppointmentDataTable() {
                                 key={date.toISOString()}
                                 onClick={() => setSelectedDate(date)}
                                 className={cn(
-                                    "w-full flex items-center gap-4 p-4 rounded-[2rem] transition-all group cursor-pointer",
+                                    "border w-full flex items-center gap-2 md:gap-4 p-2 md:p-4 rounded-[2rem] transition-all group cursor-pointer",
                                     isSelected
-                                        ? "bg-zinc-100 text-white shadow-xl shadow-black/10 scale-[1.02]"
-                                        : "hover:bg-zinc-50 text-zinc-500"
+                                        ? "bg-zinc-100 text-white shadow-md md:shadow-lg shadow-black/10 scale-[1.02]"
+                                        : "border-zinc-100 hover:bg-zinc-50 text-zinc-500"
                                 )}
                             >
                                 <div className={cn(
@@ -99,7 +99,7 @@ function AppointmentDataTable() {
                                     <span className="text-xxs font-black uppercase">{format(date, "MMM")}</span>
                                     <span className="text-lg font-black leading-none">{format(date, "d")}</span>
                                 </div>
-                                <div className="text-left">
+                                <div className="text-left hidden md:block">
                                     <p className={cn("text-base font-black uppercase tracking-widest mb-1 text-black")}>
                                         {isTodayDate ? "Today" : format(date, "EEEE")}
                                     </p>
@@ -107,8 +107,11 @@ function AppointmentDataTable() {
                                         <b>{selectedBookingLength?.length ?? 0}</b> reservations
                                     </p>
                                 </div>
-                                {isSelected && <ChevronRight size={14} className="ml-auto opacity-50" />}
-                                {hasBookings && <div className="ml-auto h-1 w-1 bg-black rounded-full mt-1" />}
+                                <p className={cn("text-xs opacity-70 uppercase tracking-tight text-black/70 flex items-center gap-1 md:hidden border border-black rounded-lg p-1")}>
+                                    <b>{selectedBookingLength?.length ?? 0}</b> <CheckIcon size={18} />
+                                </p>
+                                {isSelected && <ChevronRight size={14} className="ml-auto opacity-50 hidden md:block" />}
+                                {hasBookings && <div className="ml-auto h-1 w-1 bg-black rounded-full mt-1 hidden md:block" />}
                             </button>
                         );
                     })}
@@ -116,14 +119,14 @@ function AppointmentDataTable() {
             </aside>
 
             {/* RIGHT SIDE: DAILY APPOINTMENTS FEED */}
-            <main className="flex-1 flex flex-col overflow-hidden bg-zinc-50/30">
-                <header className="p-8 flex justify-between items-center bg-white/50 backdrop-blur-md border-b border-zinc-100">
+            <main className="flex-1 flex flex-col bg-zinc-50/30">
+                <header className="p-2 md:p-8 flex flex-col-reverse gap-4 md:gap-1 md:flex-row md:justify-between md:items-center bg-white/90 backdrop-blur-md border-b border-zinc-100 sticky top-23 md:top-0 z-20">
                     <div>
                         <p className="text-xxs font-black text-zinc-400 uppercase tracking-[0.2em]">Viewing Schedule For</p>
-                        <h2 className="text-4xl font-black uppercase tracking-tighter">
+                        <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter">
                             {isSameDay(selectedDate, new Date()) ? "Today" : format(selectedDate, "EEEE (dd, MMM)")}
                         </h2>
-                        <h3 className="text-base font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
+                        <h3 className="hidden md:block text-base font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
                             {appointments.length} {appointments.length === 1 ? "Booking" : "Bookings"}
                         </h3>
                     </div>
@@ -141,14 +144,14 @@ function AppointmentDataTable() {
                         <Button
                             onClick={deleteOldAppointments}
                             title="Delete Old Appointments"
-                            className="bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl flex gap-2 items-center"
+                            className="hidden md:flex bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl gap-2 items-center"
                         >
                             <Trash2 size={18} />
                         </Button>
                     </div>
                 </header>
 
-                <div className="flex-1 overflow-y-auto p-8 no-scrollbar">
+                <div className="flex-1 overflow-y-auto px-0 py-4 md:p-8 no-scrollbar">
                     <div className="max-w-4xl mx-auto space-y-8">
 
                         {/* --- PAST APPOINTMENTS SECTION --- */}
@@ -217,57 +220,129 @@ interface IAppointmentRowProps {
 
 function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointmentRowProps) {
     const time = format(appointment.scheduledAt.toDate(), "HH:mm");
-
     const serviceIds = appointment.serviceIds;
     const allServices = services.filter(s => serviceIds.includes(s.id!));
-
     const berber = barbers.find(b => b.id === appointment.barberId);
 
     return (
         <div className={cn(
-            "group bg-white border border-zinc-100 p-4 rounded-[2rem] flex items-center justify-between hover:shadow-lg hover:shadow-black/5 transition-all",
-            appointment.isPast && "opacity-70 grayscale"
+            "group bg-white border border-zinc-100 p-5 md:p-6 rounded-[2.5rem] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:shadow-xl hover:shadow-black/5 transition-all relative overflow-hidden",
+            appointment.isPast && "opacity-60 grayscale bg-zinc-50"
         )}>
-            <div className="flex items-center gap-8">
-                <span className="text-2xl font-black italic w-16">{time}</span>
 
-                <div className="h-10 w-0.5 bg-zinc-100" />
-
-                <div className="flex flex-col gap-1">
-                    <div className="flex gap-4 items-center">
-                        <h4 className="font-black text-lg uppercase tracking-tight">{appointment.customerName}</h4>
-                        <span className="text-xs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-zinc-100 px-2 py-0.5 rounded-md">
-                            <Phone size={10} /> {appointment.customerPhone}
+            {/* 3. Action & Price Section */}
+            <div className="flex md:hidden items-center justify-between gap-4 pb-1 border-b border-zinc-50">
+                <div className="flex items-center justify-between md:justify-start gap-4">
+                    <div className="flex items-center gap-3">
+                        <div className="bg-black text-white p-2 rounded-2xl md:hidden">
+                            <Clock size={16} />
+                        </div>
+                        <span className="text-3xl md:text-2xl font-black tracking-tighter">
+                            {time}
                         </span>
                     </div>
-                    <div className="flex gap-2 items-center">
-                        <span className="text-xs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-blue-200 px-2 py-0.5 rounded-md">
-                            <Scissors size={10} /> {berber?.name}
-                        </span>
-                        {allServices.map(service => (
-                            <span key={service.id} className="text-xs font-bold text-zinc-800 flex items-center gap-1 uppercase tracking-widest bg-primary/50 px-2 py-0.5 rounded-md">
-                                <Scissors size={10} /> {service.name}
+                </div>
+
+                {!appointment.isPast && (
+                    <ConfirmDelete onConfirm={() => onCancel(appointment.id)}>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            className="w-10 min-h-10 p-1 md:min-w-15 md:min-h-15 md:p-4 rounded-2xl hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
+                        >
+                            <X size={24} className="min-w-6 min-h-6" />
+                        </Button>
+                    </ConfirmDelete>
+                )}
+            </div>
+
+            {/* 1. Time Section - Large and clear */}
+            <div className="hidden md:flex items-center justify-between md:justify-start gap-4">
+                <div className="flex items-center gap-3">
+                    <div className="bg-black text-white p-2 rounded-2xl md:hidden">
+                        <Clock size={16} />
+                    </div>
+                    <span className="text-3xl md:text-2xl font-black italic tracking-tighter">
+                        {time}
+                    </span>
+                </div>
+
+                {/* Mobile-only Price Badge */}
+                <span className="md:hidden text-sm font-black bg-zinc-100 px-3 py-1 rounded-full border border-zinc-200">
+                    {appointment.totalPrice} DEN
+                </span>
+            </div>
+
+            {/* Vertical Divider (Desktop) */}
+            <div className="hidden md:block h-12 w-px bg-zinc-100" />
+
+            {/* 2. Customer & Services Info */}
+            <div className="flex-1 space-y-3">
+                <div className="flex items-start justify-between gap-1">
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                        <h4 className="font-black text-xl md:text-lg uppercase tracking-tight flex items-center gap-2">
+                            {appointment.customerName}
+                        </h4>
+                        <a
+                            href={`tel:${appointment.customerPhone}`}
+                            className="w-fit text-xxs font-bold text-zinc-500 hover:text-black flex items-center gap-1.5 uppercase tracking-widest bg-zinc-50 border border-zinc-100 px-2.5 py-1 rounded-full transition-colors"
+                        >
+                            <Phone size={12} /> {appointment.customerPhone}
+                        </a>
+                    </div>
+
+                    {/* Mobile-only Price Badge */}
+                    <span className="md:hidden text-sm font-black bg-zinc-100 px-2 py-1 rounded-full border border-zinc-200 whitespace-nowrap">
+                        {appointment.totalPrice} DEN
+                    </span>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                    {/* Barber Badge */}
+                    <span className="text-xxs font-bold text-blue-700 flex items-center gap-1.5 uppercase tracking-widest bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-lg">
+                        <User size={10} strokeWidth={3} /> {berber?.name}
+                    </span>
+
+                    {/* Service Badges */}
+                    {allServices.map(service => {
+                        const isPremium = service.isPremium; // Assuming this boolean exists
+
+                        return (
+                            <span
+                                key={service.id}
+                                className={cn(
+                                    "text-xs font-black flex items-center gap-1 uppercase tracking-widest px-2 py-0.5 rounded-xl transition-all",
+                                    isPremium
+                                        ? "bg-amber-300 text-black shadow-sm shadow-primary ring-1 ring-amber-500/20"
+                                        : "bg-amber-50 text-zinc-600 border border-zinc-200/50"
+                                )}
+                            >
+                                {isPremium ? <Star size={10} fill="currentColor" /> : <Scissors size={10} strokeWidth={3} />}
+                                {service.name}
                             </span>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
             </div>
 
-            <div className="flex items-center gap-4">
-                <span className="text-base font-black mr-4 w-20 text-right">{appointment.totalPrice} den</span>
-                {/* Action Buttons */}
+            {/* 3. Action & Price Section */}
+            <div className="hidden md:flex items-center justify-between md:justify-end gap-4 mt-0 md:pt-0 border-t md:border-none border-zinc-50">
+                {/* Desktop-only Price */}
+                <div className="flex flex-col items-end">
+                    <span className="text-xxs font-black text-zinc-400 uppercase tracking-[0.2em]">Total</span>
+                    <span className="text-xl font-black tabular-nums">{appointment.totalPrice} DEN</span>
+                </div>
+
                 {!appointment.isPast && (
-                    <div className="flex gap-2">
-                        <ConfirmDelete onConfirm={() => onCancel(appointment.id)}>
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                className="min-w-15 min-h-15 p-4 rounded-2xl border border-zinc-100 text-zinc-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
-                            >
-                                <X size={24} className="min-w-6 min-h-6" />
-                            </Button>
-                        </ConfirmDelete>
-                    </div>
+                    <ConfirmDelete onConfirm={() => onCancel(appointment.id)}>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            className="w-10 min-h-10 p-1 md:min-w-15 md:min-h-15 md:p-4 rounded-2xl hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
+                        >
+                            <X size={24} className="min-w-6 min-h-6" />
+                        </Button>
+                    </ConfirmDelete>
                 )}
             </div>
         </div>

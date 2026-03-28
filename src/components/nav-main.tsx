@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +23,11 @@ export function NavMain({
   }[]
 }) {
   const { pathname } = useLocation()
+  const { setOpenMobile } = useSidebar()
+
+  const handleCloseSidebar = () => {
+    setOpenMobile(false)
+  }
 
   return (
     <SidebarGroup {...props}>
@@ -36,7 +42,7 @@ export function NavMain({
                     ? "bg-primary text-primary-foreground hover:bg-primary"
                     : "hover:bg-muted"
                 )}
-                render={<Link to={`/manage${item.url}`} />}>
+                render={<Link to={`/manage${item.url}`} onClick={handleCloseSidebar} />}>
                 {item.icon}
                 <span>{item.title}</span>
               </SidebarMenuButton>

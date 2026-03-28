@@ -29,19 +29,15 @@ export default function BarbersConfig() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingBarber, setEditingBarber] = useState<IBarber | null>(null);
 
-    // Form State
     const [formData, setFormData] = useState({
         name: '',
         role: 'Editor',
         bio: '',
     });
 
-    // Simple derived state (No memo needed for small lists)
     const adminMembers = barbers.filter(b => b.role === 'Admin');
-    const adminCount = adminMembers.length;
-    const hasAdmin = adminCount > 0;
+    const hasAdmin = adminMembers.length > 0;
 
-    // Real-time subscription
     useEffect(() => {
         const unsubscribe = subscribeToBarbers((data) => {
             setBarbers(data);
@@ -65,10 +61,8 @@ export default function BarbersConfig() {
         setIsModalOpen(true);
     };
 
-    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // Construct the final object for Firebase
         const barberData: Omit<IBarber, 'id'> = {
             name: formData.name,
             role: formData.role as 'Admin' | 'Editor',
@@ -83,31 +77,31 @@ export default function BarbersConfig() {
                 await addBarber(barberData);
             }
             setIsModalOpen(false);
-            setFormData({ name: '', role: 'Editor', bio: '' }); // Reset
+            setFormData({ name: '', role: 'Editor', bio: '' });
         } catch (error) {
             console.error("Firebase Error:", error);
         }
     };
 
     return (
-        <div className="p-10 w-full max-w-5xl mx-auto">
+        <div className="p-6 md:p-10 w-full max-w-6xl mx-auto">
             {/* --- HEADER --- */}
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
-                <div>
-                    <h2 className="text-4xl font-black uppercase tracking-tighter text-black">The Saqo's Team</h2>
-                    <p className="text-zinc-400 text-xs font-bold uppercase tracking-[0.3em] mt-3">Access Control & Staff</p>
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
+                <div className="space-y-2">
+                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-black leading-none">The Saqo's Team</h2>
+                    <p className="text-zinc-400 text-xxs md:text-xs font-bold uppercase tracking-[0.3em]">Access Control & Staff</p>
                 </div>
 
+
                 <Button
-                    onClick={openAddModal}
-                    className="h-16 flex items-center gap-3 px-10 bg-black text-white rounded-[2rem] font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/10"
-                >
-                    <Plus size={20} strokeWidth={3} /> Add New Member
+                    onClick={() => openAddModal()}
+                    className="w-full md:w-auto min-h-14 md:min-h-15 px-8 rounded-xl md:rounded-2xl text-white! font-black uppercase text-xs tracking-widest hover:scale-105 transition-all">
+                    <Plus size={18} strokeWidth={3} /> Add New Member
                 </Button>
             </header>
 
             {/* --- GRID --- */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                 <AnimatePresence mode='popLayout'>
                     {barbers.map((barber) => (
                         <motion.div
@@ -116,40 +110,41 @@ export default function BarbersConfig() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
-                            className="group relative bg-white border border-zinc-100 p-10 rounded-[3.5rem] shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] transition-all duration-500"
+                            className="group relative bg-white border border-zinc-100 p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] transition-all duration-500"
                         >
-                            {barber.role !== 'Admin' && (
-                                <ConfirmDelete onConfirm={() => barber.id && deleteBarber(barber.id)}>
-                                    <button
-                                        type="button"
-                                        className="absolute top-8 right-8 p-3 bg-red-50 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white z-20"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
-                                </ConfirmDelete>
-                            )}
-
-                            <div className="flex flex-col items-center text-center">
-                                {/* Conditional Badge Logic */}
-                                <span className={`absolute top-8 left-8 text-xxs font-black px-4 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-2 ${barber.role === 'Admin' ? 'bg-black text-white' : 'bg-zinc-100 text-zinc-600'
-                                    }`}>
+                            {/* Card Actions (Mobile Friendly) */}
+                            <div className="flex justify-between items-center mb-6">
+                                <span className={`text-xxs font-black px-4 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-2 ${
+                                    barber.role === 'Admin' ? 'bg-black text-white' : 'bg-zinc-100 text-zinc-600'
+                                }`}>
                                     {barber.role === 'Admin' ? <ShieldCheck size={12} /> : <PenTool size={12} />}
                                     {barber.role}
                                 </span>
 
-                                <div className="h-10" />
+                                {barber.role !== 'Admin' && (
+                                    <ConfirmDelete onConfirm={() => barber.id && deleteBarber(barber.id)}>
+                                        <button
+                                            type="button"
+                                            className="p-2.5 bg-red-50 text-red-500 rounded-xl md:opacity-0 md:group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </ConfirmDelete>
+                                )}
+                            </div>
 
-                                <div className="w-28 h-28 bg-zinc-50 border-2 border-zinc-100 rounded-[3rem] flex items-center justify-center mb-8 relative group-hover:border-black transition-all">
-                                    <User size={48} className="text-zinc-200 group-hover:text-black transition-colors" />
+                            <div className="flex flex-col items-center text-center">
+                                <div className="w-24 h-24 md:w-28 md:h-28 bg-zinc-50 border-2 border-zinc-100 rounded-[2.5rem] md:rounded-[3rem] flex items-center justify-center mb-6 relative group-hover:border-black transition-all">
+                                    <User size={40} className="text-zinc-200 group-hover:text-black transition-colors" />
                                 </div>
 
-                                <h3 className="text-3xl font-black uppercase tracking-tighter">{barber.name}</h3>
+                                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter line-clamp-1">{barber.name}</h3>
 
-                                <p className="text-zinc-500 text-sm font-medium mt-6 mb-8 leading-relaxed px-2 line-clamp-3">
+                                <p className="text-zinc-500 text-sm font-medium mt-4 mb-6 leading-relaxed px-2 line-clamp-3 min-h-[4.5rem]">
                                     "{barber.bio}"
                                 </p>
 
-                                <div className="w-full h-px bg-zinc-50 mb-8" />
+                                <div className="w-full h-px bg-zinc-50 mb-6" />
 
                                 <button
                                     type='button'
@@ -166,43 +161,44 @@ export default function BarbersConfig() {
 
             {/* --- MODAL --- */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="sm:max-w-125 rounded-[3rem] p-10 bg-white border-none shadow-2xl">
+                <DialogContent className="w-[95vw] sm:max-w-lg rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-10 bg-white border-none shadow-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle className="text-3xl font-black uppercase tracking-tighter">
+                        <DialogTitle className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
                             {editingBarber ? 'Manage Member' : 'New Member'}
                         </DialogTitle>
                     </DialogHeader>
 
-                    <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+                    <form onSubmit={handleSubmit} className="space-y-5 mt-4">
                         <div className="space-y-4">
-                            {/* Photo Upload Simulation */}
-                            <div className="flex flex-col items-center justify-center group cursor-pointer mb-4 text-center">
-                                <div className="w-24 h-24 rounded-[2.5rem] bg-zinc-50 border-2 border-dashed border-zinc-200 flex flex-col items-center justify-center text-zinc-400 group-hover:border-black group-hover:text-black transition-all">
-                                    <Camera size={24} />
-                                    <span className="text-xxs font-black uppercase mt-1 tracking-widest">Upload Photo</span>
+                            {/* Photo Upload */}
+                            <div className="flex flex-col items-center justify-center group cursor-pointer mb-2 text-center">
+                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] md:rounded-[2.5rem] bg-zinc-50 border-2 border-dashed border-zinc-200 flex flex-col items-center justify-center text-zinc-400 group-hover:border-black group-hover:text-black transition-all">
+                                    <Camera size={20} />
+                                    <span className="text-[9px] font-black uppercase mt-1 tracking-widest">Upload</span>
                                 </div>
                             </div>
-                            <div className="space-y-2">
+
+                            <div className="space-y-1.5">
                                 <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400 ml-1">Full Name</Label>
                                 <Input
                                     required
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="h-14 rounded-2xl bg-zinc-100 border-none font-bold px-6"
+                                    className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-zinc-100 border-none font-bold px-5"
                                 />
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400 ml-1">Permission Level</Label>
                                 <Select
                                     value={formData.role}
                                     onValueChange={(value) => setFormData({ ...formData, role: value || 'Editor' })}
                                 >
-                                    <SelectTrigger className="min-h-14 w-full rounded-2xl bg-zinc-100 border-none font-bold px-6">
+                                    <SelectTrigger className="h-12 md:h-14 w-full rounded-xl md:rounded-2xl bg-zinc-100 border-none font-bold px-5">
                                         <SelectValue placeholder="Select role" />
                                     </SelectTrigger>
-                                    <SelectContent className="rounded-2xl border-none shadow-xl">
-                                        {!hasAdmin && (
+                                    <SelectContent className="rounded-xl border-none shadow-xl">
+                                        {(!hasAdmin || editingBarber?.role === 'Admin') && (
                                             <SelectItem value="Admin" className="font-bold py-3 text-red-600">ADMIN</SelectItem>
                                         )}
                                         <SelectItem value="Editor" className="font-bold py-3">EDITOR</SelectItem>
@@ -210,19 +206,19 @@ export default function BarbersConfig() {
                                 </Select>
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <Label className="text-xxs font-black uppercase tracking-widest text-zinc-400 ml-1">Bio / Notes</Label>
                                 <Textarea
                                     required
                                     value={formData.bio}
                                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                                    className="rounded-2xl bg-zinc-100 border-none font-bold min-h-32 resize-none p-6"
+                                    className="rounded-xl md:rounded-2xl bg-zinc-100 border-none font-bold min-h-24 md:min-h-32 resize-none p-5"
                                 />
                             </div>
                         </div>
 
-                        <DialogFooter className="pt-4">
-                            <Button type="submit" className="w-full h-16 bg-black text-white rounded-[2rem] font-black uppercase tracking-widest">
+                        <DialogFooter className="pt-2">
+                            <Button type="submit" className="w-full h-14 md:h-16 bg-black text-white rounded-xl md:rounded-[2rem] font-black uppercase tracking-widest hover:opacity-90">
                                 {editingBarber ? 'Update Member' : 'Add to Team'}
                             </Button>
                         </DialogFooter>
