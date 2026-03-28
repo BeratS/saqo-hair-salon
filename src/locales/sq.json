@@ -76,5 +76,6 @@
     "No active reservation found": "Nuk ekziston asnjë rezervim aktiv",
     "Check the phone number and try again.": "Nuk ka rezervim me këtë numër të telefonit dhe provoni përsëri.",
     "Reservation Cancelled": "Rezervimi u anulua",
-    "Your appointment has been successfully removed.": "Takimi juaj është hequr me sukses."
+    "Your appointment has been successfully removed.": "Takimi juaj është hequr me sukses.",
+    "Reminder: Your appointment is in 30 minutes!": "Rikujtim: Ju njoftojmë 30 minuta më herët, për rezervimin tuaj!"
 }

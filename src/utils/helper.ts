@@ -2,13 +2,19 @@ import { format, isToday } from "date-fns";
 
 import { Constants } from "@/Constants";
 
+// Helper to check environment safely
+export const getIsIOS = () => {
+    if (typeof window === 'undefined') return false;
+    // Check for Safari/iOS while excluding Chrome on iOS which behaves differently
+    return /iPhone|iPad|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+};
 
 export function wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function removeSpaces(str: string) {
-  return str.replace(/\s+/g, '');
+    return str.replace(/\s+/g, '');
 }
 
 /**
@@ -176,3 +182,16 @@ export const generateTimeSlots = (
 
     return slots;
 };
+
+export const getSMSReminderHref = (phone: string, text?: string) => {
+    const separator = getIsIOS() ? '&' : '?';
+
+    // 2. Prepare the branded message
+    const salonName = Constants.SITE_TITLE;
+    const reminderText = text || `Reminder: Your appointment is in 30 minutes!`;
+
+    // 3. Encode the message for the URL
+    const fullMessage = encodeURIComponent(`${salonName}\n${reminderText}`);
+
+    return `sms:${phone}${separator}body=${fullMessage}`;
+}

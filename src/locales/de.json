@@ -76,5 +76,6 @@
     "No active reservation found": "Keine aktive Reservierung gefunden",
     "Check the phone number and try again.": "Bitte überprüfen Sie die Telefonnummer und versuchen Sie es erneut.",
     "Reservation Cancelled": "Reservierung storniert",
-    "Your appointment has been successfully removed.": "Ihr Termin wurde erfolgreich entfernt."
+    "Your appointment has been successfully removed.": "Ihr Termin wurde erfolgreich entfernt.",
+    "Reminder: Your appointment is in 30 minutes!": "Erinnerung: Ihr Termin ist in 30 Minuten!"
 }

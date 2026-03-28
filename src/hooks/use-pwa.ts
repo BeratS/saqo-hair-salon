@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 
-// Helper to check environment safely
-const getIsIOS = () => {
-    if (typeof window === 'undefined') return false;
-    // Check for Safari/iOS while excluding Chrome on iOS which behaves differently
-    return /iPhone|iPad|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-};
+import { getIsIOS } from '@/utils/helper';
 
 const getIsStandalone = () => {
     if (typeof window === 'undefined') return false;

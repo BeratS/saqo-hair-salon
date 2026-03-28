@@ -76,5 +76,6 @@
     "No active reservation found": "Не е пронајдена активна резервација",
     "Check the phone number and try again.": "Проверете го телефонскиот број и обидете се повторно.",
     "Reservation Cancelled": "Резервацијата е откажана",
-    "Your appointment has been successfully removed.": "Вашиот состанок е успешно отстранет."
+    "Your appointment has been successfully removed.": "Вашиот состанок е успешно отстранет.",
+    "Reminder: Your appointment is in 30 minutes!": "Потсетник: Вашиот термин е за 30 минути!"
 }

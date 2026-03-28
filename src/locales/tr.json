@@ -76,5 +76,6 @@
     "No active reservation found": "Aktif rezervasyon bulunamadı",
     "Check the phone number and try again.": "Telefon numarasını kontrol edin ve tekrar deneyin.",
     "Reservation Cancelled": "Rezervasyon İptal Edildi",
-    "Your appointment has been successfully removed.": "Randevunuz başarıyla kaldırıldı."
+    "Your appointment has been successfully removed.": "Randevunuz başarıyla kaldırıldı.",
+    "Reminder: Your appointment is in 30 minutes!": "Hatırlatma: Randevunuz 30 dakika içinde!"
 }

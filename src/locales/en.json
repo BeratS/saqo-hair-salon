@@ -76,5 +76,6 @@
     "No active reservation found": "No active reservation found",
     "Check the phone number and try again.": "Check the phone number and try again.",
     "Reservation Cancelled": "Reservation Cancelled",
-    "Your appointment has been successfully removed.": "Your appointment has been successfully removed."
+    "Your appointment has been successfully removed.": "Your appointment has been successfully removed.",
+    "Reminder: Your appointment is in 30 minutes!": "Reminder: Your appointment is in 30 minutes!"
 }

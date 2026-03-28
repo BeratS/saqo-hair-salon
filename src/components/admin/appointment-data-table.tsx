@@ -1,11 +1,13 @@
 import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarIcon, CheckIcon, ChevronDown, ChevronRight, Clock, Phone, Scissors, Search, Star, Trash2, User, X } from "lucide-react";
+import { CalendarIcon, CheckIcon, ChevronDown, ChevronRight, Clock, MessageSquare, Phone, Scissors, Search, Star, Trash2, User, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import useAppointments from "@/hooks/useAppointments";
 import { useBerberData } from "@/hooks/useBerberData";
 import { cn } from "@/lib/utils";
+import { getSMSReminderHref } from "@/utils/helper";
 
 import { Button } from "../ui/button";
 import ConfirmDelete from "../widgets/confirm-delete";
@@ -16,7 +18,7 @@ interface IGroupedAppointments {
 }
 
 function AppointmentDataTable() {
-
+    
     const [searchTerm, setSearchTerm] = useState("");
     const [showPast, setShowPast] = useState(false);
 
@@ -219,6 +221,7 @@ interface IAppointmentRowProps {
 }
 
 function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointmentRowProps) {
+    const { t } = useTranslation();
     const time = format(appointment.scheduledAt.toDate(), "HH:mm");
     const serviceIds = appointment.serviceIds;
     const allServices = services.filter(s => serviceIds.includes(s.id!));
@@ -344,6 +347,14 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
                         </Button>
                     </ConfirmDelete>
                 )}
+            </div>
+
+            <div className="flex sm:hidden">
+                {/* <a href={getSMSReminderHref(appointment.customerPhone, t('Reminder: Your appointment is in 30 minutes!'))} */}
+                <a href={getSMSReminderHref(appointment.customerPhone, 'Rikujtim: Ju njoftojmë 30 minuta më herët, për rezervimin tuaj!')}
+                    className="w-full text-center text-xs font-black bg-blue-600 text-white px-2 py-1 rounded-lg flex justify-center items-center gap-1 hover:bg-blue-700">
+                    <MessageSquare size={10} /> Send SMS
+                </a>
             </div>
         </div>
     );
