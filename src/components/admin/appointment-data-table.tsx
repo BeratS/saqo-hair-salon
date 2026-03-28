@@ -2,7 +2,6 @@ import { format, isSameDay } from "date-fns";
 import { AnimatePresence, motion } from 'framer-motion';
 import { CalendarIcon, CheckIcon, ChevronDown, ChevronRight, Clock, MessageSquare, Phone, Scissors, Search, Star, Trash2, User, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import useAppointments from "@/hooks/useAppointments";
 import { useBerberData } from "@/hooks/useBerberData";
@@ -221,7 +220,6 @@ interface IAppointmentRowProps {
 }
 
 function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointmentRowProps) {
-    const { t } = useTranslation();
     const time = format(appointment.scheduledAt.toDate(), "HH:mm");
     const serviceIds = appointment.serviceIds;
     const allServices = services.filter(s => serviceIds.includes(s.id!));
