@@ -24,7 +24,7 @@ export function InstallPWA() {
 
     if (isIOS) {
         return (
-            <p className="text-center">
+            <p className="text-center text-sm opacity-60">
                 {t("To install: tap Share and 'Add to Home Screen'")}
             </p>
         )

@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import useAppointments from "@/hooks/useAppointments";
 import { useBerberData } from "@/hooks/useBerberData";
 import { cn } from "@/lib/utils";
-import { getSMSReminderHref } from "@/utils/helper";
+import { getSMSReminderHref, getWhatsappReminderHref } from "@/utils/helper";
 
 import { Button } from "../ui/button";
 import ConfirmDelete from "../widgets/confirm-delete";
@@ -17,7 +17,7 @@ interface IGroupedAppointments {
 }
 
 function AppointmentDataTable() {
-    
+
     const [searchTerm, setSearchTerm] = useState("");
     const [showPast, setShowPast] = useState(false);
 
@@ -227,7 +227,7 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
 
     return (
         <div className={cn(
-            "group bg-white border border-zinc-100 p-5 md:p-6 rounded-[2.5rem] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:shadow-xl hover:shadow-black/5 transition-all relative overflow-hidden",
+            "group bg-white border border-zinc-100 p-5 rounded-[2.5rem] flex flex-col md:flex-row md:items-center gap-4 hover:shadow-xl hover:shadow-black/5 transition-all relative overflow-hidden",
             appointment.isPast && "opacity-60 grayscale bg-zinc-50"
         )}>
 
@@ -235,7 +235,7 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
             <div className="flex md:hidden items-center justify-between gap-4 pb-1 border-b border-zinc-50">
                 <div className="flex items-center justify-between md:justify-start gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="bg-black text-white p-2 rounded-2xl md:hidden">
+                        <div className="bg-black text-white p-2 rounded-2xl">
                             <Clock size={16} />
                         </div>
                         <span className="text-3xl md:text-2xl font-black tracking-tighter">
@@ -259,14 +259,9 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
 
             {/* 1. Time Section - Large and clear */}
             <div className="hidden md:flex items-center justify-between md:justify-start gap-4">
-                <div className="flex items-center gap-3">
-                    <div className="bg-black text-white p-2 rounded-2xl md:hidden">
-                        <Clock size={16} />
-                    </div>
-                    <span className="text-3xl md:text-2xl font-black italic tracking-tighter">
-                        {time}
-                    </span>
-                </div>
+                <span className="text-3xl md:text-2xl font-black tracking-tighter">
+                    {time}
+                </span>
 
                 {/* Mobile-only Price Badge */}
                 <span className="md:hidden text-sm font-black bg-zinc-100 px-3 py-1 rounded-full border border-zinc-200">
@@ -275,35 +270,44 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
             </div>
 
             {/* Vertical Divider (Desktop) */}
-            <div className="hidden md:block h-12 w-px bg-zinc-100" />
+            <div className="hidden md:block h-12 w-px mx-1 bg-zinc-100" />
 
             {/* 2. Customer & Services Info */}
             <div className="flex-1 space-y-3">
-                <div className="flex items-start justify-between gap-1">
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                    <div className="w-full sm:w-auto flex items-center justify-between">
                         <h4 className="font-black text-xl md:text-lg uppercase tracking-tight flex items-center gap-2">
                             {appointment.customerName}
                         </h4>
+
+                        {/* Mobile-only Price Badge */}
+                        <span className="md:hidden text-sm font-black bg-zinc-100 px-2 py-1 rounded-full border border-zinc-200 whitespace-nowrap">
+                            {appointment.totalPrice} DEN
+                        </span>
+                    </div>
+
+                    <div className="w-full sm:w-auto flex items-center justify-between md:justify-start gap-1 flex-wrap">
                         <a
                             href={`tel:${appointment.customerPhone}`}
-                            className="w-fit text-xxs font-bold text-zinc-500 hover:text-black flex items-center gap-1.5 uppercase tracking-widest bg-zinc-50 border border-zinc-100 px-2.5 py-1 rounded-full transition-colors"
+                            className="w-fit text-xxs font-bold text-purple-600 bg-purple-200 hover:text-black flex items-center gap-1.5 uppercase tracking-widest border border-purple-400 px-2.5 py-1 rounded-full transition-colors"
                         >
                             <Phone size={12} /> {appointment.customerPhone}
                         </a>
-                    </div>
 
-                    {/* Mobile-only Price Badge */}
-                    <span className="md:hidden text-sm font-black bg-zinc-100 px-2 py-1 rounded-full border border-zinc-200 whitespace-nowrap">
-                        {appointment.totalPrice} DEN
-                    </span>
+                        <a href={getWhatsappReminderHref(appointment.customerPhone, appointment.customerName, appointment.scheduledAt)}
+                            target="_blank"
+                            className="min-h-6 min-w-7 hidden sm:flex justify-center items-center gap-2 bg-green-200 px-1 rounded-lg text-xs font-black border border-green-600">
+                            <img width={18} height={18} src="/whatsapp-icon.svg" alt="Whatsapp icon" />
+                        </a>
+
+                        {/* Barber Badge */}
+                        <span className="text-xxs font-bold text-blue-700 flex items-center gap-1.5 uppercase tracking-widest bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-lg">
+                            <User size={10} strokeWidth={3} /> {berber?.name}
+                        </span>
+                    </div>
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">
-                    {/* Barber Badge */}
-                    <span className="text-xxs font-bold text-blue-700 flex items-center gap-1.5 uppercase tracking-widest bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-lg">
-                        <User size={10} strokeWidth={3} /> {berber?.name}
-                    </span>
-
                     {/* Service Badges */}
                     {allServices.map(service => {
                         const isPremium = service.isPremium; // Assuming this boolean exists
@@ -315,7 +319,7 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
                                     "text-xs font-black flex items-center gap-1 uppercase tracking-widest px-2 py-0.5 rounded-xl transition-all",
                                     isPremium
                                         ? "bg-amber-300 text-black shadow-sm shadow-primary ring-1 ring-amber-500/20"
-                                        : "bg-amber-50 text-zinc-600 border border-zinc-200/50"
+                                        : "bg-amber-100 text-zinc-600 border border-zinc-200/50"
                                 )}
                             >
                                 {isPremium ? <Star size={10} fill="currentColor" /> : <Scissors size={10} strokeWidth={3} />}
@@ -339,7 +343,7 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
                         <Button
                             type="button"
                             variant="destructive"
-                            className="w-10 min-h-10 p-1 md:min-w-15 md:min-h-15 md:p-4 rounded-2xl hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
+                            className="w-10 min-h-10 p-1 md:min-w-12 md:min-h-12 md:p-4 rounded-2xl hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
                         >
                             <X size={24} className="min-w-6 min-h-6" />
                         </Button>
@@ -347,11 +351,15 @@ function AppointmentRow({ appointment, barbers, services, onCancel }: IAppointme
                 )}
             </div>
 
-            <div className="flex sm:hidden">
-                {/* <a href={getSMSReminderHref(appointment.customerPhone, t('Reminder: Your appointment is in 30 minutes!'))} */}
-                <a href={getSMSReminderHref(appointment.customerPhone, 'Rikujtim: Ju njoftojmë 30 minuta më herët, për rezervimin tuaj!')}
-                    className="w-full text-center text-xs font-black bg-blue-600 text-white px-2 py-1 rounded-lg flex justify-center items-center gap-1 hover:bg-blue-700">
-                    <MessageSquare size={10} /> Send SMS
+            <div className="flex items-center gap-1 sm:hidden">
+                <a href={getSMSReminderHref(appointment.customerPhone, appointment.customerName, appointment.scheduledAt)}
+                    className="flex-1 min-h-8 text-center text-xs font-black bg-blue-600 text-white px-2 py-1 rounded-lg flex justify-center items-center gap-1 hover:bg-blue-700">
+                    <MessageSquare size={16} /> Send SMS
+                </a>
+                <a href={getWhatsappReminderHref(appointment.customerPhone, appointment.customerName, appointment.scheduledAt)}
+                    target="_blank"
+                    className="flex-1 min-h-8 flex justify-center items-center gap-2 bg-green-200 px-2 rounded-lg text-xs font-black border border-green-600">
+                    <img width={22} height={22} src="/whatsapp-icon.svg" alt="Whatsapp icon" /> WhatsApp
                 </a>
             </div>
         </div>

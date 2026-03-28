@@ -28,6 +28,18 @@ export function NavUser() {
   const { isMobile } = useSidebar()
   const { user, onLogout } = useAuth();
 
+  const getFallbackWord = (name?: string | null) => {
+    if (!name) return "SQ"; // fallback default
+
+    const words = name.trim().split(" ").filter(Boolean);
+
+    if (words.length === 1) {
+      return words[0][0].toUpperCase();
+    }
+
+    return (words[0][0] + words[1][0]).toUpperCase();
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -39,7 +51,9 @@ export function NavUser() {
           >
             <Avatar className="size-8 rounded-lg grayscale">
               <AvatarImage src={''} alt={user?.displayName || user?.email || ''} />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              <AvatarFallback className="rounded-lg">
+                {getFallbackWord(user?.displayName || user?.email)}
+              </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user?.displayName}</span>

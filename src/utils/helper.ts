@@ -183,15 +183,43 @@ export const generateTimeSlots = (
     return slots;
 };
 
-export const getSMSReminderHref = (phone: string, text?: string) => {
+export const getSMSReminderHref = (phone: string, customerName: string, scheduledAt?: any) => {
     const separator = getIsIOS() ? '&' : '?';
 
     // 2. Prepare the branded message
     const salonName = Constants.SITE_TITLE;
-    const reminderText = text || `Reminder: Your appointment is in 30 minutes!`;
+
+    // format time
+    const date = scheduledAt?.toDate ? scheduledAt.toDate() : new Date(scheduledAt || '');
+    const time = format(date, "HH:mm");
+
+    // `Reminder: Your appointment is in 30 minutes!`;
+    const message = `Përshendetje ${customerName}: Rikujtimë për terminin tuaj sot në orën ${time} tek saloni jonë, Shifemi`
 
     // 3. Encode the message for the URL
-    const fullMessage = encodeURIComponent(`${salonName}\n${reminderText}`);
+    const fullMessage = encodeURIComponent(`${salonName}\n${message}`);
 
     return `sms:${phone}${separator}body=${fullMessage}`;
+}
+
+export const getWhatsappReminderHref = (phone: string, customerName: string, scheduledAt: any) => {
+    // 1. Format the Phone Number (Crucial to avoid 404)
+    let cleanedPhone = phone.replace(/\D/g, '');
+    if (cleanedPhone.startsWith('0')) {
+        cleanedPhone = '389' + cleanedPhone.substring(1);
+    }
+
+    // 2. Prepare the branded message with \n for new lines
+    const salonName = Constants.SITE_TITLE;
+    
+    const date = scheduledAt?.toDate ? scheduledAt.toDate() : new Date(scheduledAt || '');
+    const time = format(date, "HH:mm");
+
+    const message = `Përshendetje ${customerName}:\n\nRikujtim për terminin tuaj sot në orën ${time} tek saloni jonë, shihemi!`;
+
+    // 3. Encode for URL
+    // This will turn \n into %0A automatically
+    const fullMessage = encodeURIComponent(`${salonName}\n${message}`);
+
+    return `https://wa.me/${cleanedPhone}?text=${fullMessage}`;
 }

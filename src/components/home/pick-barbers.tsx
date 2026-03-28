@@ -46,7 +46,7 @@ function PickBarbers({ barbers, booking, setBarber }: IProps) {
                                     : "border-zinc-100 bg-white hover:border-zinc-300"
                             )}
                         >
-                            <div className="p-6 flex items-center gap-6">
+                            <div className="p-4 flex items-center gap-4 bg-amber-200/10">
                                 {/* Profile Image with Animated Ring */}
                                 <div className="relative shrink-0">
                                     <motion.div

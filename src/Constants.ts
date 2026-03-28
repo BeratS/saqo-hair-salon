@@ -27,6 +27,7 @@ export const Constants = {
   EMAIL: 'info@saqohairsalon.com',
   CONTACT_NUMBER: '+389 70 336 332',
   CONTACT_NUMBER_SHORT: '070 336 332',
+  COUNTRY_CODE: '389',
 }
 
 export const DATE_FORMAT = {
