@@ -15,7 +15,7 @@ import { useBerberSettings } from './useBerberSettings';
 
 const useBooking = () => {
     const { t } = useTranslation();
-    
+
     const [step, setStep] = useState<number>(BookingStepsEnum.Barber);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [bookingError, setBookingError] = useState<string>('');
@@ -175,28 +175,38 @@ const useBooking = () => {
 
     const toggleService = (service: IServiceMenu) => {
         setBooking(prev => {
-            const isAllInclusive = service.isPremium;
+            // 1. Handle Premium/All-Inclusive Override
+            if (service.isPremium) {
+                return {
+                    ...prev,
+                    selectedServices: [service],
+                    totalPrice: service.price
+                };
+            }
 
-            // If selecting All Inclusive, clear others
-            if (isAllInclusive) return {
-                ...prev,
-                selectedServices: [service],
-                totalPrice: service.price
-            };
+            // 2. Remove any existing Premium services if selecting a normal one
+            const currentNormalServices = prev.selectedServices.filter(s => !s.isPremium);
 
-            // If other service is selected and All Inclusive was active, clear All Inclusive
-            const filtered = prev.selectedServices.filter(s => s.isPremium !== true);
+            // 3. Determine if we are adding or removing
+            const isAlreadySelected = currentNormalServices.find(s => s.id === service.id);
 
-            const exists = filtered.find(s => s.id === service.id);
-            if (exists) return {
-                ...prev,
-                selectedServices: filtered.filter(s => s.id !== service.id),
-                totalPrice: filtered.reduce((sum, s) => sum + s.price, 0)
-            };
+            let newSelected: IServiceMenu[];
+
+            if (isAlreadySelected) {
+                // Remove the service
+                newSelected = currentNormalServices.filter(s => s.id !== service.id);
+            } else {
+                // Add the service
+                newSelected = [...currentNormalServices, service];
+            }
+
+            // 4. Calculate Total Price based on the NEW final list
+            const newTotal = newSelected.reduce((sum, s) => sum + s.price, 0);
+
             return {
                 ...prev,
-                selectedServices: [...filtered, service],
-                totalPrice: filtered.reduce((sum, s) => sum + s.price, 0) + service.price
+                selectedServices: newSelected,
+                totalPrice: newTotal
             };
         });
     };
