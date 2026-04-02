@@ -72,12 +72,12 @@ function PickTime({
                         <CalendarIcon size={28} className="text-black" />
                     </SheetTrigger>
 
-                    <SheetContent side="bottom" className="max-w-xl mx-auto rounded-t-[3.5rem] px-4 pb-10 border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                    <SheetContent side="bottom" className="max-w-xl mx-auto rounded-t-[3.5rem] px-4 pb-8 border-t-0 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                         {/* Grabber Handle for Visual Cue */}
                         <div className="mx-auto w-16 h-1.5 rounded-full bg-zinc-200 mt-2 mb-8" />
 
-                        <SheetHeader className="mb-6 p-0 pt-6 pb-4">
-                            <SheetTitle className="text-3xl font-black uppercase text-center tracking-widest">
+                        <SheetHeader className="mb-4 p-0 pt-6 pb-4">
+                            <SheetTitle className="text-2xl font-black uppercase text-center tracking-widest">
                                 {t('Pick a Date')}
                             </SheetTitle>
                         </SheetHeader>
@@ -90,7 +90,7 @@ function PickTime({
                         />
 
                         <SheetClose render={
-                            <Button className="w-full py-8 rounded-[2rem] bg-black text-white font-black text-lg uppercase tracking-widest mt-6 active:scale-95 transition-transform" />
+                            <Button className="w-full py-8 rounded-full bg-black text-white font-black text-base uppercase tracking-widest mt-6 active:scale-95 transition-transform" />
                         }>
                             {t('Apply Selection')}
                         </SheetClose>

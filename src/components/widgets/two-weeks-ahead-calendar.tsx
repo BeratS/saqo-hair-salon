@@ -26,7 +26,7 @@ export default function TwoWeekAheadCalendar({ selectedDate, dateSlots, onSelect
                         whileTap={{ scale: 0.98 }}
                         onClick={() => onSelect(date)}
                         className={cn(
-                            "w-full flex items-center justify-between p-5 py-2 px-4 rounded-[2rem] border-2 transition-all",
+                            "w-full h-full flex items-center justify-between p-5 py-2 px-4 rounded-4xl border-2 transition-all",
                             isSelected
                                 ? "border-yellow-60 bg-primary text-white shadow-xl translate-x-1"
                                 : "border-zinc-100 bg-white text-black hover:border-zinc-200"
@@ -45,7 +45,7 @@ export default function TwoWeekAheadCalendar({ selectedDate, dateSlots, onSelect
                                 </span>
                             </div>
 
-                            <p className="font-black uppercase tracking-widest text-xs text-center">
+                            <p className="font-black uppercase tracking-widest text-xxs text-center">
                                 {isToday ? t("Today") : t(format(date, "EEEE"))}
                             </p>
                         </div>
