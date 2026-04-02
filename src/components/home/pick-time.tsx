@@ -1,6 +1,7 @@
 import { format, isSameDay } from 'date-fns';
 import { Calendar as CalendarIcon, CalendarX } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // UI Components
@@ -31,16 +32,33 @@ interface IProps {
 
 function PickTime({
     baseDate,
-    setBaseDate,
     booking,
     timeSlots,
     weekStrip,
     dateSlots,
+    setBaseDate,
     setDate,
     setTime,
     isSlotBooked,
 }: IProps) {
     const { t } = useTranslation();
+
+    // 1. FILTERED SLOTS: Only slots that are NOT booked
+    const availableSlots = useMemo(() => {
+        if (!booking.date) return [];
+        return timeSlots.filter((time: string) => !isSlotBooked(booking.date, time));
+    }, [timeSlots, booking.date, isSlotBooked]);
+
+    useEffect(() => {
+        if (!booking?.time && availableSlots.length === 0 && weekStrip?.length > 0) {
+            const getNextAvailableDate = weekStrip?.at(1);
+            if (getNextAvailableDate) {
+                setDate(getNextAvailableDate);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     return (
         <div className="flex flex-col h-full space-y-6">
@@ -117,12 +135,9 @@ function PickTime({
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 pb-10">
-                    {timeSlots.length > 0 ? (
-                        timeSlots.map((time: string) => {
+                    {availableSlots.length > 0 ? (
+                        availableSlots.map((time: string) => {
                             const isTimeSelected = booking.time === time;
-                            const booked = isSlotBooked(booking.date, time);
-
-                            if (booked) return null;
 
                             return (
                                 <Button
@@ -143,7 +158,7 @@ function PickTime({
                         })
                     ) : (
                         /* EMPTY STATE UI */
-                        <div className="col-span-3 flex flex-col items-center justify-center py-8 px-4 bg-zinc-50 rounded-[2.5rem] border-2 border-dashed border-zinc-200">
+                        <div className="col-span-3 flex flex-col items-center justify-center py-8 px-4 sm:px-6 bg-zinc-50 rounded-[2.5rem] border-2 border-dashed border-zinc-200">
                             <div className="p-4 bg-white rounded-full shadow-sm mb-4">
                                 <CalendarX size={32} className="text-zinc-400" />
                             </div>
