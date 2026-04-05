@@ -162,10 +162,10 @@ const useAppointments = () => {
             // 3. Commit the deletions
             await batch.commit();
 
-            alert(`Successfully cleared ${snapshot.size} old appointments.`);
+            toast.success(`Successfully cleared ${snapshot.size} old appointments.`);
         } catch (error) {
             console.error("Error deleting old appointments:", error);
-            alert("Failed to delete appointments. Check console for details.");
+            toast.error("Failed to delete appointments. Check console for details.");
         }
     };
 

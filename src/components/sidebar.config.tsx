@@ -1,4 +1,4 @@
-import { ListIcon, MenuSquare,SettingsIcon, UserCircle } from "lucide-react"
+import { BanknoteArrowDownIcon, ListIcon, MenuSquare, SettingsIcon, UserCircle } from "lucide-react"
 
 export const sidebarConfig = {
   pages: [
@@ -35,6 +35,13 @@ export const sidebarConfig = {
       url: "/settings",
       icon: (
         <SettingsIcon />
+      ),
+    },
+    {
+      title: "Monthly Payments",
+      url: "/monthly-payments",
+      icon: (
+        <BanknoteArrowDownIcon />
       ),
     },
   ],

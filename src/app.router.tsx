@@ -9,6 +9,7 @@ const AppointmentPage = lazy(() => import('./pages/admin/appointment-page'));
 const AdminMainPage = lazy(() => import('./pages/admin/main-page'));
 const SettingsPage = lazy(() => import('./pages/admin/settings-page'));
 const CancelBookingPage = lazy(() => import('./pages/admin/cancel-booking-page'));
+const MonthlyPaymentPage = lazy(() => import('./pages/admin/monthly-payment-page'));
 const MenuPage = lazy(() => import('./pages/admin/menu-page'));
 const AuthPage = lazy(() => import('./pages/auth-page'));
 
@@ -80,6 +81,14 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute>
                 <SettingsPage />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'monthly-payments',
+            element: (
+              <ProtectedRoute>
+                <MonthlyPaymentPage />
               </ProtectedRoute>
             )
           },

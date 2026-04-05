@@ -55,3 +55,10 @@ interface IScheduleException {
   note: string;
   isWorking: boolean;
 }
+
+interface IPaymentMonth {
+    id: number;
+    month: string;
+    year: number;
+    isPaid: boolean;
+}
