@@ -8,9 +8,10 @@ import Hairstyle from './hairstyle';
 import { calculateRotation, lerp } from './pose-math';
 
 const HAIR_STYLES = [
-    { id: 'style1', name: 'Short Fade', model: '/models/fade.glb' },
-    { id: 'style2', name: 'Curly Top', model: '/models/curly.glb' },
-    { id: 'style3', name: 'Classic Pomp', model: '/models/pomp.glb' },
+    { id: 'style1', name: 'Bald Fade', model: '/models/bald_head.glb' },
+    // { id: 'style1', name: 'Short Fade', model: '/models/fade.glb' },
+    // { id: 'style2', name: 'Curly Top', model: '/models/curly.glb' },
+    // { id: 'style3', name: 'Classic Pomp', model: '/models/pomp.glb' },
 ];
 
 export default function HairTryOn() {
