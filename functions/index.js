@@ -36,13 +36,16 @@ exports.appointmentReminder = onSchedule("every 5 minutes", async (event) => {
             const data = doc.data();
             if (data.status === 'cancelled') return;
 
+            const date = scheduledAt?.toDate ? scheduledAt.toDate() : new Date(scheduledAt || '');
+            const time = format(date, "HH:mm");
+
             if (data.fcmToken) {
                 docIds.push(doc.id); // Track which IDs we are messaging
                 messages.push({
                     token: data.fcmToken,
                     notification: {
                         title: "Saqo Hair Salon",
-                        body: `Reminder: Your appointment is in 30 minutes!`,
+                        body: `Përshendetje ${data.customerName}:\n\nRikujtim për terminin tuaj sot në orën ${time} tek saloni jonë, shihemi!`,
                     },
                     webpush: {
                         headers: { Urgency: "high" },
@@ -64,7 +67,7 @@ exports.appointmentReminder = onSchedule("every 5 minutes", async (event) => {
 
         if (messages.length > 0) {
             const response = await admin.messaging().sendEach(messages);
-            
+
             // 2. MARK AS SENT IN FIRESTORE SO THEY DON'T GET IT AGAIN
             const batch = db.batch();
             response.responses.forEach((res, idx) => {
