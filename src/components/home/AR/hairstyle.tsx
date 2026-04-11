@@ -2,26 +2,33 @@ import { useGLTF } from '@react-three/drei';
 import { useRef } from 'react';
 import * as THREE from 'three';
 
-function Hairstyle({ url, transform }: { url: string, transform: any }) {
+export default function Hairstyle({ url, transform }: { url: string, transform: any }) {
     const { scene } = useGLTF(url);
     const groupRef = useRef<THREE.Group>(null);
+
+    // Fine-tune these based on your specific .glb models
+    const Y_OFFSET = 0.5; // Lift the hair up
+    const Z_OFFSET = -0.2; // Move it slightly back into the head
 
     return (
         <group 
             ref={groupRef}
-            // We map the normalized MediaPipe coordinates (0 to 1) 
-            // to Three.js coordinates (usually centered at 0)
+            // Multiplying by -10 to -15 stretches the 0.1 normalized movements 
+            // to match the Three.js camera view
             position={[
-                (transform.pos[0] - 0.5) * -10, 
-                (transform.pos[1] - 0.5) * -10, 
-                (transform.pos[2]) * -5
+                (transform.pos[0] - 0.5) * -12, 
+                (transform.pos[1] - 0.5) * -12 + Y_OFFSET, 
+                transform.pos[2] * -8 + Z_OFFSET
             ]}
-            rotation={[transform.rot.pitch, transform.rot.yaw, transform.rot.roll]}
-            scale={transform.scale * 10}
+            rotation={[
+                transform.rot.pitch, 
+                transform.rot.yaw, 
+                transform.rot.roll
+            ]}
+            // Scale usually needs to be between 15-25 for head models
+            scale={transform.scale * 22} 
         >
             <primitive object={scene} />
         </group>
     );
 }
-
-export default Hairstyle
